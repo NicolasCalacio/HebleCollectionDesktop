@@ -34,7 +34,7 @@
                             </font>
                         </Label>
                         <Label text="Solicitações aguardando análise inicial. Realize a aprovação ou negação dos novos chamados cadastrados." textFill="#64748B" wrapText="true" VBox.vgrow="ALWAYS" />
-                        <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#abrirTicketsPendentes" prefHeight="42.0" style="-fx-background-color: #F59E0B; -fx-text-fill: white; -fx-background-radius: 8; -fx-cursor: hand;" text="Gerenciar Pendentes">
+                        <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#abrirTicketsPendentes" prefHeight="42.0" style="-fx-background-color: #d6b667; -fx-text-fill: white; -fx-background-radius: 8; -fx-cursor: hand;" text="Gerenciar Pendentes">
                             <font>
                                 <Font name="System Bold" size="13.0" />
                             </font>
@@ -51,7 +51,7 @@
                             </font>
                         </Label>
                         <Label text="Chamados em execução pelas equipes de suporte. Acompanhe a resolução e atualização dos status." textFill="#64748B" wrapText="true" VBox.vgrow="ALWAYS" />
-                        <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#abrirTicketsEmAndamento" prefHeight="42.0" style="-fx-background-color: #2563EB; -fx-text-fill: white; -fx-background-radius: 8; -fx-cursor: hand;" text="Ver em Andamento">
+                        <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#abrirTicketsEmAndamento" prefHeight="42.0" style="-fx-background-color: #d6b667; -fx-text-fill: white; -fx-background-radius: 8; -fx-cursor: hand;" text="Ver em Andamento">
                             <font>
                                 <Font name="System Bold" size="13.0" />
                             </font>
@@ -68,7 +68,7 @@
                             </font>
                         </Label>
                         <Label text="Histórico de chamados finalizados, resolvidos ou encerrados. Permite consulta de soluções e auditoria." textFill="#64748B" wrapText="true" VBox.vgrow="ALWAYS" />
-                        <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#abrirTicketsFechados" prefHeight="42.0" style="-fx-background-color: #10B981; -fx-text-fill: white; -fx-background-radius: 8; -fx-cursor: hand;" text="Consultar Fechados">
+                        <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#abrirTicketsFechados" prefHeight="42.0" style="-fx-background-color: #d6b667; -fx-text-fill: white; -fx-background-radius: 8; -fx-cursor: hand;" text="Consultar Fechados">
                             <font>
                                 <Font name="System Bold" size="13.0" />
                             </font>

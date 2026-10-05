@@ -50,7 +50,6 @@ public class ControllerTicketsHub {
 
     @FXML
     private void abrirTicketsFechados(ActionEvent event) {
-
         carregarView("/com/example/heblecollectiondesktop/view/ticketFechados.fxml", loader -> {
             ControllerTicketFechados controller = loader.getController();
             if (controller != null) {

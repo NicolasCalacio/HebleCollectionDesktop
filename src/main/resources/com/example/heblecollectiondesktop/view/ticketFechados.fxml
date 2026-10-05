@@ -10,7 +10,6 @@
 
 <VBox spacing="20.0" style="-fx-padding: 24; -fx-background-color: #F8FAFC;" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.heblecollectiondesktop.controller.ControllerTicketFechados">
     <children>
-        <!-- Botão Voltar configurado para a tela de Gerenciar Empresas -->
         <Button mnemonicParsing="false" onAction="#voltarAoHub" style="-fx-background-color: transparent; -fx-text-fill: #64748B; -fx-cursor: hand;" text="← Voltar " />
 
         <HBox alignment="CENTER_LEFT" spacing="10.0">

@@ -33,7 +33,7 @@
                             </font>
                         </Label>
                         <Label text="Controle de acessos, cadastro de novos colaboradores, atribuição de cargos e permissões do sistema." textFill="#64748B" wrapText="true" VBox.vgrow="ALWAYS" />
-                        <Button mnemonicParsing="false" onAction="#abrirGerenciarFuncionarios" prefHeight="42.0" maxWidth="1.7976931348623157E308" style="-fx-background-color: #2563EB; -fx-text-fill: white; -fx-background-radius: 8; -fx-cursor: hand;" text="Gerenciar Funcionários">
+                        <Button mnemonicParsing="false" onAction="#abrirGerenciarFuncionarios" prefHeight="42.0" maxWidth="1.7976931348623157E308" style="-fx-background-color: #d6b667; -fx-text-fill: white; -fx-background-radius: 8; -fx-cursor: hand;" text="Gerenciar Funcionários">
                             <font>
                                 <Font name="System Bold" size="13.0" />
                             </font>
@@ -49,7 +49,7 @@
                             </font>
                         </Label>
                         <Label text="Administração de empresas cadastradas, CNPJs, fornecedores, parceiros e dados corporativos vinculados." textFill="#64748B" wrapText="true" VBox.vgrow="ALWAYS" />
-                        <Button mnemonicParsing="false" onAction="#abrirGerenciarEmpresas" prefHeight="42.0" maxWidth="1.7976931348623157E308" style="-fx-background-color: #0F172A; -fx-text-fill: white; -fx-background-radius: 8; -fx-cursor: hand;" text="Gerenciar Empresas">
+                        <Button mnemonicParsing="false" onAction="#abrirGerenciarEmpresas" prefHeight="42.0" maxWidth="1.7976931348623157E308" style="-fx-background-color: #d6b667; -fx-text-fill: white; -fx-background-radius: 8; -fx-cursor: hand;" text="Gerenciar Empresas">
                             <font>
                                 <Font name="System Bold" size="13.0" />
                             </font>
@@ -65,7 +65,7 @@
                             </font>
                         </Label>
                         <Label text="Histórico imutável de ações administrativas, remoções, alterações e registros de auditoria do sistema." textFill="#64748B" wrapText="true" VBox.vgrow="ALWAYS" />
-                        <Button mnemonicParsing="false" onAction="#abrirLogsModeracao" prefHeight="42.0" maxWidth="1.7976931348623157E308" style="-fx-background-color: #475569; -fx-text-fill: white; -fx-background-radius: 8; -fx-cursor: hand;" text="Consultar Logs">
+                        <Button mnemonicParsing="false" onAction="#abrirLogsModeracao" prefHeight="42.0" maxWidth="1.7976931348623157E308" style="-fx-background-color: #d6b667; -fx-text-fill: white; -fx-background-radius: 8; -fx-cursor: hand;" text="Consultar Logs">
                             <font>
                                 <Font name="System Bold" size="13.0" />
                             </font>

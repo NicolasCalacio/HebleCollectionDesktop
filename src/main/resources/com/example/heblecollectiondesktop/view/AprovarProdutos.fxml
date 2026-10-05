@@ -25,7 +25,7 @@
                     </children>
                 </VBox>
 
-                <Button fx:id="btnAprovar" mnemonicParsing="false" onAction="#acaoAprovarProduto" prefHeight="40.0" style="-fx-background-color: #10B981; -fx-text-fill: white; -fx-background-radius: 8; -fx-cursor: hand;" text="✓ Aprovar Pedido">
+                <Button fx:id="btnAprovar" mnemonicParsing="false" onAction="#acaoAprovarProduto" prefHeight="40.0" style="-fx-background-color: #d6b667; -fx-text-fill: white; -fx-background-radius: 8; -fx-cursor: hand;" text="✓ Aprovar Pedido">
                     <font>
                         <Font name="System Bold" size="13.0" />
                     </font>

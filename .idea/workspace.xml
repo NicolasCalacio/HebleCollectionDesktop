@@ -5,11 +5,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="cb3a4291-41f8-4b38-8e73-f8ae096bae80" name="Changes" comment="Correção da tela de deleção de empresas">
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/example/heblecollectiondesktop/controller/ControllerEditarCupom.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/com/example/heblecollectiondesktop/view/editarCupom.fxml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/example/heblecollectiondesktop/controller/ControllerTelaInfoTickets.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/com/example/heblecollectiondesktop/view/InfoPopUp.fxml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/heblecollectiondesktop/controller/ControllerGerenciarCupons.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/heblecollectiondesktop/controller/ControllerGerenciarCupons.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/com/example/heblecollectiondesktop/view/InfoPopUp.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/com/example/heblecollectiondesktop/view/InfoPopUp.fxml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/heblecollectiondesktop/controller/ControllerTicketFechados.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/heblecollectiondesktop/controller/ControllerTicketFechados.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/module-info.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/module-info.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -19,15 +19,15 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
-        <option value="Class" />
         <option value="FxmlFile" />
+        <option value="Class" />
       </list>
     </option>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
-        <entry key="$PROJECT_DIR$" value="feature/AbrirJanelaInfo" />
+        <entry key="$PROJECT_DIR$" value="feature/ticketscorrigidos-telaCupons-e-botoes-rapidosdashboard" />
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -49,61 +49,61 @@
   </component>
   <component name="NextEditCompletionFeaturesState">
     <decayedCancelled>
-      <entry key="MS100" value="0.0" />
-      <entry key="MS500" value="2.768610993113019E-170" />
-      <entry key="S2" value="6.858092184763125E-43" />
-      <entry key="S5" value="2.0659385871376294E-17" />
-      <entry key="S10" value="6.464781224274568E-9" />
-      <entry key="S30" value="0.0032855467603372674" />
-      <entry key="S60" value="0.09639709343375494" />
-      <entry key="M2" value="0.5883848279368034" />
-      <entry key="M5" value="2.3466244257909863" />
-      <entry key="M10" value="6.699246181235399" />
-      <entry key="M15" value="13.302939714922832" />
-      <entry key="M30" value="34.930705424752105" />
-      <entry key="H1" value="70.28287862999345" />
-      <entry key="H2" value="126.54772006299035" />
-      <entry key="H4" value="195.02013082408413" />
-      <entry key="D1" value="306.526463790901" />
-      <entry key="W1" value="334.08984492233714" />
+      <entry key="MS100" value="4.770512035084489E-52" />
+      <entry key="MS500" value="9.41261295847279E-11" />
+      <entry key="S2" value="0.0052367927176107595" />
+      <entry key="S5" value="0.18546511518480843" />
+      <entry key="S10" value="0.6125284224074375" />
+      <entry key="S30" value="1.4978389627424664" />
+      <entry key="S60" value="2.0582241742334126" />
+      <entry key="M2" value="2.7187910604242083" />
+      <entry key="M5" value="4.328419391152035" />
+      <entry key="M10" value="9.098479290861473" />
+      <entry key="M15" value="16.314591551407172" />
+      <entry key="M30" value="38.68313358212355" />
+      <entry key="H1" value="73.96166623049946" />
+      <entry key="H2" value="129.81739735561615" />
+      <entry key="H4" value="197.5234806253169" />
+      <entry key="D1" value="307.17876460780553" />
+      <entry key="W1" value="334.19131767433595" />
     </decayedCancelled>
     <decayedSelected>
       <entry key="MS100" value="1.0" />
       <entry key="MS500" value="1.0" />
       <entry key="S2" value="1.0" />
-      <entry key="S5" value="1.0000000000000002" />
-      <entry key="S10" value="1.000000010554255" />
-      <entry key="S30" value="1.0021955488812213" />
-      <entry key="S60" value="1.0507539564853914" />
-      <entry key="M2" value="1.4092152091338614" />
-      <entry key="M5" value="3.72389511419898" />
-      <entry key="M10" value="7.0593151271935515" />
-      <entry key="M15" value="9.307879203942727" />
-      <entry key="M30" value="13.169303931454097" />
-      <entry key="H1" value="18.013328985188327" />
-      <entry key="H2" value="26.374291664716118" />
-      <entry key="H4" value="36.88621054558807" />
-      <entry key="D1" value="54.025992326216056" />
-      <entry key="W1" value="58.24847278972293" />
+      <entry key="S5" value="1.0" />
+      <entry key="S10" value="1.0000000000329075" />
+      <entry key="S30" value="1.00092279878592" />
+      <entry key="S60" value="1.0836739620994018" />
+      <entry key="M2" value="1.8908894307897817" />
+      <entry key="M5" value="5.0243065324733385" />
+      <entry key="M10" value="8.22936666456518" />
+      <entry key="M15" value="10.188699548770495" />
+      <entry key="M30" value="13.476590405423826" />
+      <entry key="H1" value="17.90385061626065" />
+      <entry key="H2" value="26.02990004099733" />
+      <entry key="H4" value="36.34685908303229" />
+      <entry key="D1" value="53.13883380059903" />
+      <entry key="W1" value="57.26586080725771" />
     </decayedSelected>
     <decayedShown>
-      <entry key="MS100" value="0.0068011762757509715" />
-      <entry key="MS500" value="0.3685673043227753" />
-      <entry key="S2" value="0.7791645796604998" />
-      <entry key="S5" value="0.9050064628829054" />
-      <entry key="S10" value="0.9513182898290933" />
-      <entry key="S30" value="0.9886069713042988" />
-      <entry key="S60" value="1.1341625468575134" />
-      <entry key="M2" value="1.9797161664538139" />
-      <entry key="M5" value="6.04657902933701" />
-      <entry key="M10" value="13.735808517495036" />
-      <entry key="M15" value="22.590585898438473" />
-      <entry key="M30" value="48.085306444645745" />
-      <entry key="H1" value="88.28543603380685" />
-      <entry key="H2" value="152.91268488778928" />
-      <entry key="H4" value="231.89873514740353" />
-      <entry key="D1" value="360.55029900617274" />
-      <entry key="W1" value="392.3379766863365" />
+      <entry key="MS100" value="5.4760557665252006E-12" />
+      <entry key="MS500" value="0.00559362794105926" />
+      <entry key="S2" value="0.2763963901305208" />
+      <entry key="S5" value="0.7276958943645546" />
+      <entry key="S10" value="1.2788485689911717" />
+      <entry key="S30" value="2.3272577143528803" />
+      <entry key="S60" value="3.041434257107207" />
+      <entry key="M2" value="4.5462205724658" />
+      <entry key="M5" value="9.311632854216612" />
+      <entry key="M10" value="17.29807379361412" />
+      <entry key="M15" value="26.47915739377042" />
+      <entry key="M30" value="52.14374861774424" />
+      <entry key="H1" value="91.85432732851125" />
+      <entry key="H2" value="155.83780067760065" />
+      <entry key="H4" value="233.86267095145195" />
+      <entry key="D1" value="360.315442495542" />
+      <entry key="W1" value="391.45683817771624" />
     </decayedShown>
   </component>
   <component name="ProblemsViewState">
@@ -118,40 +118,40 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;ASKED_SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
-    &quot;Application.Application.executor&quot;: &quot;Run&quot;,
-    &quot;Application.conexaoDB.executor&quot;: &quot;Run&quot;,
-    &quot;Maven.HebleCollectionDesktop [clean].executor&quot;: &quot;Run&quot;,
-    &quot;Maven.HebleCollectionDesktop [compile].executor&quot;: &quot;Run&quot;,
-    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.typescript.service.memoryLimit.init&quot;: &quot;true&quot;,
-    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
-    &quot;codeWithMe.voiceChat.enabledByDefault&quot;: &quot;false&quot;,
-    &quot;com.intellij.ml.llm.matterhorn.ej.ui.settings.DefaultModelSelectionForGA.v1&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;feature/cuponsCompletos&quot;,
-    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
-    &quot;junie.onboarding.icon.badge.shown&quot;: &quot;true&quot;,
-    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/projetos/HebleCollectionDesktop&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.jshint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.jshint&quot;: &quot;&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;project.structure.last.edited&quot;: &quot;Modules&quot;,
-    &quot;project.structure.proportion&quot;: &quot;0.0&quot;,
-    &quot;project.structure.side.proportion&quot;: &quot;0.0&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.JavaFX&quot;,
-    &quot;to.speed.mode.migration.done&quot;: &quot;true&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "ASKED_SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "Application.Application.executor": "Run",
+    "Application.conexaoDB.executor": "Run",
+    "Maven.HebleCollectionDesktop [clean].executor": "Run",
+    "Maven.HebleCollectionDesktop [compile].executor": "Run",
+    "ModuleVcsDetector.initialDetectionPerformed": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "RunOnceActivity.typescript.service.memoryLimit.init": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "codeWithMe.voiceChat.enabledByDefault": "false",
+    "com.intellij.ml.llm.matterhorn.ej.ui.settings.DefaultModelSelectionForGA.v1": "true",
+    "git-widget-placeholder": "feature/AbrirJanelaInfo",
+    "ignore.virus.scanning.warn.message": "true",
+    "junie.onboarding.icon.badge.shown": "true",
+    "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "C:/projetos/HebleCollectionDesktop",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.jshint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.jshint": "",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "project.structure.last.edited": "Modules",
+    "project.structure.proportion": "0.0",
+    "project.structure.side.proportion": "0.0",
+    "settings.editor.selected.configurable": "preferences.JavaFX",
+    "to.speed.mode.migration.done": "true",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
       <recent name="C:\projetos\HebleCollectionDesktop-main\HebleCollectionDesktop-main\src\main\resources\com\example\heblecollectiondesktop\view" />
@@ -209,8 +209,8 @@
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-jdk-30f59d01ecdd-26cb7f24e5b0-intellij.indexing.shared.core-IU-253.29346.138" />
-        <option value="bundled-js-predefined-d6986cc7102b-9b0f141eb926-JavaScript-IU-253.29346.138" />
+        <option value="bundled-jdk-30f59d01ecdd-34e2839f716b-intellij.indexing.shared.core-IU-262.9437.185" />
+        <option value="bundled-js-predefined-d6986cc7102b-4abd2a77f808-JavaScript-IU-262.9437.185" />
       </set>
     </attachedChunks>
   </component>
@@ -224,7 +224,6 @@
       <workItem from="1790874537693" duration="10650000" />
       <workItem from="1791220699364" duration="312000" />
       <workItem from="1791221190611" duration="5059000" />
-      <workItem from="1791395313926" duration="986000" />
     </task>
     <task id="LOCAL-00001" summary="Correção da tela de deleção de empresas">
       <option name="closed" value="true" />

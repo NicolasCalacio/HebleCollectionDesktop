@@ -110,7 +110,6 @@ public class ControllerGerenciarCupons {
         if (containerCentral == null) return;
 
         try {
-            // Carrega o painel inicial/dashboard principal do sistema
             URL url = getClass().getResource("/com/example/heblecollectiondesktop/view/Dashboard.fxml");
             if (url == null) {
                 url = getClass().getResource("/com/example/heblecollectiondesktop/view/dashboard.fxml");
@@ -139,7 +138,7 @@ public class ControllerGerenciarCupons {
     @FXML
     void abrirTelaAdicionarCupom(ActionEvent event) {
         try {
-            URL url = getClass().getResource("/com/example/heblecollectiondesktop/view/FormularioCupom.fxml");
+            URL url = getClass().getResource("/com/example/heblecollectiondesktop/view/adicionarCupom.fxml");
             if (url == null) {
                 url = getClass().getResource("/com/example/heblecollectiondesktop/view/formularioCupom.fxml");
             }

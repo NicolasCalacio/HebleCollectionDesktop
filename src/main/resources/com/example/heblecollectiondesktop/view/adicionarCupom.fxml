@@ -8,7 +8,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="500.0" prefWidth="388.0" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.heblecollectiondesktop.controller.ControllerEditarCupom">
+<AnchorPane prefHeight="500.0" prefWidth="388.0" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.heblecollectiondesktop.controller.ControllerAdicionarCupom">
     <children>
         <Label layoutX="30.0" layoutY="24.0" text="Adicionar Cupom">
             <font>
@@ -58,7 +58,7 @@
             </font>
         </Button>
 
-        <Button fx:id="btnEditar" layoutX="260.0" layoutY="430.0" mnemonicParsing="false" onAction="#EditarCupom" prefHeight="38.0" prefWidth="98.0" style="-fx-background-color: #d6b667; -fx-background-radius: 8;" text="Adicionar" textFill="WHITE">
+        <Button fx:id="btnAdicionar" layoutX="260.0" layoutY="430.0" mnemonicParsing="false" onAction="#AdicionarCupom" prefHeight="38.0" prefWidth="98.0" style="-fx-background-color: #d6b667; -fx-background-radius: 8;" text="Adicionar" textFill="WHITE">
             <cursor>
                 <Cursor fx:constant="HAND" />
             </cursor>

@@ -97,7 +97,7 @@ public class ControllerAdicionarCupom {
 
 
             // Atualização no banco de dados via DAO
-            boolean sucesso = cupomDAO.atualizar(CupomAdicionado);
+            boolean sucesso = cupomDAO.salvar(CupomAdicionado);
 
             if (sucesso) {
                 exibirAlerta(Alert.AlertType.INFORMATION, "Sucesso", "O cupom foi cadastrado com sucesso!");

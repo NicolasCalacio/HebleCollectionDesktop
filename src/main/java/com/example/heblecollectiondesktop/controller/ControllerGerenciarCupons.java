@@ -6,6 +6,7 @@ import java.text.SimpleDateFormat;
 import java.util.Optional;
 
 import com.example.heblecollectiondesktop.database.CupomDAO;
+import com.example.heblecollectiondesktop.model.Cargo;
 import com.example.heblecollectiondesktop.model.Cupom;
 import com.example.heblecollectiondesktop.model.Funcionario;
 
@@ -52,12 +53,43 @@ public class ControllerGerenciarCupons {
 
     public void setFuncionarioLogado(Funcionario funcionarioLogado) {
         this.funcionarioLogado = funcionarioLogado;
+        atualizarVisibilidadeBotoes();
     }
 
     @FXML
     public void initialize() {
         configurarColunas();
         carregarTabela();
+        atualizarVisibilidadeBotoes();
+    }
+
+    /**
+     * Verifica se o funcionário logado tem o cargo GERENTE.
+     */
+    private boolean isGerente() {
+        return funcionarioLogado != null
+                && funcionarioLogado.getCargo() != null
+                && funcionarioLogado.getCargo() == Cargo.GERENTE;
+    }
+
+    /**
+     * Oculta os botões de ação caso o usuário logado não seja um Gerente.
+     */
+    private void atualizarVisibilidadeBotoes() {
+        boolean ehGerente = isGerente();
+
+        if (btnAdicionarCupom != null) {
+            btnAdicionarCupom.setVisible(ehGerente);
+            btnAdicionarCupom.setManaged(ehGerente);
+        }
+        if (btnEditarCupom != null) {
+            btnEditarCupom.setVisible(ehGerente);
+            btnEditarCupom.setManaged(ehGerente);
+        }
+        if (btnRemoverCupom != null) {
+            btnRemoverCupom.setVisible(ehGerente);
+            btnRemoverCupom.setManaged(ehGerente);
+        }
     }
 
     private void configurarColunas() {
@@ -137,6 +169,11 @@ public class ControllerGerenciarCupons {
 
     @FXML
     void abrirTelaAdicionarCupom(ActionEvent event) {
+        if (!isGerente()) {
+            mostrarAlerta(Alert.AlertType.WARNING, "Acesso Negado", "Apenas gerentes podem adicionar novos cupons.");
+            return;
+        }
+
         try {
             URL url = getClass().getResource("/com/example/heblecollectiondesktop/view/adicionarCupom.fxml");
             if (url == null) {
@@ -170,6 +207,11 @@ public class ControllerGerenciarCupons {
 
     @FXML
     void abrirSubjanelaEditarCupom(ActionEvent event) {
+        if (!isGerente()) {
+            mostrarAlerta(Alert.AlertType.WARNING, "Acesso Negado", "Apenas gerentes podem editar cupons.");
+            return;
+        }
+
         if (tabelaCupons == null) return;
 
         Cupom selecionado = tabelaCupons.getSelectionModel().getSelectedItem();
@@ -218,6 +260,11 @@ public class ControllerGerenciarCupons {
 
     @FXML
     void acaoRemoverCupom(ActionEvent event) {
+        if (!isGerente()) {
+            mostrarAlerta(Alert.AlertType.WARNING, "Acesso Negado", "Apenas gerentes podem remover cupons.");
+            return;
+        }
+
         if (tabelaCupons == null) return;
 
         Cupom selecionado = tabelaCupons.getSelectionModel().getSelectedItem();

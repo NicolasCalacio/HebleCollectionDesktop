@@ -46,7 +46,7 @@ public class ControllerAdicionarCupom {
     private Cupom CupomAdicionado;
     private final CupomDAO cupomDAO = new CupomDAO();
 
-
+    // Recebe o cupom selecionado na tabela e preenche os campos
     public void setCupom(Cupom cupom) {
         this.CupomAdicionado = cupom;
 
@@ -66,61 +66,52 @@ public class ControllerAdicionarCupom {
         }
     }
 
-   public void AdicionarCupom(){
-        String txcodigo = txCodigo.getText().trim();
-       String  txtDescontoPercentual= txDescontoPercentual.getText().trim();
-       String  txValorMin = txValorMinimo.getText().trim();
+    @FXML
+    void AdicionarCupom(ActionEvent event) {
+        String codigo = txCodigo.getText().trim();
+        String txtDesconto = txDescontoPercentual.getText().trim();
+        String txtValorMin = txValorMinimo.getText().trim();
 
-       if (txcodigo.isEmpty() || txtDescontoPercentual.isEmpty() || txValorMin.isEmpty()) {
-           exibirAlerta(Alert.AlertType.WARNING, "Campos Obrigatórios", "Por favor, preencha o código, o desconto e o valor mínimo.");
-           return;
-       }
-       try {
+        // Validação de campos obrigatórios
+        if (codigo.isEmpty() || txtDesconto.isEmpty() || txtValorMin.isEmpty()) {
+            exibirAlerta(Alert.AlertType.WARNING, "Campos Obrigatórios", "Por favor, preencha o código, o desconto e o valor mínimo.");
+            return;
+        }
 
-           double desconto = Double.parseDouble(txtDescontoPercentual.replace(",", "."));
-           double valorMin = Double.parseDouble(txValorMin.replace(",", "."));
-
-
-           if (desconto <= 0 || desconto > 100) {
-               exibirAlerta(Alert.AlertType.WARNING, "Valor Inválido", "O desconto deve ser entre 0% e 100%.");
-               return;
-           }
-
-           if (valorMin < 0) {
-               exibirAlerta(Alert.AlertType.WARNING, "Valor Inválido", "O valor mínimo não pode ser negativo.");
-               return;
-           }
+        try {
+            double desconto = Double.parseDouble(txtDesconto.replace(",", "."));
+            double valorMin = Double.parseDouble(txtValorMin.replace(",", "."));
 
 
-           LocalDate localDate = dpValidade.getValue();
-           Date validade = null;
-           if (localDate != null) {
-               validade = Date.from(localDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
-           }
+            LocalDate localDate = dpValidade.getValue();
+            Date validade = null;
+            if (localDate != null) {
+                validade = Date.from(localDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
+            }
+
+            if (CupomAdicionado == null) {
+                CupomAdicionado = new Cupom();
+            }
 
 
-           Cupom novoCupom = new Cupom();
-           novoCupom.setCodigo(txcodigo);
-           novoCupom.setDescontoPercentual(desconto);
-           novoCupom.setValorMinimo(valorMin);
-           novoCupom.setValidade(validade);
 
 
-           boolean sucesso = cupomDAO.salvar(novoCupom);
+            // Atualização no banco de dados via DAO
+            boolean sucesso = cupomDAO.salvar(CupomAdicionado);
 
-           if (sucesso) {
-               exibirAlerta(Alert.AlertType.INFORMATION, "Sucesso", "O cupom foi cadastrado com sucesso!");
-               fecharJanela();
-           } else {
-               exibirAlerta(Alert.AlertType.ERROR, "Erro", "Não foi possível cadastrar o cupom.");
-           }
+            if (sucesso) {
+                exibirAlerta(Alert.AlertType.INFORMATION, "Sucesso", "O cupom foi cadastrado com sucesso!");
+                fecharJanela();
+            } else {
+                exibirAlerta(Alert.AlertType.ERROR, "Erro", "Não foi possível adicionar esse  cupom!.");
+            }
 
-       } catch (NumberFormatException e) {
-           exibirAlerta(Alert.AlertType.ERROR, "Erro de Formato", "Informe números válidos nos campos de Desconto e Valor Mínimo.");
-       } catch (SQLException e) {
-           exibirAlerta(Alert.AlertType.ERROR, "Erro no Banco de Dados", "Falha ao gravar cupom: " + e.getMessage());
-       }
-
+        } catch (NumberFormatException e) {
+            exibirAlerta(Alert.AlertType.ERROR, "Erro de Validação", "Insira valores numéricos válidos para Desconto e Valor Mínimo.");
+        } catch (SQLException e) {
+            e.printStackTrace();
+            exibirAlerta(Alert.AlertType.ERROR, "Erro de Banco de Dados", "Falha ao salvar as alterações: " + e.getMessage());
+        }
     }
 
     @FXML

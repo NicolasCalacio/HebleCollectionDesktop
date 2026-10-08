@@ -71,4 +71,21 @@ public class TicketDAO {
             return false;
         }
     }
+    public boolean Adicionar(Ticket ticket){
+        String sql = """
+            INSERT INTO login_schema.tickets
+            (assunto, descricao, status, funcionario_id)
+            VALUES (?, ?, ?, ?)
+            """;
+        try (Connection conexao = conexaoDB.getConexao();
+             PreparedStatement stmt = conexao.prepareStatement(sql)) {
+            stmt.setString(1, ticket.getAssunto());
+            stmt.setString(2, ticket.getDescricao());
+            stmt.setString(3, "pendente");
+            stmt.setInt(3, ticket.getFuncionarioId());
+            return stmt.executeUpdate()>0;
+        }catch (SQLException e){
+            throw new RuntimeException("Erro ao adicionar ticket:"+ e.getMessage(),e);
+        }
+    }
 }

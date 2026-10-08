@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.effect.DropShadow?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.paint.Color?>
+<?import javafx.scene.text.Font?>
+
+<StackPane prefHeight="760.0" prefWidth="1200.0" style="-fx-background-color: #EDF2F7;" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.heblecollectiondesktop.controller.ControllerSuporteFuncionario">
+
+    <children>
+
+        <!-- Cartão principal -->
+        <VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="504.0" minWidth="464.0" prefHeight="504.0" prefWidth="464.0" spacing="14.0" style="-fx-background-color: #FFFFFF; -fx-background-radius: 20; -fx-padding: 35;">
+
+            <effect>
+                <DropShadow blurType="THREE_PASS_BOX" height="30.0" radius="14.5" width="30.0">
+                    <color>
+                        <Color opacity="0.12" />
+                    </color>
+                </DropShadow>
+            </effect>
+
+            <children>
+
+                <!-- Título -->
+                <VBox alignment="CENTER" prefWidth="430.0" spacing="4.0">
+
+                    <children>
+
+                        <Label text="Suporte de Funcionários" textFill="#0F172A">
+                            <font>
+                                <Font name="System Bold" size="24.0" />
+                            </font>
+                        </Label>
+
+                        <Label text="Abra um chamado para solicitar suporte" textFill="#64748B">
+                            <font>
+                                <Font size="13.0" />
+                            </font>
+                        </Label>
+
+                    </children>
+
+                    <VBox.margin>
+                        <Insets bottom="15.0" />
+                    </VBox.margin>
+
+                </VBox>
+
+
+                <!-- Matrícula -->
+                <VBox alignment="CENTER_LEFT" prefWidth="430.0" spacing="4.0">
+
+                    <children>
+
+                        <Label text="Matrícula do funcionário" textFill="#334155">
+                            <font>
+                                <Font name="System Bold" size="12.0" />
+                            </font>
+                        </Label>
+
+                        <TextField fx:id="txMatricula" prefHeight="42.0" prefWidth="430.0" promptText="Digite a matrícula" style="-fx-background-color: #F8FAFC; -fx-border-color: #CBD5E1; -fx-border-radius: 8; -fx-background-radius: 8; -fx-padding: 0 12;" />
+
+                    </children>
+
+                </VBox>
+
+
+                <!-- Tipo de problema -->
+                <VBox alignment="CENTER_LEFT" prefWidth="430.0" spacing="4.0">
+
+                    <children>
+
+                        <Label text="Tipo de suporte" textFill="#334155">
+                            <font>
+                                <Font name="System Bold" size="12.0" />
+                            </font>
+                        </Label>
+
+                        <ComboBox fx:id="cbTipoSuporte" prefHeight="42.0" prefWidth="430.0" promptText="Selecione o tipo de problema" style="-fx-background-color: #F8FAFC; -fx-border-color: #CBD5E1; -fx-border-radius: 8; -fx-background-radius: 8;" />
+
+                    </children>
+
+                </VBox>
+
+
+                <!-- Descrição -->
+                <VBox alignment="CENTER_LEFT" prefWidth="430.0" spacing="4.0">
+
+                    <children>
+
+                        <Label text="Descrição do problema" textFill="#334155">
+                            <font>
+                                <Font name="System Bold" size="12.0" />
+                            </font>
+                        </Label>
+
+                        <TextArea fx:id="txDescricao" prefHeight="100.0" prefWidth="430.0" promptText="Descreva o problema ou solicitação..." style="-fx-background-color: #F8FAFC; -fx-border-color: #CBD5E1; -fx-border-radius: 8; -fx-background-radius: 8; -fx-padding: 10;" wrapText="true" />
+
+                    </children>
+
+                </VBox>
+
+
+                <!-- Botões -->
+                <HBox alignment="CENTER" prefWidth="430.0" spacing="10.0">
+
+                    <children>
+
+                        <Button fx:id="btnVoltar" mnemonicParsing="false" onAction="#voltar" prefHeight="42.0" prefWidth="150.0" style="-fx-background-color: #E2E8F0; -fx-text-fill: #334155; -fx-background-radius: 8; -fx-font-weight: bold; -fx-font-size: 13px; -fx-cursor: hand;" text="Voltar" />
+
+                        <Button fx:id="btnAbrirChamado" mnemonicParsing="false" onAction="#abrirChamado" prefHeight="42.0" prefWidth="270.0" style="-fx-background-color: #2563EB; -fx-text-fill: #FFFFFF; -fx-background-radius: 8; -fx-font-weight: bold; -fx-font-size: 13px; -fx-cursor: hand;" text="Abrir chamado" />
+
+                    </children>
+
+                    <VBox.margin>
+                        <Insets top="8.0" />
+                    </VBox.margin>
+
+                </HBox>
+
+
+                <!-- Informação -->
+                <Label text="Será criado um ticket que será avaliado pela gerencia" wrapText="true">
+                    <font>
+                        <Font size="11.0" />
+                    </font>
+                </Label>
+
+            </children>
+
+        </VBox>
+
+    </children>
+
+</StackPane>

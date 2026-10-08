@@ -15,6 +15,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
+import org.w3c.dom.events.MouseEvent;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -35,6 +36,7 @@ public class ControllerLogin implements Initializable {
 
     @FXML
     private Button btnLogin;
+
 
     private final FuncionarioDAO funcionarioDAO;
 
@@ -146,5 +148,42 @@ public class ControllerLogin implements Initializable {
         alerta.setHeaderText(null);
         alerta.setContentText(mensagem);
         alerta.showAndWait();
+    }
+    @FXML
+    private void abrirsuporte(MouseEvent event){
+        URL dashboardLocation = getClass().getResource("/com/example/heblecollectiondesktop/view/TelaSuporte.fxml");
+
+        if (dashboardLocation == null) {
+            dashboardLocation = getClass().getResource("/view/TelaSuporte.fxml");
+        }
+
+        if (dashboardLocation == null) {
+            exibirAlerta(Alert.AlertType.ERROR, "Erro de Configuração", "O arquivo 'TelaSuporte.fxml' não foi encontrado nas pastas de recursos.");
+            return;
+        }
+
+        try {
+            FXMLLoader fxmlLoader = new FXMLLoader(dashboardLocation);
+            Parent root = fxmlLoader.load();
+
+
+            Object controller = fxmlLoader.getController();
+
+
+
+            Stage stageAtual = (Stage) btnLogin.getScene().getWindow();
+
+            Stage stageDashboard = new Stage();
+            stageDashboard.setTitle("Heble Collection - Suport");
+            stageDashboard.setScene(new Scene(root, 1200, 760));
+            stageDashboard.setResizable(true);
+            stageDashboard.centerOnScreen();
+
+            stageDashboard.show();
+            stageAtual.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+            exibirAlerta(Alert.AlertType.ERROR, "Erro de Carregamento", "Falha ao carregar a tela principal: " + e.getMessage());
+        }
     }
 }

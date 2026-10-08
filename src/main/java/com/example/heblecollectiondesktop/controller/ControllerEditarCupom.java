@@ -46,7 +46,7 @@ public class ControllerEditarCupom {
     private Cupom cupomEmEdicao;
     private final CupomDAO cupomDAO = new CupomDAO();
 
-
+    // Recebe o cupom selecionado na tabela e preenche os campos
     public void setCupom(Cupom cupom) {
         this.cupomEmEdicao = cupom;
 
@@ -73,7 +73,7 @@ public class ControllerEditarCupom {
         String txtDesconto = txDescontoPercentual.getText().trim();
         String txtValorMin = txValorMinimo.getText().trim();
 
-
+        // Validação de campos obrigatórios
         if (codigo.isEmpty() || txtDesconto.isEmpty() || txtValorMin.isEmpty()) {
             exibirAlerta(Alert.AlertType.WARNING, "Campos Obrigatórios", "Por favor, preencha o código, o desconto e o valor mínimo.");
             return;
@@ -100,7 +100,7 @@ public class ControllerEditarCupom {
             cupomEmEdicao.setAtivo(ativo);
             cupomEmEdicao.setValidade(validade);
 
-
+            // Atualização no banco de dados via DAO
             boolean sucesso = cupomDAO.atualizar(cupomEmEdicao);
 
             if (sucesso) {

@@ -63,18 +63,12 @@ public class ControllerGerenciarCupons {
         atualizarVisibilidadeBotoes();
     }
 
-    /**
-     * Verifica se o funcionário logado tem o cargo GERENTE.
-     */
     private boolean isGerente() {
         return funcionarioLogado != null
                 && funcionarioLogado.getCargo() != null
                 && funcionarioLogado.getCargo() == Cargo.GERENTE;
     }
 
-    /**
-     * Oculta os botões de ação caso o usuário logado não seja um Gerente.
-     */
     private void atualizarVisibilidadeBotoes() {
         boolean ehGerente = isGerente();
 

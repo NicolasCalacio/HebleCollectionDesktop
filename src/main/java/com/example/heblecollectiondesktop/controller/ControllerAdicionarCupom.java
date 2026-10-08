@@ -46,7 +46,7 @@ public class ControllerAdicionarCupom {
     private Cupom CupomAdicionado;
     private final CupomDAO cupomDAO = new CupomDAO();
 
-    // Recebe o cupom selecionado na tabela e preenche os campos
+
     public void setCupom(Cupom cupom) {
         this.CupomAdicionado = cupom;
 
@@ -72,7 +72,6 @@ public class ControllerAdicionarCupom {
         String txtDesconto = txDescontoPercentual.getText().trim();
         String txtValorMin = txValorMinimo.getText().trim();
 
-        // Validação de campos obrigatórios
         if (codigo.isEmpty() || txtDesconto.isEmpty() || txtValorMin.isEmpty()) {
             exibirAlerta(Alert.AlertType.WARNING, "Campos Obrigatórios", "Por favor, preencha o código, o desconto e o valor mínimo.");
             return;

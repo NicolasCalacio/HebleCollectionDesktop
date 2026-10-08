@@ -6,9 +6,9 @@ import java.text.SimpleDateFormat;
 import java.util.Optional;
 
 import com.example.heblecollectiondesktop.database.CupomDAO;
-import com.example.heblecollectiondesktop.model.Cargo;
 import com.example.heblecollectiondesktop.model.Cupom;
 import com.example.heblecollectiondesktop.model.Funcionario;
+
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -17,7 +17,11 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.*;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.Pane;
 import javafx.stage.Modality;
@@ -48,38 +52,12 @@ public class ControllerGerenciarCupons {
 
     public void setFuncionarioLogado(Funcionario funcionarioLogado) {
         this.funcionarioLogado = funcionarioLogado;
-        atualizarVisibilidadeBotoes();
     }
 
     @FXML
     public void initialize() {
         configurarColunas();
         carregarTabela();
-        atualizarVisibilidadeBotoes();
-        configurarDuploClique();
-    }
-
-    private boolean isGerente() {
-        return funcionarioLogado != null
-                && funcionarioLogado.getCargo() != null
-                && funcionarioLogado.getCargo() == Cargo.GERENTE;
-    }
-
-    private void atualizarVisibilidadeBotoes() {
-        boolean ehGerente = isGerente();
-
-        if (btnAdicionarCupom != null) {
-            btnAdicionarCupom.setVisible(ehGerente);
-            btnAdicionarCupom.setManaged(ehGerente);
-        }
-        if (btnEditarCupom != null) {
-            btnEditarCupom.setVisible(ehGerente);
-            btnEditarCupom.setManaged(ehGerente);
-        }
-        if (btnRemoverCupom != null) {
-            btnRemoverCupom.setVisible(ehGerente);
-            btnRemoverCupom.setManaged(ehGerente);
-        }
     }
 
     private void configurarColunas() {
@@ -126,43 +104,6 @@ public class ControllerGerenciarCupons {
             mostrarAlerta(Alert.AlertType.ERROR, "Erro", "Erro ao carregar lista de cupons: " + e.getMessage());
         }
     }
-    private void configurarDuploClique() {
-        if (tabelaCupons == null) return;
-
-        tabelaCupons.setRowFactory(tv -> {
-            TableRow<Cupom> row = new TableRow<>();
-            row.setOnMouseClicked(event -> {
-                if (event.getClickCount() == 2 && !row.isEmpty()) {
-                    Cupom cupomSelecionado = row.getItem();
-                    abrirTelaInfoCupom(cupomSelecionado);
-                }
-            });
-            return row;
-        });
-    }
-    private void abrirTelaInfoCupom(Cupom cupom) {
-        try {
-
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/heblecollectiondesktop/view/InfoPopUpCupom.fxml"));
-            Parent root = loader.load();
-
-
-            ControllerTelaInfoCupom modalController = loader.getController();
-
-
-            modalController.setCupom(cupom);
-
-
-            Stage stage = new Stage();
-            stage.setScene(new Scene(root));
-            stage.setTitle("Informaçoes Cupom");
-            stage.initModality(Modality.APPLICATION_MODAL);
-            stage.showAndWait();
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
 
     @FXML
     void voltarAoHub(ActionEvent event) {
@@ -196,24 +137,19 @@ public class ControllerGerenciarCupons {
 
     @FXML
     void abrirTelaAdicionarCupom(ActionEvent event) {
-        if (!isGerente()) {
-            mostrarAlerta(Alert.AlertType.WARNING, "Acesso Negado", "Apenas gerentes podem adicionar novos cupons.");
-            return;
-        }
-
         try {
             URL url = getClass().getResource("/com/example/heblecollectiondesktop/view/adicionarCupom.fxml");
             if (url == null) {
-                url = getClass().getResource("/com/example/heblecollectiondesktop/view/adicionarCupom.fxml");
+                url = getClass().getResource("/com/example/heblecollectiondesktop/view/formularioCupom.fxml");
             }
 
             if (url == null) {
-                mostrarAlerta(Alert.AlertType.ERROR, "Erro FXML", "Arquivo adicionarCupom.fxml não encontrado.");
+                mostrarAlerta(Alert.AlertType.ERROR, "Erro FXML", "Arquivo FormularioCupom.fxml não encontrado.");
                 return;
             }
 
             FXMLLoader loader = new FXMLLoader(url);
-            Parent subtela = loader.load();
+            Parent view = loader.load();
 
             Object controller = loader.getController();
             if (controller != null) {
@@ -222,15 +158,10 @@ public class ControllerGerenciarCupons {
                     controller.getClass().getMethod("setFuncionarioLogado", Funcionario.class).invoke(controller, funcionarioLogado);
                 } catch (Exception ignored) {}
             }
-            Stage janelaAtual = (Stage) ((Button) event.getSource()).getScene().getWindow();
-            Stage subjanela = new Stage();
-            subjanela.initOwner(janelaAtual);
-            subjanela.initModality(Modality.WINDOW_MODAL);
-            subjanela.setScene(new Scene(subtela));
-            subjanela.setTitle("Adicionar cupom");
-            subjanela.setResizable(false);
-            subjanela.showAndWait();
 
+            if (containerCentral != null) {
+                containerCentral.getChildren().setAll(view);
+            }
         } catch (IOException e) {
             e.printStackTrace();
             mostrarAlerta(Alert.AlertType.ERROR, "Erro de Navegação", "Não foi possível carregar o formulário: " + e.getMessage());
@@ -239,11 +170,6 @@ public class ControllerGerenciarCupons {
 
     @FXML
     void abrirSubjanelaEditarCupom(ActionEvent event) {
-        if (!isGerente()) {
-            mostrarAlerta(Alert.AlertType.WARNING, "Acesso Negado", "Apenas gerentes podem editar cupons.");
-            return;
-        }
-
         if (tabelaCupons == null) return;
 
         Cupom selecionado = tabelaCupons.getSelectionModel().getSelectedItem();
@@ -292,11 +218,6 @@ public class ControllerGerenciarCupons {
 
     @FXML
     void acaoRemoverCupom(ActionEvent event) {
-        if (!isGerente()) {
-            mostrarAlerta(Alert.AlertType.WARNING, "Acesso Negado", "Apenas gerentes podem remover cupons.");
-            return;
-        }
-
         if (tabelaCupons == null) return;
 
         Cupom selecionado = tabelaCupons.getSelectionModel().getSelectedItem();

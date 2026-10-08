@@ -46,6 +46,7 @@ public class ControllerEditarCupom {
     private Cupom cupomEmEdicao;
     private final CupomDAO cupomDAO = new CupomDAO();
 
+
     public void setCupom(Cupom cupom) {
         this.cupomEmEdicao = cupom;
 

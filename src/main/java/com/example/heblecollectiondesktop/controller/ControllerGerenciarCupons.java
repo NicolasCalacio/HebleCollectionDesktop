@@ -177,16 +177,16 @@ public class ControllerGerenciarCupons {
         try {
             URL url = getClass().getResource("/com/example/heblecollectiondesktop/view/adicionarCupom.fxml");
             if (url == null) {
-                url = getClass().getResource("/com/example/heblecollectiondesktop/view/formularioCupom.fxml");
+                url = getClass().getResource("/com/example/heblecollectiondesktop/view/adicionarCupom.fxml");
             }
 
             if (url == null) {
-                mostrarAlerta(Alert.AlertType.ERROR, "Erro FXML", "Arquivo FormularioCupom.fxml não encontrado.");
+                mostrarAlerta(Alert.AlertType.ERROR, "Erro FXML", "Arquivo adicionarCupom.fxml não encontrado.");
                 return;
             }
 
             FXMLLoader loader = new FXMLLoader(url);
-            Parent view = loader.load();
+            Parent subtela = loader.load();
 
             Object controller = loader.getController();
             if (controller != null) {
@@ -195,10 +195,15 @@ public class ControllerGerenciarCupons {
                     controller.getClass().getMethod("setFuncionarioLogado", Funcionario.class).invoke(controller, funcionarioLogado);
                 } catch (Exception ignored) {}
             }
+            Stage janelaAtual = (Stage) ((Button) event.getSource()).getScene().getWindow();
+            Stage subjanela = new Stage();
+            subjanela.initOwner(janelaAtual);
+            subjanela.initModality(Modality.WINDOW_MODAL);
+            subjanela.setScene(new Scene(subtela));
+            subjanela.setTitle("Adicionar cupom");
+            subjanela.setResizable(false);
+            subjanela.showAndWait();
 
-            if (containerCentral != null) {
-                containerCentral.getChildren().setAll(view);
-            }
         } catch (IOException e) {
             e.printStackTrace();
             mostrarAlerta(Alert.AlertType.ERROR, "Erro de Navegação", "Não foi possível carregar o formulário: " + e.getMessage());

@@ -4,10 +4,20 @@ public class Ticket {
     private int id;
     private String assunto;
     private String descricao;
-    private String status;
+    private boolean status;
     private int funcionarioId;
 
-    public Ticket(int id, String assunto, String descricao, String status, int funcionarioId) {
+    public String getFuncionarioMatricula() {
+        return funcionarioMatricula;
+    }
+
+    public void setFuncionarioMatricula(String funcionarioMatricula) {
+        this.funcionarioMatricula = funcionarioMatricula;
+    }
+
+    private String funcionarioMatricula;
+
+    public Ticket(int id, String assunto, String descricao, boolean status, int funcionarioId) {
         this.id = id;
         this.assunto = assunto;
         this.descricao = descricao;
@@ -24,8 +34,8 @@ public class Ticket {
     public String getDescricao() { return descricao; }
     public void setDescricao(String descricao) { this.descricao = descricao; }
 
-    public String getStatus() { return status; }
-    public void setStatus(String status) { this.status = status; }
+    public boolean getStatus() { return status; }
+    public void setStatus(Boolean status) { this.status = status; }
 
     public int getFuncionarioId() { return funcionarioId; }
     public void setFuncionarioId(int funcionarioId) { this.funcionarioId = funcionarioId; }

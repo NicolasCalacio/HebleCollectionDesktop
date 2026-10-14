@@ -26,6 +26,7 @@ public class ControllerTicketFechados {
     @FXML
     private TableView<Ticket> tbTicketsFechados;
 
+
     @FXML
     private TableColumn<Ticket, Integer> colId;
 

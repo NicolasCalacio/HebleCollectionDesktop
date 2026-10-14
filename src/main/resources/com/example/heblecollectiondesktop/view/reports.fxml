@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<VBox spacing="24.0" style="-fx-padding: 30; -fx-background-color: #F8FAFC;" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.heblecollectiondesktop.controller.ControllerModeracaoHub">
+    <children>
+        <VBox spacing="4.0">
+            <children>
+                <Label prefHeight="35.0" prefWidth="586.0" text="Painel de Moderação de Tickets " textFill="#0F172A">
+                    <font>
+                        <Font name="System Bold" size="24.0" />
+                    </font>
+                </Label>
+                <Label text="Selecione o módulo administrativo de Tickets  que deseja gerenciar" textFill="#64748B">
+                    <font>
+                        <Font size="14.0" />
+                    </font>
+                </Label>
+            </children>
+        </VBox>
+
+        <HBox spacing="20.0" VBox.vgrow="ALWAYS">
+            <children>
+                <VBox prefWidth="300.0" spacing="16.0" style="-fx-background-color: #FFFFFF; -fx-border-color: #E2E8F0; -fx-border-radius: 12; -fx-background-radius: 12; -fx-padding: 24;" HBox.hgrow="ALWAYS">
+                    <children>
+                        <Label text="Tickets Pedentes  " textFill="#1E293B">
+                            <font>
+                                <Font name="System Bold" size="18.0" />
+                            </font>
+                        </Label>
+                        <Label text="Controle Pedentes de Tickets, Transações inacabadas ,denúncias , Formas de pagamentos, Reembolso. " textFill="#64748B" wrapText="true" VBox.vgrow="ALWAYS" />
+                        <Button fx:id="btnPendencias" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#irparaosPendentes" prefHeight="42.0" style="-fx-background-color: #2563EB; -fx-text-fill: white; -fx-background-radius: 8; -fx-cursor: hand;" text="Pendências">
+                            <font>
+                                <Font name="System Bold" size="13.0" />
+                            </font>
+                        </Button>
+                    </children>
+                </VBox>
+
+                <VBox prefWidth="300.0" spacing="16.0" style="-fx-background-color: #FFFFFF; -fx-border-color: #E2E8F0; -fx-border-radius: 12; -fx-background-radius: 12; -fx-padding: 24;" HBox.hgrow="ALWAYS">
+                    <children>
+                        <Label prefHeight="27.0" prefWidth="269.0" text="Tickets Em Andamento" textFill="#1E293B">
+                            <font>
+                                <Font name="System Bold" size="18.0" />
+                            </font>
+                        </Label>
+                        <Label text="Tickets em processo de Report, de acordo com suas denúncias e reclamações em relação ao sistema.  " textFill="#64748B" wrapText="true" VBox.vgrow="ALWAYS" />
+                        <Button fx:id="btnTicketsemAndamento" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#abrirprogressodeTickets" prefHeight="42.0" style="-fx-background-color: #0F172A; -fx-text-fill: white; -fx-background-radius: 8; -fx-cursor: hand;" text="Processo ">
+                            <font>
+                                <Font name="System Bold" size="13.0" />
+                            </font>
+                        </Button>
+                    </children>
+                </VBox>
+
+                <VBox prefWidth="300.0" spacing="16.0" style="-fx-background-color: #FFFFFF; -fx-border-color: #E2E8F0; -fx-border-radius: 12; -fx-background-radius: 12; -fx-padding: 24;" HBox.hgrow="ALWAYS">
+                    <children>
+                        <Label text="Tickets Fechado " textFill="#1E293B">
+                            <font>
+                                <Font name="System Bold" size="18.0" />
+                            </font>
+                        </Label>
+                        <Label prefHeight="58.0" prefWidth="171.0" text="Histórico de Tickets Finalizados. " textFill="#64748B" wrapText="true" VBox.vgrow="ALWAYS" />
+                  <Button fx:id="btnTicketsFechado" layoutX="35.0" layoutY="111.0" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#irparaosFechados" prefHeight="36.0" prefWidth="250.0" style="-fx-background-color: #475569; -fx-text-fill: white; -fx-background-radius: 8; -fx-cursor: hand;" text="Finalizado">
+                     <font>
+                        <Font name="System Bold" size="13.0" />
+                     </font>
+                  </Button>
+                    </children>
+                </VBox>
+            </children>
+        </HBox>
+    </children>
+</VBox>

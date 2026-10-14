@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.Cursor?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+
+<AnchorPane prefHeight="628.0" prefWidth="387.0" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" fx:controller="$CONTROLLER_NAME$">
+   <children>
+      <AnchorPane cache="true" cacheHint="SPEED" depthTest="DISABLE" layoutX="10.0" layoutY="10.0" prefHeight="618.0" prefWidth="388.0">
+         <children>
+            <Button fx:id="btnEditar" layoutX="270.0" layoutY="558.0" mnemonicParsing="false" onAction="#EditarEmpresa" prefHeight="38.0" prefWidth="84.0" style="-fx-background-color: d6b667; -fx-background-radius: 8" text="Editar " textFill="WHITE">
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor>
+               <font>
+                  <Font name="System Bold" size="14.0" />
+               </font>
+            </Button>
+            <Button fx:id="BtnLimpar" layoutX="17.0" layoutY="558.0" mnemonicParsing="false" onAction="#Limpar" prefHeight="38.0" prefWidth="65.0" style="-fx-background-radius: 8;" text="Limpar">
+               <font>
+                  <Font name="System Bold" size="12.0" />
+               </font>
+            </Button>
+            <Label layoutX="102.0" layoutY="29.0" prefHeight="27.0" prefWidth="181.0" text="Edição de Cupons ">
+               <font>
+                  <Font name="System Bold" size="18.0" />
+               </font>
+            </Label>
+            <Label layoutX="26.0" layoutY="68.0" prefHeight="27.0" prefWidth="200.0" text=" Código do Cumpom">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </Label>
+            <Label layoutX="30.0" layoutY="132.0" prefHeight="27.0" prefWidth="131.0" text="Descrição do Cupom">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </Label>
+            <Label layoutX="26.0" layoutY="201.0" prefHeight="27.0" prefWidth="131.0" text="Valor do Cupom">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </Label>
+            <Button fx:id="btnCancelar" layoutX="136.0" layoutY="558.0" mnemonicParsing="false" onAction="#Cancelar" prefHeight="38.0" prefWidth="84.0" style="-fx-background-radius: 8;" text="Cancelar">
+               <font>
+                  <Font name="System Bold" size="12.0" />
+               </font>
+            </Button>
+            <TextField layoutX="16.0" layoutY="358.0" promptText="00/00/00" />
+            <TextField layoutX="20.0" layoutY="296.0" promptText="00/00/00" />
+            <TextField layoutX="26.0" layoutY="95.0" promptText="digite o código" />
+            <Label layoutX="24.0" layoutY="266.0" prefHeight="27.0" prefWidth="103.0" text="Data de Início" />
+            <Label layoutX="24.0" layoutY="330.0" prefHeight="18.0" prefWidth="113.0" text="Data de Validade " />
+            <TextField layoutX="17.0" layoutY="228.0" promptText="\%15..." />
+            <TextField layoutX="19.0" layoutY="169.0" promptText="descreva" />
+            <Label layoutX="24.0" layoutY="392.0" prefHeight="18.0" prefWidth="103.0" text="Status do Cupom" />
+            <TextField layoutX="17.0" layoutY="417.0" promptText="ativo ou desativado" />
+            <ImageView fitHeight="38.0" fitWidth="43.0" layoutX="262.0" layoutY="24.0">
+               <image>
+                  <Image url="@../../../../../../../../../Downloads/image-removebg-preview%20(1).png" />
+               </image>
+            </ImageView>
+         </children>
+      </AnchorPane>
+   </children>
+</AnchorPane>

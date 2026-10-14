@@ -1,4 +1,5 @@
 package com.example.heblecollectiondesktop.controller;
+
 import java.util.List;
 import java.util.stream.Collectors;
 import com.example.heblecollectiondesktop.database.TicketDAO;
@@ -36,7 +37,7 @@ public class ControllerTicketFechados {
     private TableColumn<Ticket, String> colDescricao;
 
     @FXML
-    private TableColumn<Ticket, Boolean> colStatus;
+    private TableColumn<Ticket, String> colStatus; // Alterado de Boolean para String
 
     private final TicketDAO ticketDAO = new TicketDAO();
     private Pane containerCentral;
@@ -58,10 +59,7 @@ public class ControllerTicketFechados {
         if (colStatus != null) colStatus.setCellValueFactory(new PropertyValueFactory<>("status"));
         configurarDuploClique();
         carregarTickets();
-
-
     }
-
 
     private void configurarDuploClique() {
         if (tbTicketsFechados == null) return;
@@ -80,16 +78,11 @@ public class ControllerTicketFechados {
 
     private void abrirTelaInfo(Ticket ticket) {
         try {
-
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/heblecollectiondesktop/view/InfoPopUp.fxml"));
             Parent root = loader.load();
 
-
             ControllerTelaInfoTickets modalController = loader.getController();
-
-
             modalController.setTicket(ticket);
-
 
             Stage stage = new Stage();
             stage.setTitle("Detalhes do Ticket #" + ticket.getId());
@@ -102,12 +95,14 @@ public class ControllerTicketFechados {
         }
     }
 
-
     public void carregarTickets() {
         try {
             List<Ticket> listaBanco = ticketDAO.listarTodos();
+
+            // Filtra tickets que estejam finalizados ("fechado" ou "recusado")
             List<Ticket> fechados = listaBanco.stream()
-                    .filter(Ticket::getStatus)
+                    .filter(t -> t.getStatus() != null &&
+                            (t.getStatus().equalsIgnoreCase("fechado") || t.getStatus().equalsIgnoreCase("recusado")))
                     .collect(Collectors.toList());
 
             ObservableList<Ticket> listaObservable = FXCollections.observableArrayList(fechados);

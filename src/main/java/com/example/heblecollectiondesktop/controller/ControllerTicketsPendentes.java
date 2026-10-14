@@ -1,6 +1,5 @@
 package com.example.heblecollectiondesktop.controller;
 
-
 import com.example.heblecollectiondesktop.database.TicketDAO;
 import com.example.heblecollectiondesktop.model.Funcionario;
 import com.example.heblecollectiondesktop.model.Ticket;
@@ -17,11 +16,9 @@ import javafx.scene.layout.Pane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
-import java.io.EOFException;
 import java.io.IOException;
 import java.net.URL;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 public class ControllerTicketsPendentes {
@@ -35,7 +32,8 @@ public class ControllerTicketsPendentes {
     @FXML
     private TableColumn<Ticket, String> colDescricao;
     @FXML
-    private TableColumn<Ticket, Boolean> colStatus;
+    private TableColumn<Ticket, String> colStatus; // Alterado de Boolean para String
+
     private Pane containerCentral;
     private Funcionario funcionarioLogado;
     private final TicketDAO ticketsPendentesDao = new TicketDAO();
@@ -56,8 +54,6 @@ public class ControllerTicketsPendentes {
         if (colStatus != null) colStatus.setCellValueFactory(new PropertyValueFactory<>("status"));
         configurarDuploClique();
         carregarTickets();
-
-
     }
 
     private void configurarDuploClique() {
@@ -77,16 +73,11 @@ public class ControllerTicketsPendentes {
 
     private void abrirTelaInfo(Ticket ticket) {
         try {
-
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/heblecollectiondesktop/view/InfoPopUp.fxml"));
             Parent root = loader.load();
 
-
             ControllerTelaInfoTickets modalController = loader.getController();
-
-
             modalController.setTicket(ticket);
-
 
             Stage stage = new Stage();
             stage.setTitle("Detalhes do Ticket #" + ticket.getId());
@@ -102,8 +93,9 @@ public class ControllerTicketsPendentes {
     public void carregarTickets() {
         try {
             List<Ticket> listaBanco = ticketsPendentesDao.listarTodos();
+
             List<Ticket> pendentes = listaBanco.stream()
-                    .filter(t -> !t.getStatus())
+                    .filter(t -> t.getStatus() != null && t.getStatus().equalsIgnoreCase("pendente"))
                     .collect(Collectors.toList());
 
             ObservableList<Ticket> lista = FXCollections.observableArrayList(pendentes);
@@ -112,7 +104,7 @@ public class ControllerTicketsPendentes {
             }
         } catch (Exception e) {
             e.printStackTrace();
-            mostrarAlerta("Erro de Conexão", "Não foi possível carregar os tickets: " + e.getMessage());
+            mostrarAlerta("Erro de Conexão", "Não foi possível carregar os tickets: " + e.getMessage(), Alert.AlertType.ERROR);
         }
     }
 
@@ -120,15 +112,18 @@ public class ControllerTicketsPendentes {
     public void AprovarTicket() {
         Ticket selecionado = TabelaTickets.getSelectionModel().getSelectedItem();
         if (selecionado == null) {
-            mostrarAlerta("Atenção", "Selecione um ticket na tabela.");
+            mostrarAlerta("Atenção", "Selecione um ticket na tabela.", Alert.AlertType.WARNING);
             return;
         }
-        boolean sucesso = ticketsPendentesDao.atualizarStatus(selecionado.getId(), true);
+
+        // Atualiza o status para "andamento" (ou "fechado", conforme sua preferência de fluxo)
+        boolean sucesso = ticketsPendentesDao.atualizarStatus(selecionado.getId(), "andamento");
+
         if (sucesso) {
-            mostrarAlerta("Sucesso", "Ticket #" + selecionado.getId() + " aprovado com sucesso!");
+            mostrarAlerta("Sucesso", "Ticket #" + selecionado.getId() + " aprovado/movido para andamento com sucesso!", Alert.AlertType.INFORMATION);
             carregarTickets();
         } else {
-            mostrarAlerta("Erro", "Não foi possível aprovar o ticket selecionado.");
+            mostrarAlerta("Erro", "Não foi possível aprovar o ticket selecionado.", Alert.AlertType.ERROR);
         }
     }
 
@@ -136,7 +131,7 @@ public class ControllerTicketsPendentes {
     public void RejeitarTicket(ActionEvent event) {
         Ticket selecionado = TabelaTickets.getSelectionModel().getSelectedItem();
         if (selecionado == null) {
-            mostrarAlerta("Atenção", "Selecione um ticket na tabela.");
+            mostrarAlerta("Atenção", "Selecione um ticket na tabela.", Alert.AlertType.WARNING);
             return;
         }
         try {
@@ -145,7 +140,6 @@ public class ControllerTicketsPendentes {
 
             ControllerConfirmarRejeicao controllerPai = loader.getController();
             controllerPai.setTicketSelecionado(selecionado);
-
 
             Button btnClicado1 = (Button) event.getSource();
             Stage janelaAtual = (Stage) btnClicado1.getScene().getWindow();
@@ -162,11 +156,8 @@ public class ControllerTicketsPendentes {
 
         } catch (IOException e) {
             e.printStackTrace();
-            mostrarAlerta("Erro de Carregamento", "Falha ao carregar a sub-tela: " , Alert.AlertType.ERROR );
+            mostrarAlerta("Erro de Carregamento", "Falha ao carregar a sub-tela: " + e.getMessage(), Alert.AlertType.ERROR);
         }
-
-
-
     }
 
     @FXML
@@ -177,7 +168,7 @@ public class ControllerTicketsPendentes {
                 url = getClass().getResource("/com/example/heblecollectiondesktop/view/ticketsHub.fxml");
             }
             if (url == null) {
-                mostrarAlerta("Erro FXML", "Arquivo TicketsHub.fxml não encontrado.");
+                mostrarAlerta("Erro FXML", "Arquivo TicketsHub.fxml não encontrado.", Alert.AlertType.ERROR);
                 return;
             }
 
@@ -197,19 +188,10 @@ public class ControllerTicketsPendentes {
             }
         } catch (IOException e) {
             e.printStackTrace();
-            mostrarAlerta("Erro de Navegação", "Falha ao retornar ao hub: " + e.getMessage());
+            mostrarAlerta("Erro de Navegação", "Falha ao retornar ao hub: " + e.getMessage(), Alert.AlertType.ERROR);
         }
     }
 
-
-
-    private void mostrarAlerta(String titulo, String mensagem) {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle(titulo);
-        alert.setHeaderText(null);
-        alert.setContentText(mensagem);
-        alert.showAndWait();
-    }
     @FXML
     private void subjanela(ActionEvent event){
         Ticket TicketSelecionado = TabelaTickets.getSelectionModel().getSelectedItem();
@@ -234,11 +216,20 @@ public class ControllerTicketsPendentes {
             SubJanela1.setResizable(false);
             SubJanela1.showAndWait();
             carregarTickets();
-        }catch (IOException e) {
+        } catch (IOException e) {
             e.printStackTrace();
-            mostrarAlerta("Erro de Carregamento", "Falha ao carregar a sub-tela: " , Alert.AlertType.ERROR );
+            mostrarAlerta("Erro de Carregamento", "Falha ao carregar a sub-tela: " + e.getMessage(), Alert.AlertType.ERROR);
         }
     }
+
+    private void mostrarAlerta(String titulo, String mensagem) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle(titulo);
+        alert.setHeaderText(null);
+        alert.setContentText(mensagem);
+        alert.showAndWait();
+    }
+
     private void mostrarAlerta(String titulo, String mensagem, Alert.AlertType tipo) {
         Alert alert = new Alert(tipo);
         alert.setTitle(titulo);

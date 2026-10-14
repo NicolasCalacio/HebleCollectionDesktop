@@ -29,7 +29,7 @@ public class ControllerTicketsAndamento {
     @FXML private TableColumn<Ticket, Integer> colID;
     @FXML private TableColumn<Ticket, String> colAssunto;
     @FXML private TableColumn<Ticket, String> colDescricao;
-    @FXML private TableColumn<Ticket, Boolean> colStatus;
+    @FXML private TableColumn<Ticket, String> colStatus; // Alterado de Boolean para String
     @FXML private TableColumn<Ticket, Integer> colFuncionarioId;
 
     private final TicketDAO ticketDAO = new TicketDAO();
@@ -61,9 +61,9 @@ public class ControllerTicketsAndamento {
     public void carregarTickets() {
         try {
             List<Ticket> todos = ticketDAO.listarTodos();
-            // Filtra chamados em andamento (não finalizados)
+
             List<Ticket> emAndamento = todos.stream()
-                    .filter(t -> !t.getStatus())
+                    .filter(t -> t.getStatus() != null && t.getStatus().equalsIgnoreCase("andamento"))
                     .collect(Collectors.toList());
 
             listaTickets.setAll(emAndamento);
@@ -86,7 +86,7 @@ public class ControllerTicketsAndamento {
         }
 
         try {
-            boolean sucesso = ticketDAO.atualizarStatus(ticketSelecionado.getId(), true);
+            boolean sucesso = ticketDAO.atualizarStatus(ticketSelecionado.getId(), "fechado");
 
             if (sucesso) {
                 registrarLog("CONCLUSAO_TICKET", ticketSelecionado, "Ticket finalizado com sucesso.");
@@ -116,7 +116,6 @@ public class ControllerTicketsAndamento {
             ControllerConfirmarNegar controllerPai = loader.getController();
             controllerPai.setTicketSelecionado(ticketSelecionado);
 
-
             Button btnClicado1 = (Button) event.getSource();
             Stage janelaAtual = (Stage) btnClicado1.getScene().getWindow();
 
@@ -132,9 +131,8 @@ public class ControllerTicketsAndamento {
 
         } catch (IOException e) {
             e.printStackTrace();
-            mostrarAlerta("Erro de Carregamento", "Falha ao carregar a sub-tela: " , Alert.AlertType.ERROR );
+            mostrarAlerta("Erro de Carregamento", "Falha ao carregar a sub-tela: ", Alert.AlertType.ERROR);
         }
-
     }
 
     @FXML
@@ -161,6 +159,7 @@ public class ControllerTicketsAndamento {
             mostrarAlerta("Erro", "Erro ao deletar ticket: " + e.getMessage(), Alert.AlertType.ERROR);
         }
     }
+
     private void configurarDuploClique() {
         if (ticketsEmAndamento == null) return;
 
@@ -175,18 +174,14 @@ public class ControllerTicketsAndamento {
             return row;
         });
     }
+
     private void abrirTelaInfo(Ticket ticket) {
         try {
-
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/heblecollectiondesktop/view/InfoPopUp.fxml"));
             Parent root = loader.load();
 
-
             ControllerTelaInfoTickets modalController = loader.getController();
-
-
             modalController.setTicket(ticket);
-
 
             Stage stage = new Stage();
             stage.setTitle("Detalhes do Ticket #" + ticket.getId());

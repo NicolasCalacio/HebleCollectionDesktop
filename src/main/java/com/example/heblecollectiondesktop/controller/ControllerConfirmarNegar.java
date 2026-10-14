@@ -15,116 +15,115 @@ import javafx.stage.Stage;
 
 public class ControllerConfirmarNegar {
 
-        @FXML
-        private ComboBox<String> cbMotivoNegar;
-        @FXML private TextArea txtObservacao;
+    @FXML
+    private ComboBox<String> cbMotivoNegar;
+    @FXML private TextArea txtObservacao;
 
-        private Ticket ticketRejeitar;
-        private ControllerTicketsPendentes controllerPai;
-        private Funcionario funcionarioLogado;
+    private Ticket ticketRejeitar;
+    private ControllerTicketsPendentes controllerPai;
+    private Funcionario funcionarioLogado;
 
-        private final LogsDAO rejeitarLog = new LogsDAO();
-        private final TicketDAO ticketDAO = new TicketDAO();
+    private final LogsDAO rejeitarLog = new LogsDAO();
+    private final TicketDAO ticketDAO = new TicketDAO();
 
-        public void setTicketSelecionado(Ticket ticket) {
-            this.ticketRejeitar = ticket;
+    public void setTicketSelecionado(Ticket ticket) {
+        this.ticketRejeitar = ticket;
+    }
+
+    public void setControllerPai(ControllerTicketsPendentes controllerPai) {
+        this.controllerPai = controllerPai;
+    }
+
+    public void setFuncionarioLogado(Funcionario funcionarioLogado) {
+        this.funcionarioLogado = funcionarioLogado;
+    }
+
+    @FXML
+    public void initialize() {
+        if (cbMotivoNegar != null) {
+            cbMotivoNegar.setItems(FXCollections.observableArrayList(
+                    "Denúncias e tickets excederam o limite",
+                    "Solicitação da própria empresa",
+                    "Cadastro Duplicado / Incorreto",
+                    "Violação das Políticas da Empresa",
+                    "Outro"
+            ));
+        }
+    }
+
+    @FXML
+    private void negar(ActionEvent event) {
+        String motivo = cbMotivoNegar.getValue();
+        String observacao = txtObservacao.getText() != null ? txtObservacao.getText().trim() : "";
+
+        if (motivo == null || motivo.isBlank()) {
+            mostrarAlerta("Motivo Obrigatório", "Por favor, selecione um motivo para a negação.", Alert.AlertType.WARNING);
+            return;
         }
 
-        public void setControllerPai(ControllerTicketsPendentes controllerPai) {
-            this.controllerPai = controllerPai;
+        if (ticketRejeitar == null) {
+            mostrarAlerta("Erro", "Nenhum Ticket selecionado para negação.", Alert.AlertType.ERROR);
+            return;
         }
 
-        public void setFuncionarioLogado(Funcionario funcionarioLogado) {
-            this.funcionarioLogado = funcionarioLogado;
-        }
+        try {
+            // Alterado de false para "recusado" para corresponder ao novo sistema de status textual
+            boolean sucesso = ticketDAO.atualizarStatus(ticketRejeitar.getId(), "recusado");
 
-        @FXML
-        public void initialize() {
-            if (cbMotivoNegar != null) {
-                cbMotivoNegar.setItems(FXCollections.observableArrayList(
-                        "Denúncias e tickets excederam o limite",
-                        "Solicitação da própria empresa",
-                        "Cadastro Duplicado / Incorreto",
-                        "Violação das Políticas da Empresa",
-                        "Outro"
-                ));
+            if (sucesso) {
+                String idModerador = (funcionarioLogado != null && funcionarioLogado.getMatricula() != null)
+                        ? funcionarioLogado.getMatricula()
+                        : "SISTEMA";
+                rejeitarLog.registrarLog(idModerador, String.valueOf(ticketRejeitar.getId()), "Ticket retornado para análise/negado.");
+                mostrarAlerta("Sucesso", "Status do Ticket #" + ticketRejeitar.getId() + " atualizado.", Alert.AlertType.INFORMATION);
+            } else {
+                mostrarAlerta("Erro", "Falha ao alterar o status do ticket.", Alert.AlertType.ERROR);
             }
-        }
 
-        @FXML
-        private void negar(ActionEvent event) {
-            String motivo = cbMotivoNegar.getValue();
-            String observacao = txtObservacao.getText() != null ? txtObservacao.getText().trim() : "";
-
-            if (motivo == null || motivo.isBlank()) {
-                mostrarAlerta("Motivo Obrigatório", "Por favor, selecione um motivo para a negação.", Alert.AlertType.WARNING);
-                return;
-            }
-
-            if (ticketRejeitar == null) {
-                mostrarAlerta("Erro", "Nenhum Ticket selecionado para negação.", Alert.AlertType.ERROR);
-                return;
-            }
-
-            try {
-                boolean sucesso = ticketDAO.atualizarStatus(ticketRejeitar.getId(), false);
-
-                if (sucesso) {
-                    String idModerador = (funcionarioLogado != null && funcionarioLogado.getMatricula() != null)
-                            ? funcionarioLogado.getMatricula()
-                            : "SISTEMA";
-                    rejeitarLog.registrarLog(idModerador, String.valueOf (ticketRejeitar.getId()), "Ticket retornado para análise/negado.");
-                    mostrarAlerta("Sucesso", "Status do Ticket #" + ticketRejeitar.getId() + " atualizado.", Alert.AlertType.INFORMATION);
-                } else {
-                    mostrarAlerta("Erro", "Falha ao alterar o status do ticket.", Alert.AlertType.ERROR);
-                }
-
-
-                    if (controllerPai != null) {
-                        try {
-                            controllerPai.carregarTickets();
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-                    }
-
-                    fecharJanela(event);
-                }catch (Exception e) {
-                e.printStackTrace();
-
-                String mensagemErro = e.getMessage();
-                if (mensagemErro != null && (mensagemErro.contains("foreign key") || mensagemErro.contains("1451"))) {
-                    mostrarAlerta("Violação de Integridade",
-                            "Não é possível excluir o ticket '" + ticketRejeitar.getAssunto() + "' pois existem registros vinculados a ele.", Alert.AlertType.ERROR);
-                } else {
-                    mostrarAlerta("Erro de Banco de Dados", "Falha ao deletar ticket: " + mensagemErro, Alert.AlertType.ERROR);
+            if (controllerPai != null) {
+                try {
+                    controllerPai.carregarTickets();
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
             }
-            }
 
+            fecharJanela(event);
 
-        private void mostrarAlerta(String titulo, String mensagem, Alert.AlertType tipo) {
-            Alert alert = new Alert(tipo);
-            alert.setTitle(titulo);
-            alert.setHeaderText(null);
-            alert.setContentText(mensagem);
-            alert.showAndWait();
-        }
+        } catch (Exception e) {
+            e.printStackTrace();
 
-        private void fecharJanela(ActionEvent event) {
-            Node source = (Node) event.getSource();
-            Stage stage = (Stage) source.getScene().getWindow();
-            if (stage != null) {
-                stage.close();
-            }
-        }
-
-        @FXML
-        public void cancelar() {
-            Stage janelaAtual = (Stage) txtObservacao.getScene().getWindow();
-            if (janelaAtual != null) {
-                janelaAtual.close();
+            String mensagemErro = e.getMessage();
+            if (mensagemErro != null && (mensagemErro.contains("foreign key") || mensagemErro.contains("1451"))) {
+                mostrarAlerta("Violação de Integridade",
+                        "Não é possível atualizar o status do ticket '" + ticketRejeitar.getAssunto() + "' pois existem registros vinculados a ele.", Alert.AlertType.ERROR);
+            } else {
+                mostrarAlerta("Erro de Banco de Dados", "Falha ao atualizar status: " + mensagemErro, Alert.AlertType.ERROR);
             }
         }
     }
 
+    private void mostrarAlerta(String titulo, String mensagem, Alert.AlertType tipo) {
+        Alert alert = new Alert(tipo);
+        alert.setTitle(titulo);
+        alert.setHeaderText(null);
+        alert.setContentText(mensagem);
+        alert.showAndWait();
+    }
+
+    private void fecharJanela(ActionEvent event) {
+        Node source = (Node) event.getSource();
+        Stage stage = (Stage) source.getScene().getWindow();
+        if (stage != null) {
+            stage.close();
+        }
+    }
+
+    @FXML
+    public void cancelar() {
+        Stage janelaAtual = (Stage) txtObservacao.getScene().getWindow();
+        if (janelaAtual != null) {
+            janelaAtual.close();
+        }
+    }
+}

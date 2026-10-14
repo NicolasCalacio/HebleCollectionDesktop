@@ -15,15 +15,14 @@ public class ControllerTelaInfoTicketsAndamento {
     @FXML
     private TextArea txtDescricao;
 
-
     public void setTicket(Ticket ticket) {
         if (ticket == null) return;
 
         lblId.setText("ID: " + ticket.getId());
         lblAssunto.setText("Assunto: " + ticket.getAssunto());
 
-        String textoStatus = ticket.getStatus() ? "Resolvido / Fechado" : "Pendente";
-        lblStatus.setText("Estado: " + textoStatus);
+        String statusAtual = ticket.getStatus() != null ? ticket.getStatus() : "indefinido";
+        lblStatus.setText("Estado: " + statusAtual);
 
         txtDescricao.setText(ticket.getDescricao());
     }

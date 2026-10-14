@@ -4,6 +4,7 @@ module com.example.heblecollectiondesktop {
     requires javafx.graphics;
     requires javafx.base;
     requires java.sql;
+    requires com.example.heblecollectiondesktop;
 
     opens com.example.heblecollectiondesktop to javafx.fxml;
     opens com.example.heblecollectiondesktop.controller to javafx.fxml;

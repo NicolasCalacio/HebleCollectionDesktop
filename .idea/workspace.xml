@@ -4,14 +4,14 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="cb3a4291-41f8-4b38-8e73-f8ae096bae80" name="Changes" comment="Tela de adicionar cupom feita, controller de adicionar cupom.">
+    <list default="true" id="cb3a4291-41f8-4b38-8e73-f8ae096bae80" name="Changes" comment="Correção da tela de deleção de empresas">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/heblecollectiondesktop/controller/ControllerAdicionarCupom.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/heblecollectiondesktop/controller/ControllerAdicionarCupom.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/heblecollectiondesktop/controller/ControllerGerenciarCupons.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/heblecollectiondesktop/controller/ControllerGerenciarCupons.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/heblecollectiondesktop/controller/ControllerSuporteFuncionario.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/heblecollectiondesktop/controller/ControllerSuporteFuncionario.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/heblecollectiondesktop/controller/ControllerTicketFechados.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/heblecollectiondesktop/controller/ControllerTicketFechados.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/heblecollectiondesktop/database/TicketDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/heblecollectiondesktop/database/TicketDAO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/heblecollectiondesktop/model/Ticket.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/heblecollectiondesktop/model/Ticket.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/heblecollectiondesktop/controller/ControllerTicketsHub.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/heblecollectiondesktop/controller/ControllerTicketsHub.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/com/example/heblecollectiondesktop/view/AprovarProdutos.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/com/example/heblecollectiondesktop/view/AprovarProdutos.fxml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/com/example/heblecollectiondesktop/view/cadastroFuncionarios.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/com/example/heblecollectiondesktop/view/cadastroFuncionarios.fxml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/com/example/heblecollectiondesktop/view/moderacaoHub.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/com/example/heblecollectiondesktop/view/moderacaoHub.fxml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/com/example/heblecollectiondesktop/view/ticketFechados.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/com/example/heblecollectiondesktop/view/ticketFechados.fxml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/com/example/heblecollectiondesktop/view/ticketsHub.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/com/example/heblecollectiondesktop/view/ticketsHub.fxml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -138,7 +138,7 @@
     "WebServerToolWindowFactoryState": "false",
     "codeWithMe.voiceChat.enabledByDefault": "false",
     "com.intellij.ml.llm.matterhorn.ej.ui.settings.DefaultModelSelectionForGA.v1": "true",
-    "git-widget-placeholder": "feature/Tela-suporte",
+    "git-widget-placeholder": "WIP/teste",
     "ignore.virus.scanning.warn.message": "true",
     "junie.onboarding.icon.badge.shown": "true",
     "kotlin-language-version-configured": "true",

@@ -150,7 +150,7 @@ public class ControllerLogin implements Initializable {
         alerta.showAndWait();
     }
     @FXML
-    private void abrirsuporte(MouseEvent event){
+    private void abrirsuporte(javafx.scene.input.MouseEvent event ){
         URL dashboardLocation = getClass().getResource("/com/example/heblecollectiondesktop/view/TelaSuporte.fxml");
 
         if (dashboardLocation == null) {

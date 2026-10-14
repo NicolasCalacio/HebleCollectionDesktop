@@ -21,7 +21,7 @@ public class Cupom {
         this.validade = validade;
     }
 
-    // Método utilitário para validar o valor da compra
+
     public boolean isValidoParaValor(double valorTotalCompra) {
         return this.ativo && valorTotalCompra >= this.valorMinimo;
     }

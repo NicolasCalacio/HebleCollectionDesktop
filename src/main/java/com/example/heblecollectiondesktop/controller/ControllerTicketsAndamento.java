@@ -12,10 +12,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.Pane;
 import javafx.stage.Modality;
@@ -32,7 +29,7 @@ public class ControllerTicketsAndamento {
     @FXML private TableColumn<Ticket, Integer> colID;
     @FXML private TableColumn<Ticket, String> colAssunto;
     @FXML private TableColumn<Ticket, String> colDescricao;
-    @FXML private TableColumn<Ticket, Boolean> colStatus;
+    @FXML private TableColumn<Ticket, String> colStatus; // Alterado de Boolean para String
     @FXML private TableColumn<Ticket, Integer> colFuncionarioId;
 
     private final TicketDAO ticketDAO = new TicketDAO();
@@ -57,16 +54,16 @@ public class ControllerTicketsAndamento {
         if (colDescricao != null) colDescricao.setCellValueFactory(new PropertyValueFactory<>("descricao"));
         if (colStatus != null) colStatus.setCellValueFactory(new PropertyValueFactory<>("status"));
         if (colFuncionarioId != null) colFuncionarioId.setCellValueFactory(new PropertyValueFactory<>("funcionarioId"));
-
+        configurarDuploClique();
         carregarTickets();
     }
 
     public void carregarTickets() {
         try {
             List<Ticket> todos = ticketDAO.listarTodos();
-            // Filtra chamados em andamento (não finalizados)
+
             List<Ticket> emAndamento = todos.stream()
-                    .filter(t -> !t.getStatus())
+                    .filter(t -> t.getStatus() != null && t.getStatus().equalsIgnoreCase("andamento"))
                     .collect(Collectors.toList());
 
             listaTickets.setAll(emAndamento);
@@ -89,7 +86,7 @@ public class ControllerTicketsAndamento {
         }
 
         try {
-            boolean sucesso = ticketDAO.atualizarStatus(ticketSelecionado.getId(), true);
+            boolean sucesso = ticketDAO.atualizarStatus(ticketSelecionado.getId(), "fechado");
 
             if (sucesso) {
                 registrarLog("CONCLUSAO_TICKET", ticketSelecionado, "Ticket finalizado com sucesso.");
@@ -119,7 +116,6 @@ public class ControllerTicketsAndamento {
             ControllerConfirmarNegar controllerPai = loader.getController();
             controllerPai.setTicketSelecionado(ticketSelecionado);
 
-
             Button btnClicado1 = (Button) event.getSource();
             Stage janelaAtual = (Stage) btnClicado1.getScene().getWindow();
 
@@ -135,9 +131,8 @@ public class ControllerTicketsAndamento {
 
         } catch (IOException e) {
             e.printStackTrace();
-            mostrarAlerta("Erro de Carregamento", "Falha ao carregar a sub-tela: " , Alert.AlertType.ERROR );
+            mostrarAlerta("Erro de Carregamento", "Falha ao carregar a sub-tela: ", Alert.AlertType.ERROR);
         }
-
     }
 
     @FXML
@@ -162,6 +157,40 @@ public class ControllerTicketsAndamento {
         } catch (Exception e) {
             e.printStackTrace();
             mostrarAlerta("Erro", "Erro ao deletar ticket: " + e.getMessage(), Alert.AlertType.ERROR);
+        }
+    }
+
+    private void configurarDuploClique() {
+        if (ticketsEmAndamento == null) return;
+
+        ticketsEmAndamento.setRowFactory(tv -> {
+            TableRow<Ticket> row = new TableRow<>();
+            row.setOnMouseClicked(event -> {
+                if (event.getClickCount() == 2 && !row.isEmpty()) {
+                    Ticket ticketSelecionado = row.getItem();
+                    abrirTelaInfo(ticketSelecionado);
+                }
+            });
+            return row;
+        });
+    }
+
+    private void abrirTelaInfo(Ticket ticket) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/heblecollectiondesktop/view/InfoPopUp.fxml"));
+            Parent root = loader.load();
+
+            ControllerTelaInfoTickets modalController = loader.getController();
+            modalController.setTicket(ticket);
+
+            Stage stage = new Stage();
+            stage.setTitle("Detalhes do Ticket #" + ticket.getId());
+            stage.setScene(new Scene(root));
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.showAndWait();
+
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 

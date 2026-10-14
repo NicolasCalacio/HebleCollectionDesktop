@@ -20,20 +20,14 @@ public class TicketDAO {
              ResultSet rs = stmt.executeQuery()) {
 
             while (rs.next()) {
-              
-                String statusString = rs.getString("status");
 
-                
-                boolean statusBoolean = "APROVADO".equalsIgnoreCase(statusString)
-                        || "CONCLUIDO".equalsIgnoreCase(statusString)
-                        || "TRUE".equalsIgnoreCase(statusString)
-                        || "1".equals(statusString);
+                String status = rs.getString("status");
 
                 Ticket t = new Ticket(
                         rs.getInt("id"),
                         rs.getString("assunto"),
                         rs.getString("descricao"),
-                        statusBoolean,
+                        status,
                         rs.getInt("funcionario_id")
                 );
                 lista.add(t);
@@ -46,16 +40,13 @@ public class TicketDAO {
         return lista;
     }
 
-    public boolean atualizarStatus(int idTicket, boolean novoStatus) {
+    public boolean atualizarStatus(int idTicket, String novoStatus) {
         String sql = "UPDATE login_schema.tickets SET status = ? WHERE id = ?";
 
         try (Connection conexao = conexaoDB.getConexao();
              PreparedStatement stmt = conexao.prepareStatement(sql)) {
 
-            
-            String statusTexto = novoStatus ? "APROVADO" : "NEGADO";
-
-            stmt.setString(1, statusTexto);
+            stmt.setString(1, novoStatus);
             stmt.setInt(2, idTicket);
 
             return stmt.executeUpdate() > 0;
@@ -78,6 +69,35 @@ public class TicketDAO {
             System.err.println("Erro ao deletar ticket: " + e.getMessage());
             e.printStackTrace();
             return false;
+        }
+    }
+
+    public boolean Adicionar(Ticket ticket) {
+        String sql = """
+            INSERT INTO login_schema.tickets 
+            (assunto, descricao, status, funcionario_id) 
+            VALUES (?, ?, ?, ?)
+            """;
+
+        try (Connection conexao = conexaoDB.getConexao();
+             PreparedStatement stmt = conexao.prepareStatement(sql)) {
+
+            stmt.setString(1, ticket.getAssunto());
+            stmt.setString(2, ticket.getDescricao());
+
+            stmt.setString(3, ticket.getStatus() != null ? ticket.getStatus() : "pendente");
+
+
+            if (ticket.getFuncionarioId() > 0) {
+                stmt.setInt(4, ticket.getFuncionarioId());
+            } else {
+                stmt.setNull(4, java.sql.Types.INTEGER);
+            }
+
+            return stmt.executeUpdate() > 0;
+
+        } catch (SQLException e) {
+            throw new RuntimeException("Erro ao adicionar ticket: " + e.getMessage(), e);
         }
     }
 }

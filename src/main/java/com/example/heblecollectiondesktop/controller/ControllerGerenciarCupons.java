@@ -21,6 +21,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableRow; // Import adicionado
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.Pane;
@@ -57,6 +58,7 @@ public class ControllerGerenciarCupons {
     @FXML
     public void initialize() {
         configurarColunas();
+        configurarDuploClique(); // Chamada adicionada
         carregarTabela();
     }
 
@@ -105,37 +107,108 @@ public class ControllerGerenciarCupons {
         }
     }
 
+    private void configurarDuploClique() {
+        if (tabelaCupons == null) return;
+
+        tabelaCupons.setRowFactory(tv -> {
+            TableRow<Cupom> row = new TableRow<>();
+            row.setOnMouseClicked(event -> {
+                if (event.getClickCount() == 2 && !row.isEmpty()) {
+                    Cupom cupomSelecionado = row.getItem();
+                    abrirTelaInfoCupom(cupomSelecionado);
+                }
+            });
+            return row;
+        });
+    }
+
+    private void abrirTelaInfoCupom(Cupom cupom) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/heblecollectiondesktop/view/InfoPopUpCupom.fxml"));
+            Parent root = loader.load();
+
+            ControllerTelaInfoCupom modalController = loader.getController();
+            if (modalController != null) {
+                modalController.setCupom(cupom);
+            }
+
+            Stage stage = new Stage();
+            stage.setScene(new Scene(root));
+            stage.setTitle("Informações do Cupom");
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.showAndWait();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            mostrarAlerta(Alert.AlertType.ERROR, "Erro", "Falha ao abrir detalhes do cupom: " + e.getMessage());
+        }
+    }
+
+    @FXML
+    void voltarAoHub(ActionEvent event) {
+        if (containerCentral == null) return;
+
+        try {
+            URL url = getClass().getResource("/com/example/heblecollectiondesktop/view/Dashboard.fxml");
+            if (url == null) {
+                url = getClass().getResource("/com/example/heblecollectiondesktop/view/dashboard.fxml");
+            }
+
+            if (url != null) {
+                FXMLLoader loader = new FXMLLoader(url);
+                Parent dashboardView = loader.load();
+
+                Object controller = loader.getController();
+                if (controller != null) {
+                    try {
+                        controller.getClass().getMethod("setContainerCentral", Pane.class).invoke(controller, containerCentral);
+                        controller.getClass().getMethod("setFuncionarioLogado", Funcionario.class).invoke(controller, funcionarioLogado);
+                    } catch (Exception ignored) {}
+                }
+
+                containerCentral.getChildren().setAll(dashboardView);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+            mostrarAlerta(Alert.AlertType.ERROR, "Erro de Navegação", "Não foi possível voltar ao Painel Principal.");
+        }
+    }
+
     @FXML
     void abrirTelaAdicionarCupom(ActionEvent event) {
         try {
-            URL url = getClass().getResource("/com/example/heblecollectiondesktop/view/FormularioCupom.fxml");
+            URL url = getClass().getResource("/com/example/heblecollectiondesktop/view/adicionarCupom.fxml");
             if (url == null) {
-                url = getClass().getResource("/com/example/heblecollectiondesktop/view/formularioCupom.fxml");
+                url = getClass().getResource("/com/example/heblecollectiondesktop/view/AdicionarCupom.fxml");
             }
 
             if (url == null) {
-                mostrarAlerta(Alert.AlertType.ERROR, "Erro FXML", "Arquivo FormularioCupom.fxml não encontrado.");
+                mostrarAlerta(Alert.AlertType.ERROR, "Erro FXML", "Arquivo adicionarCupom.fxml não encontrado.");
                 return;
             }
 
             FXMLLoader loader = new FXMLLoader(url);
-            Parent view = loader.load();
+            Parent subtela = loader.load();
 
-            // Passa as referências necessárias para o controller do formulário (se houver)
-            Object controller = loader.getController();
+            ControllerAdicionarCupom controller = loader.getController();
             if (controller != null) {
-                try {
-                    controller.getClass().getMethod("setContainerCentral", Pane.class).invoke(controller, containerCentral);
-                    controller.getClass().getMethod("setFuncionarioLogado", Funcionario.class).invoke(controller, funcionarioLogado);
-                } catch (Exception ignored) {}
+                controller.setControllerPai(this);
             }
 
-            if (containerCentral != null) {
-                containerCentral.getChildren().setAll(view);
-            }
+            Stage janelaAtual = (Stage) ((Button) event.getSource()).getScene().getWindow();
+            Stage subjanela = new Stage();
+            subjanela.initOwner(janelaAtual);
+            subjanela.initModality(Modality.WINDOW_MODAL);
+            subjanela.setScene(new Scene(subtela));
+            subjanela.setTitle("Adicionar Novo Cupom");
+            subjanela.setResizable(false);
+            subjanela.showAndWait();
+
+            carregarTabela();
+
         } catch (IOException e) {
             e.printStackTrace();
-            mostrarAlerta(Alert.AlertType.ERROR, "Erro de Navegação", "Não foi possível carregar a tela de formulário: " + e.getMessage());
+            mostrarAlerta(Alert.AlertType.ERROR, "Erro de Carregamento", "Falha ao abrir subjanela de cadastro: " + e.getMessage());
         }
     }
 
@@ -163,12 +236,9 @@ public class ControllerGerenciarCupons {
             FXMLLoader loader = new FXMLLoader(url);
             Parent subtela = loader.load();
 
-            // Injeta o cupom selecionado no controller de edição
-            Object controller = loader.getController();
+            ControllerEditarCupom controller = loader.getController();
             if (controller != null) {
-                try {
-                    controller.getClass().getMethod("setCupom", Cupom.class).invoke(controller, selecionado);
-                } catch (Exception ignored) {}
+                controller.setCupom(selecionado);
             }
 
             Stage janelaAtual = (Stage) ((Button) event.getSource()).getScene().getWindow();
@@ -180,7 +250,6 @@ public class ControllerGerenciarCupons {
             subjanela.setResizable(false);
             subjanela.showAndWait();
 
-            // Recarrega os dados após fechar o modal
             carregarTabela();
 
         } catch (IOException e) {
@@ -207,19 +276,7 @@ public class ControllerGerenciarCupons {
         Optional<ButtonType> resultado = confirmacao.showAndWait();
         if (resultado.isPresent() && resultado.get() == ButtonType.OK) {
             try {
-                // Tenta remover via DAO pelo ID ou pelo objeto
-                boolean removido;
-                try {
-                    removido = cupomDAO.deletar(selecionado.getId());
-                } catch (NoSuchMethodError | Exception e) {
-                    // Fallback caso o DAO utilize deletar(Cupom cupom) ou excluir(int id)
-                    try {
-                        removido = cupomDAO.excluir(selecionado.getId());
-                    } catch (Exception ex) {
-                        removido = cupomDAO.deletar(selecionado);
-                    }
-                }
-
+                boolean removido = cupomDAO.deletar(selecionado.getId());
                 if (removido) {
                     mostrarAlerta(Alert.AlertType.INFORMATION, "Sucesso", "Cupom removido com sucesso!");
                     carregarTabela();
@@ -230,36 +287,6 @@ public class ControllerGerenciarCupons {
                 e.printStackTrace();
                 mostrarAlerta(Alert.AlertType.ERROR, "Erro de Banco de Dados", "Falha ao remover cupom: " + e.getMessage());
             }
-        }
-    }
-
-    @FXML
-    void voltarAoHub(ActionEvent event) {
-        if (containerCentral == null) return;
-
-        try {
-            URL url = getClass().getResource("/com/example/heblecollectiondesktop/view/CuponsHub.fxml");
-            if (url == null) {
-                url = getClass().getResource("/com/example/heblecollectiondesktop/view/cuponsHub.fxml");
-            }
-
-            if (url != null) {
-                FXMLLoader loader = new FXMLLoader(url);
-                Parent hubView = loader.load();
-
-                Object controller = loader.getController();
-                if (controller != null) {
-                    try {
-                        controller.getClass().getMethod("setContainerCentral", Pane.class).invoke(controller, containerCentral);
-                        controller.getClass().getMethod("setFuncionarioLogado", Funcionario.class).invoke(controller, funcionarioLogado);
-                    } catch (Exception ignored) {}
-                }
-
-                containerCentral.getChildren().setAll(hubView);
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-            mostrarAlerta(Alert.AlertType.ERROR, "Erro de Navegação", "Não foi possível voltar ao Hub de Cupons.");
         }
     }
 

@@ -54,6 +54,7 @@ public class ControllerDashboard implements Initializable {
     private Node vistaInicialDashboard;
     private Funcionario funcionarioLogado;
 
+
     private final ProdutoDAO produtoDAO = new ProdutoDAO();
     private final CupomDAO cupomDAO = new CupomDAO();
     private final TicketDAO ticketDAO = new TicketDAO();

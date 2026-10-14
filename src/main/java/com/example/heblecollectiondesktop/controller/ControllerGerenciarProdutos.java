@@ -11,6 +11,7 @@ import com.example.heblecollectiondesktop.database.ProdutoDAO;
 import com.example.heblecollectiondesktop.model.Funcionario;
 import com.example.heblecollectiondesktop.model.Produto;
 
+import com.example.heblecollectiondesktop.model.Ticket;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -19,19 +20,14 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
 import javafx.scene.Parent;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.ButtonType;
-import javafx.scene.control.Dialog;
-import javafx.scene.control.Label;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
+import javafx.scene.Scene;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 
 public class ControllerGerenciarProdutos implements Initializable {
 
@@ -85,6 +81,7 @@ public class ControllerGerenciarProdutos implements Initializable {
         colStatus.setCellValueFactory(new PropertyValueFactory<>("status"));
 
         tvProdutos.setItems(listaProdutos);
+        configurarDuploClique();
     }
 
     public void carregarProdutos() {
@@ -283,6 +280,45 @@ public class ControllerGerenciarProdutos implements Initializable {
     void voltarAoHub(ActionEvent event) {
         if (acaoVoltar != null) {
             acaoVoltar.run();
+        }
+    }
+    private void configurarDuploClique() {
+
+        if ( tvProdutos== null) return;
+
+        tvProdutos.setRowFactory(tv -> {
+            TableRow<Produto> row = new TableRow<>();
+            row.setOnMouseClicked(event -> {
+                if (event.getClickCount() == 2 && !row.isEmpty()) {
+                    Produto selecionado = row.getItem();
+                    abrirTelaInfo(selecionado);
+                }
+            });
+            return row;
+        });
+    }
+    @FXML
+    private void abrirTelaInfo(Produto produto) {
+        try {
+
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/heblecollectiondesktop/view/InfoPopUpProdutos.fxml"));
+            Parent root = loader.load();
+
+
+            ControllerTelaInfoProdutos modalController = loader.getController();
+
+
+            modalController.SetProduto(produto);
+
+
+            Stage stage = new Stage();
+            stage.setTitle("Detalhes do Produto #" + produto.getId());
+            stage.setScene(new Scene(root));
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.showAndWait();
+
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 

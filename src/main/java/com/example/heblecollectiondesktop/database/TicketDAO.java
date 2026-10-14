@@ -20,20 +20,14 @@ public class TicketDAO {
              ResultSet rs = stmt.executeQuery()) {
 
             while (rs.next()) {
-              
-                String statusString = rs.getString("status");
-
-                
-                boolean statusBoolean = "APROVADO".equalsIgnoreCase(statusString)
-                        || "CONCLUIDO".equalsIgnoreCase(statusString)
-                        || "TRUE".equalsIgnoreCase(statusString)
-                        || "1".equals(statusString);
+                // Lê diretamente o texto do status da base de dados
+                String status = rs.getString("status");
 
                 Ticket t = new Ticket(
                         rs.getInt("id"),
                         rs.getString("assunto"),
                         rs.getString("descricao"),
-                        statusBoolean,
+                        status,
                         rs.getInt("funcionario_id")
                 );
                 lista.add(t);
@@ -46,16 +40,13 @@ public class TicketDAO {
         return lista;
     }
 
-    public boolean atualizarStatus(int idTicket, boolean novoStatus) {
+    public boolean atualizarStatus(int idTicket, String novoStatus) {
         String sql = "UPDATE login_schema.tickets SET status = ? WHERE id = ?";
 
         try (Connection conexao = conexaoDB.getConexao();
              PreparedStatement stmt = conexao.prepareStatement(sql)) {
 
-            
-            String statusTexto = novoStatus ? "APROVADO" : "NEGADO";
-
-            stmt.setString(1, statusTexto);
+            stmt.setString(1, novoStatus);
             stmt.setInt(2, idTicket);
 
             return stmt.executeUpdate() > 0;

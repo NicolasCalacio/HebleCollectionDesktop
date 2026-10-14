@@ -5,7 +5,6 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 
-
 public class ControllerTelaInfoTickets {
 
     @FXML
@@ -17,17 +16,16 @@ public class ControllerTelaInfoTickets {
     @FXML
     private TextArea txtDescricao;
 
-
     public void setTicket(Ticket ticket) {
         if (ticket == null) return;
 
         lblId.setText("ID: " + ticket.getId());
         lblAssunto.setText("Assunto: " + ticket.getAssunto());
 
-        String textoStatus = ticket.getStatus() ? "Resolvido / Fechado" : "Pendente";
-        lblStatus.setText("Estado: " + textoStatus);
+        String statusAtual = ticket.getStatus() != null ? ticket.getStatus() : "indefinido";
+
+        lblStatus.setText("Estado: " + statusAtual);
 
         txtDescricao.setText(ticket.getDescricao());
     }
-
 }

@@ -20,7 +20,7 @@ public class TicketDAO {
              ResultSet rs = stmt.executeQuery()) {
 
             while (rs.next()) {
-                // Lê diretamente o texto do status da base de dados
+
                 String status = rs.getString("status");
 
                 Ticket t = new Ticket(
@@ -71,21 +71,33 @@ public class TicketDAO {
             return false;
         }
     }
-    public boolean Adicionar(Ticket ticket){
+
+    public boolean Adicionar(Ticket ticket) {
         String sql = """
-            INSERT INTO login_schema.tickets
-            (assunto, descricao, status, funcionario_id)
-            VALUES (?, ?, ?, null)
+            INSERT INTO login_schema.tickets 
+            (assunto, descricao, status, funcionario_id) 
+            VALUES (?, ?, ?, ?)
             """;
+
         try (Connection conexao = conexaoDB.getConexao();
              PreparedStatement stmt = conexao.prepareStatement(sql)) {
+
             stmt.setString(1, ticket.getAssunto());
             stmt.setString(2, ticket.getDescricao());
-            stmt.setString(3, "pendente");
 
-            return stmt.executeUpdate()>0;
-        }catch (SQLException e){
-            throw new RuntimeException("Erro ao adicionar ticket:"+ e.getMessage(),e);
+            stmt.setString(3, ticket.getStatus() != null ? ticket.getStatus() : "pendente");
+
+
+            if (ticket.getFuncionarioId() > 0) {
+                stmt.setInt(4, ticket.getFuncionarioId());
+            } else {
+                stmt.setNull(4, java.sql.Types.INTEGER);
+            }
+
+            return stmt.executeUpdate() > 0;
+
+        } catch (SQLException e) {
+            throw new RuntimeException("Erro ao adicionar ticket: " + e.getMessage(), e);
         }
     }
 }

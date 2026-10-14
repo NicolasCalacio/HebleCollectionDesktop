@@ -38,7 +38,7 @@ public class ControllerTicketFechados {
     private TableColumn<Ticket, String> colDescricao;
 
     @FXML
-    private TableColumn<Ticket, String> colStatus; // Alterado de Boolean para String
+    private TableColumn<Ticket, String> colStatus;
 
     private final TicketDAO ticketDAO = new TicketDAO();
     private Pane containerCentral;

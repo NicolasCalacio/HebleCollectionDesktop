@@ -8,7 +8,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox spacing="20.0" style="-fx-padding: 24; -fx-background-color: #F8FAFC;" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.heblecollectiondesktop.controller.ControllerTicketsPendentes">
+<VBox spacing="20.0" style="-fx-padding: 24; -fx-background-color: #F8FAFC;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.heblecollectiondesktop.controller.ControllerTicketsPendentes">
     <children>
         <Button mnemonicParsing="false" onAction="#voltarAoHub" style="-fx-background-color: transparent; -fx-text-fill: #64748B; -fx-cursor: hand;" text="← Voltar ao Hub" />
         <HBox alignment="CENTER_LEFT" spacing="10.0">

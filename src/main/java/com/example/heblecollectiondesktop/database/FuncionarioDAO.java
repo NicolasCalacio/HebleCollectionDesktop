@@ -31,9 +31,14 @@ public class FuncionarioDAO {
                     String pass = rs.getString("senha");
                     String cargoBanco = rs.getString("cargo");
 
-                    Cargo cargoEnum = (cargoBanco != null)
-                            ? Cargo.valueOf(cargoBanco.toUpperCase())
-                            : Cargo.FUNCIONARIO;
+                    Cargo cargoEnum = Cargo.FUNCIONARIO;
+                    if (cargoBanco != null && !cargoBanco.isBlank()) {
+                        try {
+                            cargoEnum = Cargo.valueOf(cargoBanco.trim().toUpperCase());
+                        } catch (IllegalArgumentException e) {
+                            System.err.println("Aviso: Cargo desconhecido no banco ('" + cargoBanco + "'). Assumindo FUNCIONARIO.");
+                        }
+                    }
 
                     if (cargoEnum == Cargo.GERENTE) {
                         return new Gerente(id, mat, pass);
@@ -60,9 +65,14 @@ public class FuncionarioDAO {
                 String pass = rs.getString("senha");
                 String cargoBanco = rs.getString("cargo");
 
-                Cargo cargoEnum = (cargoBanco != null)
-                        ? Cargo.valueOf(cargoBanco.toUpperCase())
-                        : Cargo.FUNCIONARIO;
+                Cargo cargoEnum = Cargo.FUNCIONARIO;
+                if (cargoBanco != null && !cargoBanco.isBlank()) {
+                    try {
+                        cargoEnum = Cargo.valueOf(cargoBanco.trim().toUpperCase());
+                    } catch (IllegalArgumentException e) {
+                        System.err.println("Aviso: Cargo desconhecido no banco ('" + cargoBanco + "'). Assumindo FUNCIONARIO.");
+                    }
+                }
 
                 if (cargoEnum == Cargo.GERENTE) {
                     lista.add(new Gerente(id, mat, pass));
@@ -141,12 +151,10 @@ public class FuncionarioDAO {
                 }
             }
 
-
             try (PreparedStatement stmtDelete = conn.prepareStatement(sqlDelete)) {
                 stmtDelete.setInt(1, idFuncionarioDeletar);
                 stmtDelete.executeUpdate();
             }
-
 
             try (PreparedStatement stmtLog = conn.prepareStatement(sqlLog)) {
                 stmtLog.setString(1, matriculaModerador);

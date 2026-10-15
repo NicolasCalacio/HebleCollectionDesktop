@@ -80,7 +80,7 @@ public class ControllerDashboard implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        // Inicializações padrão, se necessário
+        // Inicializações padrão
     }
 
     public void setFuncionarioLogado(Funcionario funcionario) {
@@ -227,8 +227,27 @@ public class ControllerDashboard implements Initializable {
             return;
         }
 
-        // Implemente a navegação de vendas aqui conforme o seu projeto
-        mostrarAlerta("Informação", "Módulo de Vendas em desenvolvimento.");
+        try {
+            URL url = getClass().getResource("/com/example/heblecollectiondesktop/view/Vendas.fxml");
+            if (url == null) {
+                url = getClass().getResource("/com/example/heblecollectiondesktop/view/vendas.fxml");
+            }
+
+            if (url == null) {
+                mostrarAlerta("Erro FXML", "Arquivo Vendas.fxml não encontrado.");
+                return;
+            }
+
+            FXMLLoader loader = new FXMLLoader(url);
+            Parent vendasView = loader.load();
+
+            if (painelConteudoCentral != null) {
+                painelConteudoCentral.getChildren().setAll(vendasView);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+            mostrarAlerta("Erro de Carregamento", "Falha ao carregar a tela de vendas: " + e.getMessage());
+        }
     }
 
     @FXML

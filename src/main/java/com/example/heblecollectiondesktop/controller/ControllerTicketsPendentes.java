@@ -33,6 +33,8 @@ public class ControllerTicketsPendentes {
     @FXML
     private TableColumn<Ticket, Integer> colID;
     @FXML
+    private TableColumn<Ticket, String> colTipo;
+    @FXML
     private TableColumn<Ticket, String> colAssunto;
     @FXML
     private TableColumn<Ticket, String> colDescricao;
@@ -54,6 +56,7 @@ public class ControllerTicketsPendentes {
     @FXML
     public void initialize() {
         if (colID != null) colID.setCellValueFactory(new PropertyValueFactory<>("id"));
+        if (colTipo != null) colTipo.setCellValueFactory(new PropertyValueFactory<>("tipo"));
         if (colAssunto != null) colAssunto.setCellValueFactory(new PropertyValueFactory<>("assunto"));
         if (colDescricao != null) colDescricao.setCellValueFactory(new PropertyValueFactory<>("descricao"));
         if (colStatus != null) colStatus.setCellValueFactory(new PropertyValueFactory<>("status"));
@@ -132,6 +135,9 @@ public class ControllerTicketsPendentes {
             stage.setScene(new Scene(root));
             stage.initModality(Modality.APPLICATION_MODAL);
             stage.showAndWait();
+
+
+            carregarTickets();
 
         } catch (IOException e) {
             e.printStackTrace();

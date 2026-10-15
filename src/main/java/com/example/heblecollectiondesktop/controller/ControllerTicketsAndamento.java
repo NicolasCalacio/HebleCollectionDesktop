@@ -181,7 +181,9 @@ public class ControllerTicketsAndamento {
             Parent root = loader.load();
 
             ControllerTelaInfoTickets modalController = loader.getController();
-            modalController.setTicket(ticket);
+            if (modalController != null) {
+                modalController.setTicket(ticket);
+            }
 
             Stage stage = new Stage();
             stage.setTitle("Detalhes do Ticket #" + ticket.getId());
@@ -189,8 +191,12 @@ public class ControllerTicketsAndamento {
             stage.initModality(Modality.APPLICATION_MODAL);
             stage.showAndWait();
 
+
+            carregarTickets();
+
         } catch (IOException e) {
             e.printStackTrace();
+            mostrarAlerta("Erro", "Falha ao abrir detalhes do ticket: " + e.getMessage(), Alert.AlertType.ERROR);
         }
     }
 

@@ -55,10 +55,10 @@ public class ControllerGerenciarConsumidores {
 
     @FXML
     public void initialize() {
-        if (colid != null) colid.setCellValueFactory(new PropertyValueFactory<>("id"));
-        if (colNome != null) colNome.setCellValueFactory(new PropertyValueFactory<>("nome"));
-        if (colCpf != null) colCpf.setCellValueFactory(new PropertyValueFactory<>("cnpj"));
-        if (colStatus != null) colStatus.setCellValueFactory(new PropertyValueFactory<>("status"));
+        if (colid != null) colid.setCellValueFactory(new PropertyValueFactory<>("IDconsumidor"));
+        if (colNome != null) colNome.setCellValueFactory(new PropertyValueFactory<>("nomconsumidor"));
+        if (colCpf != null) colCpf.setCellValueFactory(new PropertyValueFactory<>("cpfconsumidor"));
+        if (colStatus != null) colStatus.setCellValueFactory(new PropertyValueFactory<>("statusconsumidor"));
         carregarTabela();
     }
     public void carregarTabela() {

@@ -10,7 +10,7 @@ import java.util.List;
 
 public class ConsumidoresDAO {
 
-    public List<Consumidores> listar() {
+    public List<Consumidores> listarConsumidores() {
         String sql = "SELECT * FROM consumidores";
         List<Consumidores> lista = new ArrayList<>();
 

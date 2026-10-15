@@ -32,14 +32,14 @@
                     </font>
                 </Button>
 
-                <Button fx:id="btnEditarConsumidor" mnemonicParsing="false"  prefHeight="40.0" style="-fx-background-color: #d6b667; -fx-text-fill: white; -fx-background-radius: 8; -fx-cursor: hand;" text="* Editar Consumidor">
+                <Button fx:id="btnEditarConsumidor" mnemonicParsing="false" prefHeight="40.0" style="-fx-background-color: #d6b667; -fx-text-fill: white; -fx-background-radius: 8; -fx-cursor: hand;" text="* Editar Consumidor">
                     <font>
                         <Font name="System Bold" size="13.0" />
                     </font>
                 </Button>
 
 
-                <Button fx:id="btnBanirConsumidor" mnemonicParsing="false"  prefHeight="40.0" style="-fx-background-color: #d6b667; -fx-text-fill: white; -fx-background-radius: 8; -fx-cursor: hand;" text="🗑 Banir Consumidor">
+                <Button fx:id="btnBanirConsumidor" mnemonicParsing="false" prefHeight="40.0" style="-fx-background-color: #d6b667; -fx-text-fill: white; -fx-background-radius: 8; -fx-cursor: hand;" text="🗑 Banir Consumidor">
                     <font>
                         <Font name="System Bold" size="13.0" />
                     </font>
@@ -49,9 +49,9 @@
 
         <TableView fx:id="tabelaConsumidores" prefHeight="400.0" style="-fx-background-radius: 8; -fx-border-color: #E2E8F0; -fx-border-radius: 8;" VBox.vgrow="ALWAYS">
             <columns>
-                <TableColumn fx:id="colId" prefWidth="80.0" text="ID" />
+                <TableColumn fx:id="colid" prefWidth="80.0" text="ID" />
                 <TableColumn fx:id="colNome" prefWidth="261.0" text="Nome" />
-            <TableColumn fx:id="colCpf" prefWidth="217.0" text="CPF" />
+                <TableColumn fx:id="colCpf" prefWidth="217.0" text="CPF" />
                 <TableColumn fx:id="colStatus" prefWidth="218.0" text="Status" />
             </columns>
             <columnResizePolicy>

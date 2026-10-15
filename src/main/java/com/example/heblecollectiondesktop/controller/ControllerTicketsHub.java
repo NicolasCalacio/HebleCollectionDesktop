@@ -28,7 +28,7 @@ public class ControllerTicketsHub {
     @FXML
     private void abrirTicketsPendentes(ActionEvent event) {
 
-        carregarView("/com/example/heblecollectiondesktop/view/GerenciarTicketsPendentes.fxml", loader -> {
+        carregarView("/com/example/heblecollectiondesktop/view/ticketsPendentes.fxml", loader -> {
             ControllerTicketsPendentes controller = loader.getController();
             if (controller != null) {
                 controller.setContainerCentral(containerCentral);

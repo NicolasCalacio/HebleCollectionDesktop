@@ -2,6 +2,6 @@ package com.example.heblecollectiondesktop.model;
 
 public enum Cargo {
         GERENTE,
-        FUNCIONARIO,
-        SUPORTE
+        SUPORTE,
+        FUNCIONARIO
 }

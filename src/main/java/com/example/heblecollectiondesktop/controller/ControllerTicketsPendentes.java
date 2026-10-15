@@ -62,6 +62,46 @@ public class ControllerTicketsPendentes {
         carregarTickets();
     }
 
+    @FXML
+    public void voltarAoHub(ActionEvent event) {
+        try {
+            URL url = getClass().getResource("/com/example/heblecollectiondesktop/view/ticketsHub.fxml");
+            if (url == null) {
+                url = getClass().getResource("/com/example/heblecollectiondesktop/view/TicketsHub.fxml");
+            }
+            if (url == null) {
+                mostrarAlerta("Erro FXML", "Arquivo ticketsHub.fxml não encontrado nos recursos.", Alert.AlertType.ERROR);
+                return;
+            }
+
+            FXMLLoader loader = new FXMLLoader(url);
+            Parent hubView = loader.load();
+
+            ControllerTicketsHub controllerHub = loader.getController();
+            if (controllerHub != null) {
+                controllerHub.setContainerCentral(containerCentral);
+                if (funcionarioLogado != null) {
+                    controllerHub.setFuncionarioLogado(funcionarioLogado);
+                }
+            }
+
+            if (containerCentral != null) {
+                containerCentral.getChildren().setAll(hubView);
+            } else if (TabelaTickets != null && TabelaTickets.getScene() != null) {
+                Stage palcoAtual = (Stage) TabelaTickets.getScene().getWindow();
+                palcoAtual.setScene(new Scene(hubView));
+                palcoAtual.setTitle("Hub de Tickets");
+                palcoAtual.show();
+            } else {
+                mostrarAlerta("Erro de Navegação", "Não foi possível identificar o container ou a janela atual.", Alert.AlertType.ERROR);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            mostrarAlerta("Erro de Navegação", "Falha ao retornar ao hub: " + e.getMessage(), Alert.AlertType.ERROR);
+        }
+    }
+
     private void configurarDuploClique() {
         if (TabelaTickets == null) return;
 
@@ -104,7 +144,7 @@ public class ControllerTicketsPendentes {
             List<Ticket> listaBanco = ticketsPendentesDao.listarTodos();
 
             List<Ticket> pendentes = listaBanco.stream()
-                    .filter(t -> t.getStatus() != null && t.getStatus().equalsIgnoreCase("pendente"))
+                    .filter(t -> t != null && t.getStatus() != null && t.getStatus().equalsIgnoreCase("pendente"))
                     .collect(Collectors.toList());
 
             ObservableList<Ticket> lista = FXCollections.observableArrayList(pendentes);
@@ -113,7 +153,7 @@ public class ControllerTicketsPendentes {
             }
         } catch (Exception e) {
             e.printStackTrace();
-            mostrarAlerta("Erro de Conexão", "Não foi possível carregar os tickets: " + e.getMessage(), Alert.AlertType.ERROR);
+            mostrarAlerta("Erro de Conexão", "Não foi possível carregar os tickets do banco de dados: " + e.getMessage(), Alert.AlertType.ERROR);
         }
     }
 
@@ -128,10 +168,10 @@ public class ControllerTicketsPendentes {
         boolean sucesso = ticketsPendentesDao.atualizarStatus(selecionado.getId(), "andamento");
 
         if (sucesso) {
-            mostrarAlerta("Sucesso", "Ticket #" + selecionado.getId() + " aprovado/movido para andamento com sucesso!", Alert.AlertType.INFORMATION);
+            mostrarAlerta("Sucesso", "Ticket #" + selecionado.getId() + " movido para 'Em Andamento' com sucesso!", Alert.AlertType.INFORMATION);
             carregarTickets();
         } else {
-            mostrarAlerta("Erro", "Não foi possível aprovar o ticket selecionado.", Alert.AlertType.ERROR);
+            mostrarAlerta("Erro", "Não foi possível atualizar o status do ticket selecionado.", Alert.AlertType.ERROR);
         }
     }
 
@@ -167,44 +207,6 @@ public class ControllerTicketsPendentes {
         } catch (IOException e) {
             e.printStackTrace();
             mostrarAlerta("Erro de Carregamento", "Falha ao carregar a sub-tela de rejeição: " + e.getMessage(), Alert.AlertType.ERROR);
-        }
-    }
-
-    @FXML
-    private void voltarAoHub(ActionEvent event) {
-        try {
-            URL url = getClass().getResource("/com/example/heblecollectiondesktop/view/TicketsHub.fxml");
-            if (url == null) {
-                url = getClass().getResource("/com/example/heblecollectiondesktop/view/ticketsHub.fxml");
-            }
-            if (url == null) {
-                mostrarAlerta("Erro FXML", "Arquivo TicketsHub.fxml não encontrado.", Alert.AlertType.ERROR);
-                return;
-            }
-
-            FXMLLoader loader = new FXMLLoader(url);
-            Parent hubView = loader.load();
-
-            ControllerTicketsHub controllerHub = loader.getController();
-            if (controllerHub != null) {
-                controllerHub.setContainerCentral(containerCentral);
-                if (funcionarioLogado != null) {
-                    controllerHub.setFuncionarioLogado(funcionarioLogado);
-                }
-            }
-
-            if (containerCentral != null) {
-                containerCentral.getChildren().setAll(hubView);
-            } else {
-                Stage palcoAtual = (Stage) ((Button) event.getSource()).getScene().getWindow();
-                palcoAtual.setScene(new Scene(hubView));
-                palcoAtual.setTitle("Hub de Tickets");
-                palcoAtual.show();
-            }
-
-        } catch (IOException e) {
-            e.printStackTrace();
-            mostrarAlerta("Erro de Navegação", "Falha ao retornar ao hub: " + e.getMessage(), Alert.AlertType.ERROR);
         }
     }
 

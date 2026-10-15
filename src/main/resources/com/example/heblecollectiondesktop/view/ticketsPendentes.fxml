@@ -35,15 +35,16 @@
             </Button>
          </children>
       </HBox>
-      <TableView fx:id="TabelaTickets" prefHeight="400.0" style="-fx-background-radius: 8; -fx-border-color: #E2E8F0; -fx-border-radius: 8;" VBox.vgrow="ALWAYS">
-         <columns>
-            <TableColumn fx:id="colID" prefWidth="60.0" text="ID" />
-            <TableColumn fx:id="colAssunto" prefWidth="203.0" text="Assunto" />
-            <TableColumn fx:id="ColDescricao" prefWidth="211.0" text="Descrição" />
-            <TableColumn fx:id="colStatus" prefWidth="210.0" text="Status" />
-         </columns>
-         <columnResizePolicy>
-            <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+         <TableView fx:id="TabelaTickets" prefHeight="400.0" style="-fx-background-radius: 8; -fx-border-color: #E2E8F0; -fx-border-radius: 8;" VBox.vgrow="ALWAYS">
+            <columns>
+               <TableColumn fx:id="colID" prefWidth="60.0" text="ID" />
+               <TableColumn fx:id="colTipo" prefWidth="120.0" text="Tipo" /> <!-- Adicionado aqui -->
+               <TableColumn fx:id="colAssunto" prefWidth="150.0" text="Assunto" />
+               <TableColumn fx:id="ColDescricao" prefWidth="180.0" text="Descrição" />
+               <TableColumn fx:id="colStatus" prefWidth="150.0" text="Status" />
+            </columns>
+            <columnResizePolicy>
+               <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
          </columnResizePolicy>
       </TableView>
    </children>

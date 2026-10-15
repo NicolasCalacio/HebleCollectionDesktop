@@ -1,13 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.effect.*?>
-<?import javafx.scene.layout.*?>
-<?import javafx.scene.paint.*?>
-<?import javafx.scene.text.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.effect.DropShadow?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.paint.Color?>
+<?import javafx.scene.text.Font?>
 
-<BorderPane prefHeight="760.0" prefWidth="1200.0" style="-fx-background-color: #F8FAFC;" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.heblecollectiondesktop.controller.ControllerDashboard">
+<BorderPane prefHeight="760.0" prefWidth="1200.0" style="-fx-background-color: #F8FAFC;" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.heblecollectiondesktop.controller.ControllerDashboard">
 
     <left>
         <VBox prefWidth="240.0" spacing="12.0" style="-fx-background-color: #000000; -fx-padding: 24;" BorderPane.alignment="CENTER">
@@ -49,6 +54,11 @@
                         <Font size="13.0" />
                     </font>
                 </Button>
+            <Button fx:id="btnConsumidores" alignment="BASELINE_LEFT" layoutX="34.0" layoutY="154.0" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#irConsumidores" prefHeight="40.0" style="-fx-background-color: transparent; -fx-text-fill: #94A3B8; -fx-background-radius: 8; -fx-cursor: hand;" text="Consumidores">
+               <font>
+                  <Font size="13.0" />
+               </font>
+            </Button>
 
                 <Button fx:id="btnModeracao" alignment="BASELINE_LEFT" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#abrirModeração" prefHeight="40.0" style="-fx-background-color: transparent; -fx-text-fill: #38BDF8; -fx-background-radius: 8; -fx-cursor: hand;" text="★ Moderação (Gerente)">
                     <font>

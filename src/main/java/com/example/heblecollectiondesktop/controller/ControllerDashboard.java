@@ -34,22 +34,37 @@ import javafx.stage.Stage;
 
 public class ControllerDashboard implements Initializable {
 
-    @FXML private Label lblUsuarioLogado;
-    @FXML private Label lblTotalProdutos;
-    @FXML private Label lblCuponsAtivos;
-    @FXML private Label lblTicketsAbertos;
-    @FXML private Label lblStatusDetalhado;
+    @FXML
+    private Label lblUsuarioLogado;
+    @FXML
+    private Label lblTotalProdutos;
+    @FXML
+    private Label lblCuponsAtivos;
+    @FXML
+    private Label lblTicketsAbertos;
+    @FXML
+    private Label lblStatusDetalhado;
 
-    @FXML private Button btnVisaoGeral;
-    @FXML private Button btnProdutos;
-    @FXML private Button btnCupons;
-    @FXML private Button btnTickets;
-    @FXML private Button btnModeracao;
-    @FXML private Button btnSair;
-    @FXML private VBox vboxProdutos;
-    @FXML private VBox containerAtividades;
-    @FXML private Pane painelConteudoCentral;
-    @FXML private VBox vboxTickets;
+    @FXML
+    private Button btnVisaoGeral;
+    @FXML
+    private Button btnProdutos;
+    @FXML
+    private Button btnCupons;
+    @FXML
+    private Button btnTickets;
+    @FXML
+    private Button btnModeracao;
+    @FXML
+    private Button btnSair;
+    @FXML
+    private VBox vboxProdutos;
+    @FXML
+    private VBox containerAtividades;
+    @FXML
+    private Pane painelConteudoCentral;
+    @FXML
+    private VBox vboxTickets;
 
     private Node vistaInicialDashboard;
     private Funcionario funcionarioLogado;
@@ -351,6 +366,42 @@ public class ControllerDashboard implements Initializable {
                     "Erro de Carregamento",
                     "Falha ao carregar os tickets: " + e.getMessage()
             );
+        }
+    }
+@FXML
+    private void irConsumidores(ActionEvent event) {
+        try {
+            URL url = getClass().getResource("/com/example/heblecollectiondesktop/view/telaConsumidores.fxml");
+            if (url == null) {
+                url = getClass().getResource("/com/example/heblecollectiondesktop/view/telaConsumidores.fxml");
+            }
+
+            if (url == null) {
+                System.err.println("❌ FXML NÃO ENCONTRADO NO PATH: telaConsumidores.fxml");
+                mostrarAlerta("Erro FXML", "Arquivo telaConsumidores.fxml não encontrado.");
+                return;
+            }
+
+            FXMLLoader loader = new FXMLLoader(url);
+            Parent hubView = loader.load();
+
+            ControllerGerenciarConsumidores controllerconsumidores = loader.getController();
+            if (controllerconsumidores != null) {
+                controllerconsumidores.setContainerCentral(painelConteudoCentral);
+                controllerconsumidores.setAcaovoltar(()-> handleVisaoGeral(null));
+                if (funcionarioLogado != null) {
+                    controllerconsumidores.setFuncionarioLogado(funcionarioLogado);
+                }
+            }
+
+            if (painelConteudoCentral != null) {
+                painelConteudoCentral.getChildren().setAll(hubView);
+            } else {
+                System.err.println("❌ ERRO CRÍTICO: painelConteudoCentral está NULL!");
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+            mostrarAlerta("Erro de Carregamento", "Falha ao carregar a central de tickets: " + e.getMessage());
         }
     }
 }

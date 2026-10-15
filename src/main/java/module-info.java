@@ -7,6 +7,7 @@ module com.example.heblecollectiondesktop {
     requires mysql.connector.j;
 
 
+
     opens com.example.heblecollectiondesktop to javafx.fxml;
     opens com.example.heblecollectiondesktop.controller to javafx.fxml;
     opens com.example.heblecollectiondesktop.model to javafx.base;

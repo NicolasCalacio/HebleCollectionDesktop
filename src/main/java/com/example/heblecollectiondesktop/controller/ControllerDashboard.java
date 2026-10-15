@@ -41,7 +41,6 @@ public class ControllerDashboard implements Initializable {
     @FXML private Label lblStatusDetalhado;
 
     @FXML private Button btnVisaoGeral;
-    @FXML private Button btnExibirPerfil;
     @FXML private Button btnProdutos;
     @FXML private Button btnCupons;
     @FXML private Button btnTickets;

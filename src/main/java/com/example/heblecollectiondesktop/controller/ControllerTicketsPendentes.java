@@ -53,8 +53,6 @@ public class ControllerTicketsPendentes {
 
     @FXML
     public void initialize() {
-        System.out.println("🔥🔥🔥 CONTROLLER INICIALIZADO COM SUCESSO! 🔥🔥🔥");
-
         if (colID != null) colID.setCellValueFactory(new PropertyValueFactory<>("id"));
         if (colAssunto != null) colAssunto.setCellValueFactory(new PropertyValueFactory<>("assunto"));
         if (colDescricao != null) colDescricao.setCellValueFactory(new PropertyValueFactory<>("descricao"));
@@ -65,8 +63,7 @@ public class ControllerTicketsPendentes {
     }
 
     @FXML
-    private void voltarAoHub(ActionEvent event) {
-        System.out.println(">>> CLIQUE NO BOTÃO VOLTAR ACIONADO! <<<");
+    public void voltarAoHub(ActionEvent event) {
         try {
             URL url = getClass().getResource("/com/example/heblecollectiondesktop/view/ticketsHub.fxml");
             if (url == null) {
@@ -88,11 +85,9 @@ public class ControllerTicketsPendentes {
                 }
             }
 
-            // Se o container central estiver definido, troca o painel interno
             if (containerCentral != null) {
                 containerCentral.getChildren().setAll(hubView);
             } else if (TabelaTickets != null && TabelaTickets.getScene() != null) {
-                // Fallback seguro usando a cena da tabela para trocar a janela inteira
                 Stage palcoAtual = (Stage) TabelaTickets.getScene().getWindow();
                 palcoAtual.setScene(new Scene(hubView));
                 palcoAtual.setTitle("Hub de Tickets");

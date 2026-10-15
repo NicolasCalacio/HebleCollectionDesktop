@@ -27,16 +27,27 @@ public class ControllerSuporteFuncionario {
 
     @FXML
     private void abrirChamado(ActionEvent event) {
-        String assunto = txMatricula.getText() != null ? txMatricula.getText().trim() : "";
+        String assuntoText = txMatricula.getText() != null ? txMatricula.getText().trim() : "";
         String detalhes = txDescricao.getText() != null ? txDescricao.getText().trim() : "";
 
-        if (assunto.isEmpty() || detalhes.isEmpty()) {
+        if (assuntoText.isEmpty() || detalhes.isEmpty()) {
             exibirAlertaAviso("Preencha todos os campos obrigatórios.");
             return;
         }
 
+        String tipoTicket = "Senha";
+        String statusInicial = "pendente";
+        int idFuncionarioLogado = 0;
 
-        Ticket novoTicket = new Ticket(0, assunto, detalhes, "pendente", 1);
+
+        Ticket novoTicket = new Ticket(
+                0,
+                assuntoText,
+                tipoTicket,
+                detalhes,
+                statusInicial,
+                idFuncionarioLogado
+        );
 
         boolean sucesso = ticketDAO.Adicionar(novoTicket);
 

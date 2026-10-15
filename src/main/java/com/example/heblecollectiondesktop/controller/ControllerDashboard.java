@@ -311,6 +311,41 @@ public class ControllerDashboard implements Initializable {
             mostrarAlerta("Erro de Carregamento", "Falha ao carregar a central de tickets: " + e.getMessage());
         }
     }
+    @FXML
+    private void ExibirPerfil(ActionEvent event) {
+        if (funcionarioLogado == null) {
+            mostrarAlerta("Erro de Sessão", "Nenhum usuário logado detectado.");
+            return;}
+            try {
+                URL url = getClass().getResource("/com/example/heblecollectiondesktop/view/ExibirPerfil.fxml");
+                if (url == null) {
+                    url = getClass().getResource("/com/example/heblecollectiondesktop/view/exibirPerfil.fxml");
+                }
+
+                if (url == null) {
+                    mostrarAlerta("Erro", "Não foi possível encontrar ExibirPerfil.fxml");
+                    return;
+                }
+
+                FXMLLoader loader = new FXMLLoader(url);
+                Parent hubView = loader.load();
+
+                ControllerExibirPerfil controllerHub = loader.getController();
+                if(controllerHub!=null){
+                    controllerHub.setFuncionario(funcionarioLogado);
+                }
+
+                if (painelConteudoCentral != null) {
+                    painelConteudoCentral.getChildren().setAll(hubView);
+                }
+
+
+            } catch (IOException e) {
+                e.printStackTrace();
+                mostrarAlerta("Erro de Carregamento", "Falha ao carregar a tela de moderação: " + e.getMessage());
+            }
+        }
+
 
     @FXML
     private void abrirModeração(ActionEvent event) {

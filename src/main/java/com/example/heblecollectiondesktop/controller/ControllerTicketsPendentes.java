@@ -73,7 +73,7 @@ public class ControllerTicketsPendentes {
                 mostrarAlerta("Erro FXML", "Arquivo ticketsHub.fxml não encontrado nos recursos.", Alert.AlertType.ERROR);
                 return;
             }
-
+            System.out.println(url.getPath());
             FXMLLoader loader = new FXMLLoader(url);
             Parent hubView = loader.load();
 

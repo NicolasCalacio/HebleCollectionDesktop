@@ -36,7 +36,7 @@ public class conexaoDB {
         }
 
         String url = String.format(
-                "jdbc:mysql://%s:%s/%s?sslMode=REQUIRED&enabledTLSProtocols=TLSv1.2,TLSv1.3",
+                "jdbc:mysql://%s:%s/%s?useSSL=false&serverTimezone=UTC",
                 host, porta, banco
         );
 
@@ -46,7 +46,7 @@ public class conexaoDB {
     public static void main(String[] args) {
         try (Connection conexao = getConexao()) {
             if (conexao != null) {
-                System.out.println("Conexão com o banco da Aiven realizada com sucesso!");
+                System.out.println("Conexão com o banco de dados realizada com sucesso!");
             }
         } catch (SQLException e) {
             System.err.println("Erro ao conectar ao banco de dados: " + e.getMessage());

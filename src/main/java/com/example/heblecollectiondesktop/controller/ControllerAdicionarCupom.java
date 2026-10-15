@@ -73,13 +73,11 @@ public class ControllerAdicionarCupom {
         String txValorMin = txValorMinimo.getText().trim();
         LocalDate localDate = dpValidade.getValue();
 
-        // 1. Validação de campos obrigatórios vazios
         if (txcodigo.isEmpty() || txtDescontoPercentual.isEmpty() || txValorMin.isEmpty() || localDate == null) {
             exibirAlerta(Alert.AlertType.WARNING, "Campos Obrigatórios", "Por favor, preencha o código, o desconto, o valor mínimo e a data de validade.");
             return;
         }
 
-        // 2. Validação da Data de Validade (Não pode ser no passado)
         if (localDate.isBefore(LocalDate.now())) {
             exibirAlerta(Alert.AlertType.WARNING, "Data Inválida", "A data de validade não pode ser anterior ao dia de hoje.");
             return;

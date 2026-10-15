@@ -12,7 +12,7 @@ import com.example.heblecollectiondesktop.model.Ticket;
 public class TicketDAO {
 
     public List<Ticket> listarTodos() {
-        String sql = "SELECT * FROM login_schema.tickets ORDER BY criado_em DESC";
+        String sql = "SELECT * FROM tickets ORDER BY criado_em DESC";
         List<Ticket> lista = new ArrayList<>();
 
         try (Connection conexao = conexaoDB.getConexao();
@@ -41,7 +41,7 @@ public class TicketDAO {
     }
 
     public boolean atualizarStatus(int idTicket, String novoStatus) {
-        String sql = "UPDATE login_schema.tickets SET status = ? WHERE id = ?";
+        String sql = "UPDATE tickets SET status = ? WHERE id = ?";
 
         try (Connection conexao = conexaoDB.getConexao();
              PreparedStatement stmt = conexao.prepareStatement(sql)) {
@@ -57,7 +57,7 @@ public class TicketDAO {
     }
 
     public boolean deletar(int idTicket) {
-        String sql = "DELETE FROM login_schema.tickets WHERE id = ?";
+        String sql = "DELETE FROM tickets WHERE id = ?";
 
         try (Connection conexao = conexaoDB.getConexao();
              PreparedStatement stmt = conexao.prepareStatement(sql)) {
@@ -74,7 +74,7 @@ public class TicketDAO {
 
     public boolean Adicionar(Ticket ticket) {
         String sql = """
-            INSERT INTO login_schema.tickets 
+            INSERT INTO tickets 
             (assunto, descricao, status, funcionario_id) 
             VALUES (?, ?, ?, ?)
             """;
@@ -86,7 +86,6 @@ public class TicketDAO {
             stmt.setString(2, ticket.getDescricao());
 
             stmt.setString(3, ticket.getStatus() != null ? ticket.getStatus() : "pendente");
-
 
             if (ticket.getFuncionarioId() > 0) {
                 stmt.setInt(4, ticket.getFuncionarioId());

@@ -107,7 +107,7 @@ public class ControllerDashboard implements Initializable {
             if (funcionarioLogado != null) {
                 lblStatusDetalhado.setText(
                         "Sessão ativa para matrícula " + funcionarioLogado.getMatricula() + ".\n" +
-                                "Conexão MySQL estável em login_schema.\n" +
+                                "Conexão com o banco estavel.\n" +
                                 "Módulos disponíveis: Produtos, Cupons e Ticketing."
                 );
             }

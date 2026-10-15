@@ -20,12 +20,13 @@ public class TicketDAO {
              ResultSet rs = stmt.executeQuery()) {
 
             while (rs.next()) {
-
                 String status = rs.getString("status");
+                String tipo = rs.getString("tipo");
 
                 Ticket t = new Ticket(
                         rs.getInt("id"),
                         rs.getString("assunto"),
+                        tipo,
                         rs.getString("descricao"),
                         status,
                         rs.getInt("funcionario_id")
@@ -75,22 +76,22 @@ public class TicketDAO {
     public boolean Adicionar(Ticket ticket) {
         String sql = """
             INSERT INTO tickets 
-            (assunto, descricao, status, funcionario_id) 
-            VALUES (?, ?, ?, ?)
+            (assunto, tipo, descricao, status, funcionario_id) 
+            VALUES (?, ?, ?, ?, ?)
             """;
 
         try (Connection conexao = conexaoDB.getConexao();
              PreparedStatement stmt = conexao.prepareStatement(sql)) {
 
             stmt.setString(1, ticket.getAssunto());
-            stmt.setString(2, ticket.getDescricao());
-
-            stmt.setString(3, ticket.getStatus() != null ? ticket.getStatus() : "pendente");
+            stmt.setString(2, ticket.getTipo() != null ? ticket.getTipo() : "GERAL");
+            stmt.setString(3, ticket.getDescricao());
+            stmt.setString(4, ticket.getStatus() != null ? ticket.getStatus() : "pendente");
 
             if (ticket.getFuncionarioId() > 0) {
-                stmt.setInt(4, ticket.getFuncionarioId());
+                stmt.setInt(5, ticket.getFuncionarioId());
             } else {
-                stmt.setNull(4, java.sql.Types.INTEGER);
+                stmt.setNull(5, java.sql.Types.INTEGER);
             }
 
             return stmt.executeUpdate() > 0;

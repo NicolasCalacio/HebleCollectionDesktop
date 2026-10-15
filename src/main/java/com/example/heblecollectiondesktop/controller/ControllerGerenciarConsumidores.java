@@ -1,18 +1,22 @@
 package com.example.heblecollectiondesktop.controller;
 
+import com.example.heblecollectiondesktop.database.ConsumidoresDAO;
+
 import com.example.heblecollectiondesktop.model.Consumidores;
+
 import com.example.heblecollectiondesktop.model.Funcionario;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
+
 import javafx.scene.control.Alert;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.Pane;
 
-import java.io.IOException;
-import java.net.URL;
+
 
 public class ControllerGerenciarConsumidores {
     @FXML
@@ -26,6 +30,8 @@ public class ControllerGerenciarConsumidores {
     @FXML
     private TableColumn<Consumidores , String> colStatus;
     private Pane containerCentral;
+    private final ConsumidoresDAO consumidoresDAO = new ConsumidoresDAO();
+    private final ObservableList<Consumidores> listaConsumidores = FXCollections.observableArrayList();
 
     public void setFuncionarioLogado(Funcionario funcionarioLogado) {
         this.funcionarioLogado = funcionarioLogado;
@@ -47,13 +53,38 @@ public class ControllerGerenciarConsumidores {
        }
     }
 
-    private void mostrarAlertaErro(String titulo, String mensagem) {
-        Alert alert = new Alert(Alert.AlertType.ERROR);
+    @FXML
+    public void initialize() {
+        if (colid != null) colid.setCellValueFactory(new PropertyValueFactory<>("id"));
+        if (colNome != null) colNome.setCellValueFactory(new PropertyValueFactory<>("nome"));
+        if (colCpf != null) colCpf.setCellValueFactory(new PropertyValueFactory<>("cnpj"));
+        if (colStatus != null) colStatus.setCellValueFactory(new PropertyValueFactory<>("status"));
+        carregarTabela();
+    }
+    public void carregarTabela() {
+        try {
+            listaConsumidores.setAll(consumidoresDAO.listarConsumidores());
+            if (tabelaConsumidores != null) {
+                tabelaConsumidores.setItems(listaConsumidores);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            mostrarAlerta(Alert.AlertType.ERROR, "Erro de Banco de Dados", "Falha ao remover cupom: " + e.getMessage());
+        }
+    }
+
+    private void mostrarAlerta(Alert.AlertType tipo, String titulo, String mensagem) {
+        Alert alert = new Alert(tipo);
         alert.setTitle(titulo);
         alert.setHeaderText(null);
         alert.setContentText(mensagem);
         alert.showAndWait();
     }
 }
+
+
+
+
+
 
 

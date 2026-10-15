@@ -34,45 +34,27 @@ import javafx.stage.Stage;
 
 public class ControllerDashboard implements Initializable {
 
-    @FXML
-    private Label lblUsuarioLogado;
-    @FXML
-    private Label lblTotalProdutos;
-    @FXML
-    private Label lblCuponsAtivos;
-    @FXML
-    private Label lblTicketsAbertos;
-    @FXML
-    private Label lblStatusDetalhado;
+    @FXML private Label lblUsuarioLogado;
+    @FXML private Label lblTotalProdutos;
+    @FXML private Label lblCuponsAtivos;
+    @FXML private Label lblTicketsAbertos;
+    @FXML private Label lblStatusDetalhado;
 
-    @FXML
-    private Button btnVisaoGeral;
-    @FXML
-    private Button btnProdutos;
-    @FXML
-    private Button btnVendas;
-    @FXML
-    private Button btnCupons;
-    @FXML
-    private Button btnTickets;
-    @FXML
-    private Button btnConsumidores;
-    @FXML
-    private Button btnModeracao;
-    @FXML
-    private Button btnSair;
-
-    @FXML
-    private VBox vboxProdutos;
-    @FXML
-    private VBox containerAtividades;
-    @FXML
-    private Pane painelConteudoCentral;
-    @FXML
-    private VBox vboxTickets;
+    @FXML private Button btnVisaoGeral;
+    @FXML private Button btnExibirPerfil;
+    @FXML private Button btnProdutos;
+    @FXML private Button btnCupons;
+    @FXML private Button btnTickets;
+    @FXML private Button btnModeracao;
+    @FXML private Button btnSair;
+    @FXML private VBox vboxProdutos;
+    @FXML private VBox containerAtividades;
+    @FXML private Pane painelConteudoCentral;
+    @FXML private VBox vboxTickets;
 
     private Node vistaInicialDashboard;
     private Funcionario funcionarioLogado;
+
 
     private final ProdutoDAO produtoDAO = new ProdutoDAO();
     private final CupomDAO cupomDAO = new CupomDAO();
@@ -80,7 +62,10 @@ public class ControllerDashboard implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        // Inicializações padrão
+        if (btnModeracao != null) {
+            btnModeracao.setVisible(false);
+            btnModeracao.setManaged(false);
+        }
     }
 
     public void setFuncionarioLogado(Funcionario funcionario) {
@@ -96,44 +81,14 @@ public class ControllerDashboard implements Initializable {
 
     private void atualizarInterface() {
         if (funcionarioLogado != null) {
-            Cargo cargo = funcionarioLogado.getCargo();
-            String papel = cargo != null ? cargo.name() : "FUNCIONARIO";
+            boolean isGerente = (funcionarioLogado.getCargo() == Cargo.GERENTE);
+            String papel = isGerente ? "GERENTE" : "FUNCIONÁRIO";
 
             lblUsuarioLogado.setText("Operador: " + funcionarioLogado.getMatricula() + " [" + papel + "]");
-
-            boolean isGerente = (cargo == Cargo.GERENTE);
-            boolean isSuporte = (cargo == Cargo.SUPORTE);
-            boolean isFuncionario = (cargo == Cargo.FUNCIONARIO);
 
             if (btnModeracao != null) {
                 btnModeracao.setVisible(isGerente);
                 btnModeracao.setManaged(isGerente);
-            }
-
-            if (btnCupons != null) {
-                btnCupons.setVisible(isGerente);
-                btnCupons.setManaged(isGerente);
-            }
-
-            if (btnTickets != null) {
-                btnTickets.setVisible(isGerente || isSuporte);
-                btnTickets.setManaged(isGerente || isSuporte);
-            }
-
-            if (btnConsumidores != null) {
-                btnConsumidores.setVisible(isGerente || isSuporte);
-                btnConsumidores.setManaged(isGerente || isSuporte);
-            }
-
-            // FUNCIONÁRIO e GERENTE veem Produtos e Vendas
-            if (btnProdutos != null) {
-                btnProdutos.setVisible(isGerente || isFuncionario);
-                btnProdutos.setManaged(isGerente || isFuncionario);
-            }
-
-            if (btnVendas != null) {
-                btnVendas.setVisible(isGerente || isFuncionario);
-                btnVendas.setManaged(isGerente || isFuncionario);
             }
         }
     }
@@ -153,8 +108,8 @@ public class ControllerDashboard implements Initializable {
             if (funcionarioLogado != null) {
                 lblStatusDetalhado.setText(
                         "Sessão ativa para matrícula " + funcionarioLogado.getMatricula() + ".\n" +
-                                "Conexão com o banco estável.\n" +
-                                "Cargo atual: " + funcionarioLogado.getCargo()
+                                "Conexão com o banco estavel.\n" +
+                                "Módulos disponíveis: Produtos, Cupons e Ticketing."
                 );
             }
 
@@ -183,12 +138,6 @@ public class ControllerDashboard implements Initializable {
 
     @FXML
     private void irparaprodutos() {
-        Cargo cargo = funcionarioLogado != null ? funcionarioLogado.getCargo() : null;
-        if (cargo != Cargo.GERENTE && cargo != Cargo.FUNCIONARIO) {
-            mostrarAlerta("Acesso Negado", "Apenas Funcionários e Gerentes podem acessar o estoque/produtos.");
-            return;
-        }
-
         try {
             URL url = getClass().getResource("/com/example/heblecollectiondesktop/view/GerenciarProdutos.fxml");
             if (url == null) {
@@ -220,34 +169,8 @@ public class ControllerDashboard implements Initializable {
     }
 
     @FXML
-    private void irparaVendas(ActionEvent event) {
-        Cargo cargo = funcionarioLogado != null ? funcionarioLogado.getCargo() : null;
-        if (cargo != Cargo.GERENTE && cargo != Cargo.FUNCIONARIO) {
-            mostrarAlerta("Acesso Negado", "Apenas Funcionários e Gerentes podem acessar as vendas.");
-            return;
-        }
-
-        try {
-            URL url = getClass().getResource("/com/example/heblecollectiondesktop/view/Vendas.fxml");
-            if (url == null) {
-                url = getClass().getResource("/com/example/heblecollectiondesktop/view/vendas.fxml");
-            }
-
-            if (url == null) {
-                mostrarAlerta("Erro FXML", "Arquivo Vendas.fxml não encontrado.");
-                return;
-            }
-
-            FXMLLoader loader = new FXMLLoader(url);
-            Parent vendasView = loader.load();
-
-            if (painelConteudoCentral != null) {
-                painelConteudoCentral.getChildren().setAll(vendasView);
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-            mostrarAlerta("Erro de Carregamento", "Falha ao carregar a tela de vendas: " + e.getMessage());
-        }
+    private void handleCupons(ActionEvent event) {
+        irparacupons();
     }
 
     @FXML
@@ -257,12 +180,6 @@ public class ControllerDashboard implements Initializable {
 
     @FXML
     private void irparacupons() {
-        Cargo cargo = funcionarioLogado != null ? funcionarioLogado.getCargo() : null;
-        if (cargo != Cargo.GERENTE) {
-            mostrarAlerta("Acesso Negado", "Apenas Gerentes podem gerir cupons.");
-            return;
-        }
-
         try {
             URL url = getClass().getResource("/com/example/heblecollectiondesktop/view/GerenciarCupons.fxml");
             if (url == null) {
@@ -294,12 +211,6 @@ public class ControllerDashboard implements Initializable {
 
     @FXML
     private void abrirTicketsHub(ActionEvent event) {
-        Cargo cargo = funcionarioLogado != null ? funcionarioLogado.getCargo() : null;
-        if (cargo != Cargo.GERENTE && cargo != Cargo.SUPORTE) {
-            mostrarAlerta("Acesso Negado", "Apenas perfis de Suporte ou Gerência podem acessar os tickets.");
-            return;
-        }
-
         try {
             URL url = getClass().getResource("/com/example/heblecollectiondesktop/view/TicketsHub.fxml");
             if (url == null) {
@@ -307,6 +218,7 @@ public class ControllerDashboard implements Initializable {
             }
 
             if (url == null) {
+                System.err.println("❌ FXML NÃO ENCONTRADO NO PATH: TicketsHub.fxml");
                 mostrarAlerta("Erro FXML", "Arquivo TicketsHub.fxml não encontrado.");
                 return;
             }
@@ -324,6 +236,8 @@ public class ControllerDashboard implements Initializable {
 
             if (painelConteudoCentral != null) {
                 painelConteudoCentral.getChildren().setAll(hubView);
+            } else {
+                System.err.println("❌ ERRO CRÍTICO: painelConteudoCentral está NULL!");
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -332,112 +246,43 @@ public class ControllerDashboard implements Initializable {
     }
 
     @FXML
-    private void abrirModeração(ActionEvent event) {
-        Cargo cargo = funcionarioLogado != null ? funcionarioLogado.getCargo() : null;
-        if (cargo != Cargo.GERENTE) {
-            mostrarAlerta("Acesso Negado", "Apenas Gerentes têm acesso a esta área.");
+    private void handleModeracao(ActionEvent event) {
+        if (funcionarioLogado == null) {
+            mostrarAlerta("Erro de Sessão", "Nenhum usuário logado detectado.");
             return;
         }
 
-        try {
-            URL url = getClass().getResource("/com/example/heblecollectiondesktop/view/ModeracaoHub.fxml");
-            if (url == null) {
-                url = getClass().getResource("/com/example/heblecollectiondesktop/view/moderacaoHub.fxml");
-            }
-
-            if (url == null) {
-                mostrarAlerta("Erro", "Não foi possível encontrar moderacaoHub.fxml.");
-                return;
-            }
-
-            FXMLLoader loader = new FXMLLoader(url);
-            Parent hubView = loader.load();
-
-            ControllerModeracaoHub controllerHub = loader.getController();
-            if (controllerHub != null) {
-                controllerHub.setContainerCentral(painelConteudoCentral);
-                controllerHub.setFuncionarioLogado(funcionarioLogado);
-            }
-
-            if (painelConteudoCentral != null) {
-                painelConteudoCentral.getChildren().setAll(hubView);
-            }
-
-        } catch (IOException e) {
-            e.printStackTrace();
-            mostrarAlerta("Erro de Carregamento", "Falha ao carregar a tela de moderação: " + e.getMessage());
-        }
-    }
-
-    @FXML
-    private void irConsumidores(ActionEvent event) {
-        Cargo cargo = funcionarioLogado != null ? funcionarioLogado.getCargo() : null;
-        if (cargo != Cargo.GERENTE && cargo != Cargo.SUPORTE) {
-            mostrarAlerta("Acesso Negado", "Apenas perfis de Suporte ou Gerência podem gerir consumidores.");
-            return;
-        }
-
-        try {
-            URL url = getClass().getResource("/com/example/heblecollectiondesktop/view/telaConsumidores.fxml");
-            if (url == null) {
-                url = getClass().getResource("/com/example/heblecollectiondesktop/view/telaConsumidores.fxml");
-            }
-
-            if (url == null) {
-                mostrarAlerta("Erro FXML", "Arquivo telaConsumidores.fxml não encontrado.");
-                return;
-            }
-
-            FXMLLoader loader = new FXMLLoader(url);
-            Parent hubView = loader.load();
-
-            ControllerGerenciarConsumidores controllerconsumidores = loader.getController();
-            if (controllerconsumidores != null) {
-                controllerconsumidores.setContainerCentral(painelConteudoCentral);
-                controllerconsumidores.setAcaovoltar(() -> handleVisaoGeral(null));
-                if (funcionarioLogado != null) {
-                    controllerconsumidores.setFuncionarioLogado(funcionarioLogado);
+        if (funcionarioLogado.getCargo() == Cargo.GERENTE) {
+            try {
+                URL url = getClass().getResource("/com/example/heblecollectiondesktop/view/ModeracaoHub.fxml");
+                if (url == null) {
+                    url = getClass().getResource("/com/example/heblecollectiondesktop/view/moderacaoHub.fxml");
                 }
+
+                if (url == null) {
+                    mostrarAlerta("Erro", "Não foi possível encontrar moderacaoHub.fxml.");
+                    return;
+                }
+
+                FXMLLoader loader = new FXMLLoader(url);
+                Parent hubView = loader.load();
+
+                ControllerModeracaoHub controllerHub = loader.getController();
+                if (controllerHub != null) {
+                    controllerHub.setContainerCentral(painelConteudoCentral);
+                    controllerHub.setFuncionarioLogado(funcionarioLogado);
+                }
+
+                if (painelConteudoCentral != null) {
+                    painelConteudoCentral.getChildren().setAll(hubView);
+                }
+
+            } catch (IOException e) {
+                e.printStackTrace();
+                mostrarAlerta("Erro de Carregamento", "Falha ao carregar a tela de moderação: " + e.getMessage());
             }
-
-            if (painelConteudoCentral != null) {
-                painelConteudoCentral.getChildren().setAll(hubView);
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-            mostrarAlerta("Erro de Carregamento", "Falha ao carregar a central de consumidores: " + e.getMessage());
-        }
-    }
-
-    @FXML
-    private void TicketsPendentes(MouseEvent event) {
-        Cargo cargo = funcionarioLogado != null ? funcionarioLogado.getCargo() : null;
-        if (cargo != Cargo.GERENTE && cargo != Cargo.SUPORTE) {
-            mostrarAlerta("Acesso Negado", "Apenas perfis de Suporte ou Gerência podem acessar os tickets pendentes.");
-            return;
-        }
-
-        try {
-            URL url = getClass().getResource("/com/example/heblecollectiondesktop/view/ticketsPendentes.fxml");
-            if (url == null) {
-                mostrarAlerta("Erro FXML", "ticketsPendentes.fxml não encontrado.");
-                return;
-            }
-
-            FXMLLoader loader = new FXMLLoader(url);
-            Parent ticketsView = loader.load();
-
-            ControllerTicketsPendentes controller = loader.getController();
-            if (controller != null) {
-                controller.setContainerCentral(painelConteudoCentral);
-                controller.setFuncionarioLogado(funcionarioLogado);
-            }
-
-            painelConteudoCentral.getChildren().setAll(ticketsView);
-
-        } catch (IOException e) {
-            e.printStackTrace();
-            mostrarAlerta("Erro de Carregamento", "Falha ao carregar os tickets: " + e.getMessage());
+        } else {
+            mostrarAlerta("Acesso Negado", "Apenas Gerentes têm acesso a esta área.");
         }
     }
 
@@ -475,5 +320,42 @@ public class ControllerDashboard implements Initializable {
         alert.setHeaderText(null);
         alert.setContentText(mensagem);
         alert.showAndWait();
+    }
+
+    @FXML
+    private void TicketsPendentes(MouseEvent event) {
+        try {
+            URL url = getClass().getResource(
+                    "/com/example/heblecollectiondesktop/view/GerenciarTicketsPendentes.fxml"
+            );
+
+            if (url == null) {
+                mostrarAlerta(
+                        "Erro FXML",
+                        "GerenciarTicketsPendentes.fxml não encontrado."
+                );
+                return;
+            }
+
+            FXMLLoader loader = new FXMLLoader(url);
+            Parent ticketsView = loader.load();
+
+            ControllerTicketsPendentes controller = loader.getController();
+
+            if (controller != null) {
+                controller.setContainerCentral(painelConteudoCentral);
+                controller.setFuncionarioLogado(funcionarioLogado);
+            }
+
+            painelConteudoCentral.getChildren().setAll(ticketsView);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+
+            mostrarAlerta(
+                    "Erro de Carregamento",
+                    "Falha ao carregar os tickets: " + e.getMessage()
+            );
+        }
     }
 }

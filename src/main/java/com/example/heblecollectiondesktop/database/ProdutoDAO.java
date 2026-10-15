@@ -13,8 +13,8 @@ public class ProdutoDAO {
 
     public List<Produto> listarTodos() {
         String sql = "SELECT p.*, COALESCE(e.nome, 'Não vinculada') AS nome_empresa " +
-                "FROM login_schema.produtos p " +
-                "LEFT JOIN login_schema.empresa e ON p.empresa_id = e.id " +
+                "FROM produtos p " +
+                "LEFT JOIN empresa e ON p.empresa_id = e.id " +
                 "ORDER BY p.id DESC";
         List<Produto> lista = new ArrayList<>();
 
@@ -44,8 +44,8 @@ public class ProdutoDAO {
 
     public List<Produto> listarPendentes() {
         String sql = "SELECT p.*, COALESCE(e.nome, 'Não vinculada') AS nome_empresa " +
-                "FROM login_schema.produtos p " +
-                "LEFT JOIN login_schema.empresa e ON p.empresa_id = e.id " +
+                "FROM produtos p " +
+                "LEFT JOIN empresa e ON p.empresa_id = e.id " +
                 "WHERE p.status = 'PENDENTE' OR p.status IS NULL " +
                 "ORDER BY p.id DESC";
         List<Produto> lista = new ArrayList<>();
@@ -75,7 +75,7 @@ public class ProdutoDAO {
     }
 
     public boolean atualizarProduto(Produto produto) {
-        String sql = "UPDATE login_schema.produtos SET nome = ?, descricao = ?, preco = ?, quantidade_estoque = ? WHERE id = ?";
+        String sql = "UPDATE produtos SET nome = ?, descricao = ?, preco = ?, quantidade_estoque = ? WHERE id = ?";
 
         try (Connection conexao = conexaoDB.getConexao();
              PreparedStatement stmt = conexao.prepareStatement(sql)) {
@@ -94,7 +94,7 @@ public class ProdutoDAO {
     }
 
     public boolean atualizarStatus(int idProduto, String novoStatus) {
-        String sql = "UPDATE login_schema.produtos SET status = ? WHERE id = ?";
+        String sql = "UPDATE produtos SET status = ? WHERE id = ?";
 
         try (Connection conexao = conexaoDB.getConexao();
              PreparedStatement stmt = conexao.prepareStatement(sql)) {
@@ -110,7 +110,7 @@ public class ProdutoDAO {
     }
 
     public boolean deletar(int idProduto) {
-        String sql = "DELETE FROM login_schema.produtos WHERE id = ?";
+        String sql = "DELETE FROM produtos WHERE id = ?";
 
         try (Connection conexao = conexaoDB.getConexao();
              PreparedStatement stmt = conexao.prepareStatement(sql)) {
@@ -122,11 +122,12 @@ public class ProdutoDAO {
             throw new RuntimeException("Erro ao deletar produto: " + e.getMessage(), e);
         }
     }
+
     public List<Produto> buscarPorTermo(String termo) {
         List<Produto> lista = new ArrayList<>();
         String sql = "SELECT p.*, COALESCE(e.nome, 'Não vinculada') AS nome_empresa " +
-                "FROM login_schema.produtos p " +
-                "LEFT JOIN login_schema.empresa e ON p.empresa_id = e.id " +
+                "FROM produtos p " +
+                "LEFT JOIN empresa e ON p.empresa_id = e.id " +
                 "WHERE p.nome LIKE ? OR p.descricao LIKE ? OR e.nome LIKE ? " +
                 "ORDER BY p.id DESC";
 

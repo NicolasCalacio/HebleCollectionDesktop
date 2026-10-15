@@ -54,6 +54,11 @@
                         <Font size="13.0" />
                     </font>
                 </Button>
+            <Button fx:id="btnConsumidores" alignment="BASELINE_LEFT" layoutX="34.0" layoutY="154.0" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#irConsumidores" prefHeight="40.0" style="-fx-background-color: transparent; -fx-text-fill: #94A3B8; -fx-background-radius: 8; -fx-cursor: hand;" text="Consumidores">
+               <font>
+                  <Font size="13.0" />
+               </font>
+            </Button>
 
                 <Button fx:id="btnModeracao" alignment="BASELINE_LEFT" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#abrirModeração" prefHeight="40.0" style="-fx-background-color: transparent; -fx-text-fill: #38BDF8; -fx-background-radius: 8; -fx-cursor: hand;" text="★ Moderação (Gerente)">
                     <font>

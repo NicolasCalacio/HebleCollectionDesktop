@@ -37,19 +37,18 @@
                     </font>
                 </Button>
 
-                <Button fx:id="btnProdutos" alignment="BASELINE_LEFT" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#acaoirprodutos" prefHeight="40.0" style="-fx-background-color: transparent; -fx-text-fill: #94A3B8; -fx-background-radius: 8; -fx-cursor: hand;" text="Estoque / Produtos">
+                <Button fx:id="btnProdutos" alignment="BASELINE_LEFT" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#acaoirprodutos" prefHeight="40.0" style="-fx-background-color: transparent; -fx-text-fill: #ffd800; -fx-background-radius: 8; -fx-cursor: hand;" text="Estoque">
                     <font>
                         <Font size="13.0" />
                     </font>
                 </Button>
+            <Button fx:id="btnVendas" alignment="BASELINE_LEFT" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#irparaVendas" prefHeight="40.0" style="-fx-background-color: transparent; -fx-text-fill: #ffd800; -fx-background-radius: 8; -fx-cursor: hand;" text="Vendas">
+               <font>
+                  <Font size="13.0" />
+               </font>
+            </Button>
 
-                <Button fx:id="btnCupons" alignment="BASELINE_LEFT" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#irparacupons" prefHeight="40.0" style="-fx-background-color: transparent; -fx-text-fill: #94A3B8; -fx-background-radius: 8; -fx-cursor: hand;" text="Cupons &amp; Descontos">
-                    <font>
-                        <Font size="13.0" />
-                    </font>
-                </Button>
-
-                <Button fx:id="btnTickets" alignment="BASELINE_LEFT" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#abrirTicketsHub" prefHeight="40.0" style="-fx-background-color: transparent; -fx-text-fill: #94A3B8; -fx-background-radius: 8; -fx-cursor: hand;" text="Suporte / Tickets">
+                <Button fx:id="btnTickets" alignment="BASELINE_LEFT" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#abrirTicketsHub" prefHeight="40.0" style="-fx-background-color: transparent; -fx-text-fill: #94A3B8; -fx-background-radius: 8; -fx-cursor: hand;" text="Suporte">
                     <font>
                         <Font size="13.0" />
                     </font>
@@ -60,11 +59,16 @@
                </font>
             </Button>
 
-                <Button fx:id="btnModeracao" alignment="BASELINE_LEFT" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#abrirModeração" prefHeight="40.0" style="-fx-background-color: transparent; -fx-text-fill: #38BDF8; -fx-background-radius: 8; -fx-cursor: hand;" text="★ Moderação (Gerente)">
+                      <Button fx:id="btnCupons" alignment="BASELINE_LEFT" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#irparacupons" prefHeight="40.0" style="-fx-background-color: transparent; -fx-text-fill: #38bdf8; -fx-background-radius: 8; -fx-cursor: hand;" text="Cupons">
                     <font>
-                        <Font name="System Bold" size="13.0" />
+                        <Font size="13.0" />
                     </font>
                 </Button>
+            <Button fx:id="btnModeracao" alignment="BASELINE_LEFT" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#abrirModeração" prefHeight="40.0" style="-fx-background-color: transparent; -fx-text-fill: #38bdf8; -fx-background-radius: 8; -fx-cursor: hand;" text="Moderação">
+               <font>
+                  <Font size="13.0" />
+               </font>
+            </Button>
 
                 <Pane VBox.vgrow="ALWAYS" />
 

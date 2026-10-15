@@ -168,10 +168,6 @@ public class ControllerDashboard implements Initializable {
         }
     }
 
-    @FXML
-    private void handleCupons(ActionEvent event) {
-        irparacupons();
-    }
 
     @FXML
     private void mouseircupons(MouseEvent event) {
@@ -246,7 +242,7 @@ public class ControllerDashboard implements Initializable {
     }
 
     @FXML
-    private void handleModeracao(ActionEvent event) {
+    private void abrirModeração(ActionEvent event) {
         if (funcionarioLogado == null) {
             mostrarAlerta("Erro de Sessão", "Nenhum usuário logado detectado.");
             return;
@@ -326,13 +322,13 @@ public class ControllerDashboard implements Initializable {
     private void TicketsPendentes(MouseEvent event) {
         try {
             URL url = getClass().getResource(
-                    "/com/example/heblecollectiondesktop/view/GerenciarTicketsPendentes.fxml"
+                    "/com/example/heblecollectiondesktop/view/ticketsPendentes.fxml"
             );
 
             if (url == null) {
                 mostrarAlerta(
                         "Erro FXML",
-                        "GerenciarTicketsPendentes.fxml não encontrado."
+                        "ticketsPendentes.fxml não encontrado."
                 );
                 return;
             }

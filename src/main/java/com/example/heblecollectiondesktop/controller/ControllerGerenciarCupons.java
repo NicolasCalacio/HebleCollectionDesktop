@@ -41,7 +41,7 @@ public class ControllerGerenciarCupons {
     @FXML private Button btnAdicionarCupom;
     @FXML private Button btnEditarCupom;
     @FXML private Button btnRemoverCupom;
-
+    private Runnable acaovoltar;
     private Pane containerCentral;
     private Funcionario funcionarioLogado;
     private final CupomDAO cupomDAO = new CupomDAO();
@@ -54,7 +54,9 @@ public class ControllerGerenciarCupons {
     public void setFuncionarioLogado(Funcionario funcionarioLogado) {
         this.funcionarioLogado = funcionarioLogado;
     }
-
+    public void setAcaovoltar(Runnable acaovoltar){
+        this.acaovoltar=acaovoltar;
+    }
     @FXML
     public void initialize() {
         configurarColunas();
@@ -145,32 +147,9 @@ public class ControllerGerenciarCupons {
     }
 
     @FXML
-    void voltarAoHub(ActionEvent event) {
-        if (containerCentral == null) return;
-
-        try {
-            URL url = getClass().getResource("/com/example/heblecollectiondesktop/view/Dashboard.fxml");
-            if (url == null) {
-                url = getClass().getResource("/com/example/heblecollectiondesktop/view/dashboard.fxml");
-            }
-
-            if (url != null) {
-                FXMLLoader loader = new FXMLLoader(url);
-                Parent dashboardView = loader.load();
-
-                Object controller = loader.getController();
-                if (controller != null) {
-                    try {
-                        controller.getClass().getMethod("setContainerCentral", Pane.class).invoke(controller, containerCentral);
-                        controller.getClass().getMethod("setFuncionarioLogado", Funcionario.class).invoke(controller, funcionarioLogado);
-                    } catch (Exception ignored) {}
-                }
-
-                containerCentral.getChildren().setAll(dashboardView);
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-            mostrarAlerta(Alert.AlertType.ERROR, "Erro de Navegação", "Não foi possível voltar ao Painel Principal.");
+    private void voltarAoHub(ActionEvent event) {
+        if(acaovoltar!= null){
+            acaovoltar.run();
         }
     }
 

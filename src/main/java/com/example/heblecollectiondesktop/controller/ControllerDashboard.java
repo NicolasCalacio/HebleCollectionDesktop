@@ -197,6 +197,7 @@ public class ControllerDashboard implements Initializable {
             if (controllerCupons != null) {
                 controllerCupons.setContainerCentral(painelConteudoCentral);
                 controllerCupons.setFuncionarioLogado(funcionarioLogado);
+                controllerCupons.setAcaovoltar(() -> handleVisaoGeral(null));
             }
 
             if (painelConteudoCentral != null) {

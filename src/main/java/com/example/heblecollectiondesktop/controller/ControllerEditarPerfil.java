@@ -16,7 +16,6 @@ public class ControllerEditarPerfil {
     private  TextField txSenha;
     private Funcionario funcionarioEditando;
 
-    private ControllerExibirPerfil controllerPai;
 
     private final FuncionarioDAO funcionarioDAO = new FuncionarioDAO();
     private final LogsDAO logsDAOFuncionario = new LogsDAO();
@@ -36,12 +35,12 @@ public class ControllerEditarPerfil {
 
         if (Nome == null || Nome.trim().isEmpty() ||
                 Senha == null || Senha.trim().isEmpty() ){
-            mostrarAlerta1("Campos Obrigatórios", "Por favor, preencha o nome, CNPJ e estilo da empresa.", "Alerta");
+            mostrarAlerta1("Campos Obrigatórios", "Por favor, preencha o nome e a senha.", "Alerta");
             return;
         }
 
         if (funcionarioEditando == null) {
-            mostrarAlerta1("Erro", "Nenhuma empresa foi selecionada para edição.", "Erro");
+            mostrarAlerta1("Erro", "Nenhum funcionario foi selecionado para edição.", "Erro");
             return;
         }
 
@@ -64,9 +63,7 @@ public class ControllerEditarPerfil {
 
             mostrarAlerta1("Sucesso", "Funcionario editado com sucesso!", "Informação");
 
-            if (controllerPai != null) {
-                return;
-            }
+
 
             Stage janelaAtual = (Stage) txNome.getScene().getWindow();
             janelaAtual.close();

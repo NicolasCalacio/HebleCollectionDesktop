@@ -151,7 +151,7 @@ public class ConsumidoresDAO {
         }
     }
 
-    public void deletar(int idConsumidor) {
+    public boolean deletar(int idConsumidor) {
         String sql = "DELETE FROM consumidores WHERE IDconsumidor = ?";
 
         try (Connection conn = conexaoDB.getConexao();
@@ -164,5 +164,7 @@ public class ConsumidoresDAO {
         } catch (SQLException e) {
             System.err.println("Erro ao excluir consumidor: " + e.getMessage());
         }
+
+        return false;
     }
 }

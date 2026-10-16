@@ -26,6 +26,9 @@ public class ControllerExibirPerfil {
     private Label lblCargo;
     private Funcionario funcionario;
     private Runnable acaovoltar;
+    public void setAcaovoltar(Runnable acaovoltar){
+        this.acaovoltar=acaovoltar;
+    }
     public void setFuncionario(Funcionario funcionario){
         this.funcionario=funcionario;
         setLabel();

@@ -160,9 +160,11 @@ public class ConsumidoresDAO {
             stmt.setInt(1, idConsumidor);
             stmt.executeUpdate();
             System.out.println("Consumidor excluído com sucesso!");
+            return true;
 
         } catch (SQLException e) {
             System.err.println("Erro ao excluir consumidor: " + e.getMessage());
+
         }
 
         return false;

@@ -109,6 +109,43 @@ public class ControllerGerenciarConsumidores {
             mostrarAlerta(Alert.AlertType.ERROR,"Erro de Carregamento", "Falha ao carregar a sub-tela: " + e.getMessage());
         }
     }
+    @FXML
+    public void IrEditarConsumidor(ActionEvent event){
+        Consumidores consumidorselecionado = tabelaConsumidores.getSelectionModel().getSelectedItem();
+        if (consumidorselecionado == null ){
+            mostrarAlerta(Alert.AlertType.WARNING,"Aviso", "Por favor, selecione um consumidor na tabela para Banir.");
+            return;
+        }
+        String SomenteBanido = consumidorselecionado.getStatusconsumidor();
+        if (SomenteBanido.equalsIgnoreCase("Banido")){
+            try {
+
+
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/heblecollectiondesktop/view/EditarConsumidor.fxml"));
+                Parent subtela1 = loader.load();
+
+                ControllerEditarConsumidor controllerEditar = loader.getController();
+                controllerEditar.setConsumidorEditar(consumidorselecionado);
+
+                Button btnClicado2 = (Button) event.getSource();
+                Stage janelaAtual1 = (Stage) btnClicado2.getScene().getWindow();
+
+                Stage SubJanela1 = new Stage();
+                SubJanela1.setScene(new Scene(subtela1));
+                SubJanela1.initModality(Modality.APPLICATION_MODAL);
+                SubJanela1.initOwner(janelaAtual1);
+                SubJanela1.setTitle("Editar Consumidor");
+                SubJanela1.setResizable(false);
+                SubJanela1.showAndWait();
+            } catch (IOException e) {
+                mostrarAlerta(Alert.AlertType.ERROR,"Erro de Carregamento", "Falha ao carregar a sub-tela: " + e.getMessage());
+            }
+        }else {
+            mostrarAlerta(Alert.AlertType.WARNING,"Somente Consumidores Banidos", "Selecione somente um consumidor que esteja Banido");
+            return;
+        }
+
+    }
 
     private void mostrarAlerta(Alert.AlertType tipo, String titulo, String mensagem) {
         Alert alert = new Alert(tipo);

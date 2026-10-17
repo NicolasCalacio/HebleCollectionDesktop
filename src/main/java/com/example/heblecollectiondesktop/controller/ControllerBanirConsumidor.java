@@ -37,7 +37,42 @@ public class ControllerBanirConsumidor {
     }
 
     public  void confirmarBanimento(){
-        String Observacao = txtObservacao.getText()!= null ? txtObservacao.getText().trim() : "";;
+        String Observacao = txtObservacao.getText()!= null ? txtObservacao.getText().trim() : "";
+        String motivo = cbMotivo.getValue().toString();
+
+        if (motivo == null || motivo.toString().isBlank()) {
+            mostrarAlerta(Alert.AlertType.WARNING, "Motivo Obrigatório", "Por favor, selecione um motivo para o banimento.");
+            return;
+        }
+        if (consumidorBanir == null) {
+            mostrarAlerta(Alert.AlertType.ERROR, "Erro", "Nenhumo Consumidor  selecionado para Banimento.");
+            return;
+        }
+        try {
+            boolean sucesso = consumidorDAO.atualizarStatusConsumidor(consumidorBanir.getIDconsumidor(), "Banido");
+            if (sucesso){
+                String AlvoAfetado = consumidorBanir.getNomconsumidor();
+                String detalhes = "Motivo: " + motivo + (Observacao.isEmpty() ? "" : " | Obs: " + Observacao);
+
+                logsDAO.registrarLog("Suporte", "BAN_CONSUMIDOR",AlvoAfetado, detalhes);
+
+                mostrarAlerta(Alert.AlertType.INFORMATION, "Sucesso", "Consumidor Banido e ação registrada no log da moderação!");
+
+                Stage janelaAtual = (Stage) txtObservacao.getScene().getWindow();
+                janelaAtual.close();
+            }
+            else{
+                    mostrarAlerta(Alert.AlertType.ERROR, "Erro", "Não foi possível concluir a Banimento do Consumidor.");
+        }
+
+        }catch (Exception e){
+            e.printStackTrace();
+            mostrarAlerta(Alert.AlertType.ERROR, "Erro de Banco de Dados", "Falha ao Banir consumidor: " + e.getMessage());
+    }
+
+}
+    public  void BanimentoPermanente(){
+        String Observacao = txtObservacao.getText()!= null ? txtObservacao.getText().trim() : "";
         String motivo = cbMotivo.getValue().toString();
 
         if (motivo == null || motivo.toString().isBlank()) {
@@ -54,7 +89,7 @@ public class ControllerBanirConsumidor {
                 String AlvoAfetado = consumidorBanir.getNomconsumidor();
                 String detalhes = "Motivo: " + motivo + (Observacao.isEmpty() ? "" : " | Obs: " + Observacao);
 
-                logsDAO.registrarLog("Suporte", "BANIR_CONSUMIDOR",AlvoAfetado, detalhes);
+                logsDAO.registrarLog("Suporte", "BAN_PERMANENTE_CONSUMIDOR",AlvoAfetado, detalhes);
 
                 mostrarAlerta(Alert.AlertType.INFORMATION, "Sucesso", "Consumidor removido e ação registrada no log da moderação!");
 
@@ -62,14 +97,14 @@ public class ControllerBanirConsumidor {
                 janelaAtual.close();
             }
             else{
-                    mostrarAlerta(Alert.AlertType.ERROR, "Erro", "Não foi possível concluir a exclusão do Consumidor.");
-        }
+                mostrarAlerta(Alert.AlertType.ERROR, "Erro", "Não foi possível concluir a exclusão do Consumidor.");
+            }
 
         }catch (Exception e){
             e.printStackTrace();
             mostrarAlerta(Alert.AlertType.ERROR, "Erro de Banco de Dados", "Falha ao deletar consumidor: " + e.getMessage());
+        }
     }
-}
     private void mostrarAlerta(Alert.AlertType tipo, String titulo, String mensagem) {
         Alert alert = new Alert(tipo);
         alert.setTitle(titulo);

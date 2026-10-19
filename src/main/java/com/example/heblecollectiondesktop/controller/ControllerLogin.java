@@ -14,8 +14,8 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent; // IMPORT CORRETO DO JAVAFX
 import javafx.stage.Stage;
-import org.w3c.dom.events.MouseEvent;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -37,14 +37,11 @@ public class ControllerLogin implements Initializable {
     @FXML
     private Button btnLogin;
 
-
     private final FuncionarioDAO funcionarioDAO;
-
 
     public ControllerLogin() {
         this.funcionarioDAO = new FuncionarioDAO();
     }
-
 
     public ControllerLogin(FuncionarioDAO funcionarioDAO) {
         this.funcionarioDAO = funcionarioDAO;
@@ -71,7 +68,7 @@ public class ControllerLogin implements Initializable {
                     return;
                 }
             } catch (IOException e) {
-
+                // ignora e tenta o próximo
             }
         }
     }
@@ -118,12 +115,10 @@ public class ControllerLogin implements Initializable {
             FXMLLoader fxmlLoader = new FXMLLoader(dashboardLocation);
             Parent root = fxmlLoader.load();
 
-
             Object controller = fxmlLoader.getController();
             if (controller instanceof ControllerDashboard controllerDashboard) {
                 controllerDashboard.setFuncionarioLogado(funcionarioLogado);
             }
-
 
             Stage stageAtual = (Stage) btnLogin.getScene().getWindow();
 
@@ -149,8 +144,9 @@ public class ControllerLogin implements Initializable {
         alerta.setContentText(mensagem);
         alerta.showAndWait();
     }
+
     @FXML
-    private void abrirsuporte(javafx.scene.input.MouseEvent event ){
+    private void abrirsuporte(MouseEvent event) {
         URL dashboardLocation = getClass().getResource("/com/example/heblecollectiondesktop/view/TelaSuporte.fxml");
 
         if (dashboardLocation == null) {
@@ -166,15 +162,10 @@ public class ControllerLogin implements Initializable {
             FXMLLoader fxmlLoader = new FXMLLoader(dashboardLocation);
             Parent root = fxmlLoader.load();
 
-
-            Object controller = fxmlLoader.getController();
-
-
-
             Stage stageAtual = (Stage) btnLogin.getScene().getWindow();
 
             Stage stageDashboard = new Stage();
-            stageDashboard.setTitle("Heble Collection - Suport");
+            stageDashboard.setTitle("Heble Collection - Support");
             stageDashboard.setScene(new Scene(root, 1200, 760));
             stageDashboard.setResizable(true);
             stageDashboard.centerOnScreen();

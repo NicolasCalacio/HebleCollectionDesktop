@@ -39,13 +39,13 @@ public class ControllerExibirPerfil {
         lblCargo.setText("Cargo:"+funcionario.getCargo().toString());
     }
 
-    public void EditarPerfil(ActionEvent event){
+    public void irparaEditarPerfil(ActionEvent event){
 
 
         try {
             URL url = getClass().getResource("/com/example/heblecollectiondesktop/view/EditarPerfil.fxml");
             if (url == null) {
-                url = getClass().getResource("/view/EditarEmpresas.fxml");
+                url = getClass().getResource("/view/editarPerfil.fxml");
             }
 
             if (url == null) {

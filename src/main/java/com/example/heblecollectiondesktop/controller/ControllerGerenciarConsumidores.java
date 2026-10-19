@@ -116,8 +116,13 @@ public class ControllerGerenciarConsumidores {
             mostrarAlerta(Alert.AlertType.WARNING,"Aviso", "Por favor, selecione um consumidor na tabela para Banir.");
             return;
         }
+<<<<<<< HEAD
         String SomenteBanido = consumidorselecionado.getStatusconsumidor();
         if (SomenteBanido.equalsIgnoreCase("Banido")){
+=======
+
+        if (consumidorselecionado.getStatusconsumidor().equalsIgnoreCase("Banido")){
+>>>>>>> origin/feature/branches-atualizadas
             try {
 
 

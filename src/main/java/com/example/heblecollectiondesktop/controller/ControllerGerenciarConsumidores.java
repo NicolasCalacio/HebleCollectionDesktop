@@ -55,9 +55,9 @@ public class ControllerGerenciarConsumidores {
     }
     @FXML
     private void voltarAoHub(ActionEvent event) {
-       if(acaovoltar!=null){
-           acaovoltar.run();
-       }
+        if(acaovoltar!=null){
+            acaovoltar.run();
+        }
     }
 
     @FXML
@@ -116,8 +116,8 @@ public class ControllerGerenciarConsumidores {
             mostrarAlerta(Alert.AlertType.WARNING,"Aviso", "Por favor, selecione um consumidor na tabela para Banir.");
             return;
         }
-        String SomenteBanido = consumidorselecionado.getStatusconsumidor();
-        if (SomenteBanido.equalsIgnoreCase("Banido")){
+
+        if (consumidorselecionado.getStatusconsumidor().equalsIgnoreCase("Banido")){
             try {
 
 
@@ -155,10 +155,3 @@ public class ControllerGerenciarConsumidores {
         alert.showAndWait();
     }
 }
-
-
-
-
-
-
-

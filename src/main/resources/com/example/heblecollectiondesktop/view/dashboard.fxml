@@ -149,7 +149,7 @@
                                     </children>
                                 </VBox>
 
-                                <VBox prefHeight="100.0" prefWidth="280.0" spacing="8.0" style="-fx-background-color: #FFFFFF; -fx-background-radius: 12; -fx-padding: 20;">
+                                <VBox onMouseClicked="#mouseircupons" prefHeight="100.0" prefWidth="280.0" spacing="8.0" style="-fx-background-color: #FFFFFF; -fx-background-radius: 12; -fx-padding: 20;">
                                     <effect>
                                         <DropShadow blurType="THREE_PASS_BOX" height="15.0" radius="7.0" width="15.0">
                                             <color>

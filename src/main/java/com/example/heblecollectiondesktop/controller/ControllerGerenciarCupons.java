@@ -42,6 +42,8 @@ public class ControllerGerenciarCupons {
     @FXML private Button btnEditarCupom;
     @FXML private Button btnRemoverCupom;
 
+
+
     private Pane containerCentral;
     private Funcionario funcionarioLogado;
     private final CupomDAO cupomDAO = new CupomDAO();
@@ -173,6 +175,7 @@ public class ControllerGerenciarCupons {
             mostrarAlerta(Alert.AlertType.ERROR, "Erro de Navegação", "Não foi possível voltar ao Painel Principal.");
         }
     }
+
 
     @FXML
     void abrirTelaAdicionarCupom(ActionEvent event) {

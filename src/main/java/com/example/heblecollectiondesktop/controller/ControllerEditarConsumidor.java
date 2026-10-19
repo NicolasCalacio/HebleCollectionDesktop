@@ -15,90 +15,109 @@ public class ControllerEditarConsumidor {
     private ConsumidoresDAO consumidorDAO = new ConsumidoresDAO();
     private LogsDAO logsDAO = new LogsDAO();
     private Consumidores ConsumidorEditar;
+
     @FXML private Label LabelNome;
     @FXML private Label LabelID;
-    @FXML private ComboBox CbMudarStatus;
+    @FXML private ComboBox<String> CbMudarStatus;
     @FXML private TextArea txtObservacao;
 
-    public void initialize(){
-        if (CbMudarStatus != null){
-            CbMudarStatus.setItems(FXCollections.observableArrayList("Permitido","Banido" ));
-
+    public void initialize() {
+        if (CbMudarStatus != null) {
+            CbMudarStatus.setItems(FXCollections.observableArrayList("Permitido", "Banido"));
         }
     }
-    public void SetLabel(){
-        LabelNome.setText(ConsumidorEditar.getNomconsumidor());
-        LabelID.setText(String.valueOf(ConsumidorEditar.getIDconsumidor()));
+
+    public void SetLabel() {
+        if (ConsumidorEditar != null) {
+            LabelNome.setText(ConsumidorEditar.getNomconsumidor());
+            LabelID.setText(String.valueOf(ConsumidorEditar.getIDconsumidor()));
+        }
     }
 
-    public void setConsumidorEditar(Consumidores consumidor){
+    public void setConsumidorEditar(Consumidores consumidor) {
         this.ConsumidorEditar = consumidor;
-        if (consumidor != null){
+        if (consumidor != null) {
             SetLabel();
         }
     }
-    public void EditarConsumidor(){
-        String selecionado = CbMudarStatus.getValue().toString();
-        if (selecionado == null || selecionado.toString().isBlank()) {
+
+    @FXML
+    public void EditarConsumidor() {
+        // 1. Pegamos o valor diretamente como String (sem chamar .toString() antes da checagem)
+        String selecionado = (CbMudarStatus != null) ? CbMudarStatus.getValue() : null;
+
+        // 2. Validação se algo foi selecionado
+        if (selecionado == null || selecionado.isBlank()) {
             mostrarAlerta(Alert.AlertType.WARNING, "Status Obrigatório", "Por favor, selecione um Status para a edição.");
             return;
         }
+
         if (ConsumidorEditar == null) {
-            mostrarAlerta(Alert.AlertType.ERROR, "Erro", "Nenhumo Consumidor  selecionado para Edição.");
+            mostrarAlerta(Alert.AlertType.ERROR, "Erro", "Nenhum consumidor selecionado para edição.");
             return;
         }
+
         try {
+            String observacao = (txtObservacao.getText() != null) ? txtObservacao.getText().trim() : "";
+
             if (selecionado.equalsIgnoreCase("Permitido")) {
                 boolean sucesso = consumidorDAO.atualizarStatusConsumidor(ConsumidorEditar.getIDconsumidor(), "Permitido");
-                String Observacao = txtObservacao.getText()!= null ? txtObservacao.getText().trim() : "";
                 if (sucesso) {
-                    String detalhes = "Motivo: " + selecionado + (Observacao.isEmpty() ? "" : " | Obs: " + Observacao);
+                    String detalhes = "Motivo: " + selecionado + (observacao.isEmpty() ? "" : " | Obs: " + observacao);
                     String alvoAfetado = ConsumidorEditar.getNomconsumidor();
-                    logsDAO.registrarLog("Suporte", "RETIRANDO_BANIMENTO", alvoAfetado,detalhes);
+                    logsDAO.registrarLog("Suporte", "RETIRANDO_BANIMENTO", alvoAfetado, detalhes);
                     mostrarAlerta(Alert.AlertType.INFORMATION, "Sucesso", "Banimento do consumidor retirado e ação registrada no log da moderação!");
-                    Stage janelaAtual = (Stage) txtObservacao.getScene().getWindow();
-                    janelaAtual.close();
-                }else {
-                    mostrarAlerta(Alert.AlertType.ERROR, "Erro", "Não foi possível concluir o Desbanimento do Consumidor.");
+
+                    fecharJanela();
+                } else {
+                    mostrarAlerta(Alert.AlertType.ERROR, "Erro", "Não foi possível concluir o desbanimento do consumidor.");
                 }
-            }
-            if (selecionado.equalsIgnoreCase("Banido")){
+            } else if (selecionado.equalsIgnoreCase("Banido")) {
                 boolean sucesso = consumidorDAO.atualizarStatusConsumidor(ConsumidorEditar.getIDconsumidor(), "Banido");
-                String Observacao = txtObservacao.getText()!= null ? txtObservacao.getText().trim() : "";
                 if (sucesso) {
-                    String detalhes = "Motivo: " + selecionado + (Observacao.isEmpty() ? "" : " | Obs: " + Observacao);
+                    String detalhes = "Motivo: " + selecionado + (observacao.isEmpty() ? "" : " | Obs: " + observacao);
                     String alvoAfetado = ConsumidorEditar.getNomconsumidor();
-                    logsDAO.registrarLog("Suporte", "MANTENDO_BANIMENTO", alvoAfetado,detalhes);
-                    mostrarAlerta(Alert.AlertType.INFORMATION, "Sucesso", "Banimento do consumidor Mantido e ação registrada no log da moderação!");
-                    Stage janelaAtual = (Stage) txtObservacao.getScene().getWindow();
-                    janelaAtual.close();
-                }else {
-                    mostrarAlerta(Alert.AlertType.ERROR, "Erro", "Não foi possível concluir Banimento do Consumidor.");
+                    logsDAO.registrarLog("Suporte", "MANTENDO_BANIMENTO", alvoAfetado, detalhes);
+                    mostrarAlerta(Alert.AlertType.INFORMATION, "Sucesso", "Banimento do consumidor mantido e ação registrada no log da moderação!");
+
+                    fecharJanela();
+                } else {
+                    mostrarAlerta(Alert.AlertType.ERROR, "Erro", "Não foi possível concluir o banimento do consumidor.");
                 }
             }
         } catch (Exception e) {
             e.printStackTrace();
-            mostrarAlerta(Alert.AlertType.ERROR, "Erro de Banco de Dados", "Falha ao Editar consumidor: " + e.getMessage());
+            mostrarAlerta(Alert.AlertType.ERROR, "Erro de Banco de Dados", "Falha ao editar consumidor: " + e.getMessage());
         }
-
-
     }
 
     @FXML
     public void Limpar() {
-        CbMudarStatus.getSelectionModel().clearSelection();
+        if (CbMudarStatus != null) {
+            CbMudarStatus.getSelectionModel().clearSelection();
+        }
+        if (txtObservacao != null) {
+            txtObservacao.clear();
+        }
     }
+
     @FXML
     public void Cancelar() {
-        Stage janelaAtual = (Stage) LabelNome.getScene().getWindow();
-        janelaAtual.close();
+        fecharJanela();
     }
+
+    private void fecharJanela() {
+        if (LabelNome != null && LabelNome.getScene() != null) {
+            Stage janelaAtual = (Stage) LabelNome.getScene().getWindow();
+            janelaAtual.close();
+        }
+    }
+
     private void mostrarAlerta(Alert.AlertType tipo, String titulo, String mensagem) {
         Alert alert = new Alert(tipo);
         alert.setTitle(titulo);
         alert.setHeaderText(null);
         alert.setContentText(mensagem);
         alert.showAndWait();
-
     }
 }

@@ -13,7 +13,7 @@ import javafx.stage.Stage;
 
 public class ControllerBanirConsumidor {
     @FXML
-    private ComboBox cbMotivo;
+    private ComboBox<String> cbMotivo;
     @FXML
     private  TextArea txtObservacao;
     private Consumidores consumidorBanir;
@@ -21,16 +21,16 @@ public class ControllerBanirConsumidor {
     private LogsDAO logsDAO = new LogsDAO();
 
     public void initialize (){
-       if( cbMotivo != null){
-           cbMotivo.setItems(FXCollections.observableArrayList(
-                   "Violação dos Termos de Uso",
-                   "Comportamento Abusivo ou Ofensivo",
-                   "Fraude ou Atividade Suspeita",
-                   "Spam ou Propaganda não autorizada",
-                   "Solicitação do próprio Usuário",
-                   "Inatividade prolongada / Outros"
-           ));
-       }
+        if( cbMotivo != null){
+            cbMotivo.setItems(FXCollections.observableArrayList(
+                    "Violação dos Termos de Uso",
+                    "Comportamento Abusivo ou Ofensivo",
+                    "Fraude ou Atividade Suspeita",
+                    "Spam ou Propaganda não autorizada",
+                    "Solicitação do próprio Usuário",
+                    "Inatividade prolongada / Outros"
+            ));
+        }
     }
     public void Setconsumidor(Consumidores consumidor){
         this.consumidorBanir = consumidor;
@@ -38,9 +38,9 @@ public class ControllerBanirConsumidor {
 
     public  void confirmarBanimento(){
         String Observacao = txtObservacao.getText()!= null ? txtObservacao.getText().trim() : "";
-        String motivo = cbMotivo.getValue().toString();
+        String motivo = (cbMotivo != null) ? cbMotivo.getValue() : null;
 
-        if (motivo == null || motivo.toString().isBlank()) {
+        if (motivo == null || motivo.isBlank()) {
             mostrarAlerta(Alert.AlertType.WARNING, "Motivo Obrigatório", "Por favor, selecione um motivo para o banimento.");
             return;
         }
@@ -62,20 +62,20 @@ public class ControllerBanirConsumidor {
                 janelaAtual.close();
             }
             else{
-                    mostrarAlerta(Alert.AlertType.ERROR, "Erro", "Não foi possível concluir a Banimento do Consumidor.");
-        }
+                mostrarAlerta(Alert.AlertType.ERROR, "Erro", "Não foi possível concluir a Banimento do Consumidor.");
+            }
 
         }catch (Exception e){
             e.printStackTrace();
             mostrarAlerta(Alert.AlertType.ERROR, "Erro de Banco de Dados", "Falha ao Banir consumidor: " + e.getMessage());
-    }
+        }
 
-}
+    }
     public  void BanimentoPermanente(){
         String Observacao = txtObservacao.getText()!= null ? txtObservacao.getText().trim() : "";
-        String motivo = cbMotivo.getValue().toString();
+        String motivo = (cbMotivo != null) ? cbMotivo.getValue() : null;
 
-        if (motivo == null || motivo.toString().isBlank()) {
+        if (motivo == null || motivo.isBlank()) {
             mostrarAlerta(Alert.AlertType.WARNING, "Motivo Obrigatório", "Por favor, selecione um motivo para o banimento.");
             return;
         }

@@ -396,7 +396,7 @@ public class ControllerDashboard implements Initializable {
         try {
             URL url = getClass().getResource("/com/example/heblecollectiondesktop/view/telaConsumidores.fxml");
             if (url == null) {
-                url = getClass().getResource("/com/example/heblecollectiondesktop/view/telaConsumidores.fxml");
+                url = getClass().getResource("/com/example/heblecollectiondesktop/view/telaconsumidores.fxml");
             }
 
             if (url == null) {

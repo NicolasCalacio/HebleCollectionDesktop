@@ -161,7 +161,6 @@ public class ControllerVendas {
         Button btnFechar = new Button("Fechar Relatório");
         btnFechar.setPrefHeight(38);
         btnFechar.setMaxWidth(Double.MAX_VALUE);
-        // Aplicando o padrão de cor amarelo/dourado (#d6b667)
         btnFechar.setStyle("-fx-background-color: #d6b667; -fx-text-fill: white; -fx-background-radius: 8; -fx-cursor: hand; -fx-font-weight: bold;");
         btnFechar.setOnAction(e -> popupStage.close());
 

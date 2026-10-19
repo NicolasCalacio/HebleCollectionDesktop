@@ -23,11 +23,7 @@ public class ControllerEditarConsumidor {
     public void initialize(){
         if (CbMudarStatus != null){
             CbMudarStatus.setItems(FXCollections.observableArrayList("Permitido","Banido" ));
-<<<<<<< HEAD
-            SetLabel();
-=======
 
->>>>>>> origin/feature/branches-atualizadas
         }
     }
     public void SetLabel(){
@@ -37,12 +33,9 @@ public class ControllerEditarConsumidor {
 
     public void setConsumidorEditar(Consumidores consumidor){
         this.ConsumidorEditar = consumidor;
-<<<<<<< HEAD
-=======
         if (consumidor != null){
             SetLabel();
         }
->>>>>>> origin/feature/branches-atualizadas
     }
     public void EditarConsumidor(){
         String selecionado = CbMudarStatus.getValue().toString();

@@ -1,6 +1,7 @@
 package com.example.heblecollectiondesktop.controller;
 
 import com.example.heblecollectiondesktop.database.LogsDAO;
+import com.example.heblecollectiondesktop.model.Cupom;
 import com.example.heblecollectiondesktop.model.Funcionario;
 import com.example.heblecollectiondesktop.model.LogModeracao;
 import javafx.collections.FXCollections;
@@ -10,12 +11,12 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
-import javafx.scene.control.Alert;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.scene.control.TextField;
+import javafx.scene.Scene;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.Pane;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.net.URL;
@@ -79,6 +80,7 @@ public class ControllerLogsModeracao {
 
         tabelaLogs.setItems(logsFiltrados);
         carregarLogs();
+        configurarDuploClique();
     }
 
     @FXML
@@ -126,6 +128,42 @@ public class ControllerLogsModeracao {
             e.printStackTrace();
             exibirAlerta("Erro de Navegação", "Falha ao retornar ao painel principal: " + e.getMessage(), Alert.AlertType.ERROR);
         }
+    }
+
+    private void abrirTelaInfoLog(LogModeracao log) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/heblecollectiondesktop/view/InfoPopUpLog.fxml"));
+            Parent root = loader.load();
+
+            ControllerTelaInfoLog modalController = loader.getController();
+            if (modalController != null) {
+                modalController.SetLog(log);
+            }
+
+            Stage stage = new Stage();
+            stage.setScene(new Scene(root));
+            stage.setTitle("Informações do Log");
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.showAndWait();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            exibirAlerta( "Erro", "Falha ao abrir detalhes do cupom: ",Alert.AlertType.ERROR);
+        }
+    }
+    private void configurarDuploClique() {
+        if (tabelaLogs == null) return;
+
+        tabelaLogs.setRowFactory(tv -> {
+            TableRow<LogModeracao> row = new TableRow<>();
+            row.setOnMouseClicked(event -> {
+                if (event.getClickCount() == 2 && !row.isEmpty()) {
+                    LogModeracao logSelecionado = row.getItem();
+                   abrirTelaInfoLog(logSelecionado);
+                }
+            });
+            return row;
+        });
     }
 
     private void exibirAlerta(String titulo, String mensagem, Alert.AlertType tipo) {

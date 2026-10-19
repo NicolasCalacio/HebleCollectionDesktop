@@ -24,8 +24,7 @@ public class ControllerTelaInfoTickets {
 
     private Ticket ticketAtual;
     private final FuncionarioDAO funcionarioDAO = new FuncionarioDAO();
-    private final TicketDAO ticketDAO = new TicketDAO(); // Instanciado para atualizar o status
-
+    private final TicketDAO ticketDAO = new TicketDAO();
     public void setTicket(Ticket ticket) {
         this.ticketAtual = ticket;
         if (ticket == null) return;

@@ -80,7 +80,7 @@ public class ControllerDashboard implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        // Inicializações padrão
+        
     }
 
     public void setFuncionarioLogado(Funcionario funcionario) {

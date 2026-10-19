@@ -88,6 +88,7 @@ public class ControllerGerenciarProdutos implements Initializable {
         try {
             List<Produto> produtos = produtoDAO.listarTodos();
             listaProdutos.setAll(produtos);
+
         } catch (Exception e) {
             mostrarAlerta(Alert.AlertType.ERROR, "Erro", "Falha ao carregar produtos: " + e.getMessage());
         }
@@ -167,7 +168,9 @@ public class ControllerGerenciarProdutos implements Initializable {
             ControllerAprovarProdutos controller = loader.getController();
             controller.setContainerCentral(containerCentral);
             controller.setFuncionarioLogado(funcionarioLogado);
-            controller.setAcaoVoltar(() -> {
+            controller.setAcaoVoltar(()-> handle);
+            //problema no ação voltar//
+
                 if (containerCentral != null) {
                     containerCentral.getChildren().clear();
 
@@ -185,7 +188,7 @@ public class ControllerGerenciarProdutos implements Initializable {
                         e.printStackTrace();
                     }
                 }
-            });
+
 
             if (containerCentral != null) {
                 containerCentral.getChildren().clear();
@@ -220,7 +223,16 @@ public class ControllerGerenciarProdutos implements Initializable {
         TextField txtDescricao = new TextField(selecionado.getDescricao());
         TextField txtPreco = new TextField(String.valueOf(selecionado.getPreco()));
         TextField txtEstoque = new TextField(String.valueOf(selecionado.getQuantidadeEstoque()));
+        ComboBox<String> cbstatus= new ComboBox<>();
+        cbstatus.getItems().setAll("PENDENTE","APROVADO");
+        String statusAtual = selecionado.getStatus();
 
+        if (statusAtual != null &&
+                cbstatus.getItems().contains(statusAtual.toUpperCase())) {
+            cbstatus.setValue(statusAtual.toUpperCase());
+        } else {
+            cbstatus.setValue("PENDENTE");
+        }
         grid.add(new Label("Nome:"), 0, 0);
         grid.add(txtNome, 1, 0);
         grid.add(new Label("Descrição:"), 0, 1);
@@ -229,7 +241,8 @@ public class ControllerGerenciarProdutos implements Initializable {
         grid.add(txtPreco, 1, 2);
         grid.add(new Label("Estoque:"), 0, 3);
         grid.add(txtEstoque, 1, 3);
-
+        grid.add(new Label("Status:"),0, 4);
+        grid.add(cbstatus, 1, 4);
         dialog.getDialogPane().setContent(grid);
 
         dialog.setResultConverter(dialogButton -> {
@@ -239,6 +252,10 @@ public class ControllerGerenciarProdutos implements Initializable {
                     selecionado.setDescricao(txtDescricao.getText());
                     selecionado.setPreco(Double.parseDouble(txtPreco.getText()));
                     selecionado.setQuantidadeEstoque(Integer.parseInt(txtEstoque.getText()));
+                    selecionado.setStatus(cbstatus.getValue());
+                    if(selecionado.getStatus().equals("PENDENTE")){
+                        listaProdutos.remove(selecionado);
+                    }
                     return selecionado;
                 } catch (NumberFormatException e) {
                     mostrarAlerta(Alert.AlertType.ERROR, "Erro de Entrada", "Insira valores numéricos válidos para Preço e Estoque.");

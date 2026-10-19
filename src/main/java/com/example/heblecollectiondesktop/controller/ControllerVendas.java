@@ -62,6 +62,15 @@ public class ControllerVendas {
 
     private VendaDAO vendaDAO;
 
+    public Runnable getAcaoVoltar() {
+        return acaoVoltar;
+    }
+
+
+    private Runnable acaoVoltar;
+    public void setAcaoVoltar(Runnable acaoVoltar) {
+        this.acaoVoltar = acaoVoltar;
+    }
     @FXML
     public void initialize() {
         vendaDAO = new VendaDAO();
@@ -252,15 +261,10 @@ public class ControllerVendas {
     }
 
     @FXML
-    private void voltarAoHub(ActionEvent event) {
-        try {
-            Parent root = FXMLLoader.load(getClass().getResource("/com/example/heblecollectiondesktop/view/dashboard.fxml"));
-            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            stage.setScene(new Scene(root));
-            stage.show();
-        } catch (IOException e) {
-            exibirAlerta("Erro", "Não foi possível retornar ao painel: " + e.getMessage());
-        }
+    void voltarAoHub(ActionEvent event) {
+            if (acaoVoltar != null) {
+                acaoVoltar.run();
+            }
     }
 
     private void exibirAlerta(String titulo, String mensagem) {

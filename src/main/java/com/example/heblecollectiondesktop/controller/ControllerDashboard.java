@@ -80,7 +80,7 @@ public class ControllerDashboard implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        // Inicializações padrão, se necessário
+        // Inicializações padrão
     }
 
     public void setFuncionarioLogado(Funcionario funcionario) {
@@ -227,8 +227,27 @@ public class ControllerDashboard implements Initializable {
             return;
         }
 
-        // Implemente a navegação de vendas aqui conforme o seu projeto
-        mostrarAlerta("Informação", "Módulo de Vendas em desenvolvimento.");
+        try {
+            URL url = getClass().getResource("/com/example/heblecollectiondesktop/view/Vendas.fxml");
+            if (url == null) {
+                url = getClass().getResource("/com/example/heblecollectiondesktop/view/vendas.fxml");
+            }
+
+            if (url == null) {
+                mostrarAlerta("Erro FXML", "Arquivo Vendas.fxml não encontrado.");
+                return;
+            }
+
+            FXMLLoader loader = new FXMLLoader(url);
+            Parent vendasView = loader.load();
+
+            if (painelConteudoCentral != null) {
+                painelConteudoCentral.getChildren().setAll(vendasView);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+            mostrarAlerta("Erro de Carregamento", "Falha ao carregar a tela de vendas: " + e.getMessage());
+        }
     }
 
     @FXML
@@ -311,41 +330,41 @@ public class ControllerDashboard implements Initializable {
             mostrarAlerta("Erro de Carregamento", "Falha ao carregar a central de tickets: " + e.getMessage());
         }
     }
+
     @FXML
     private void ExibirPerfil(ActionEvent event) {
         if (funcionarioLogado == null) {
             mostrarAlerta("Erro de Sessão", "Nenhum usuário logado detectado.");
-            return;}
-            try {
-                URL url = getClass().getResource("/com/example/heblecollectiondesktop/view/ExibirPerfil.fxml");
-                if (url == null) {
-                    url = getClass().getResource("/com/example/heblecollectiondesktop/view/exibirPerfil.fxml");
-                }
-
-                if (url == null) {
-                    mostrarAlerta("Erro", "Não foi possível encontrar ExibirPerfil.fxml");
-                    return;
-                }
-
-                FXMLLoader loader = new FXMLLoader(url);
-                Parent hubView = loader.load();
-
-                ControllerExibirPerfil controllerHub = loader.getController();
-                if(controllerHub!=null){
-                    controllerHub.setFuncionario(funcionarioLogado);
-                }
-
-                if (painelConteudoCentral != null) {
-                    painelConteudoCentral.getChildren().setAll(hubView);
-                }
-
-
-            } catch (IOException e) {
-                e.printStackTrace();
-                mostrarAlerta("Erro de Carregamento", "Falha ao carregar a tela de moderação: " + e.getMessage());
-            }
+            return;
         }
 
+        try {
+            URL url = getClass().getResource("/com/example/heblecollectiondesktop/view/ExibirPerfil.fxml");
+            if (url == null) {
+                url = getClass().getResource("/com/example/heblecollectiondesktop/view/exibirPerfil.fxml");
+            }
+
+            if (url == null) {
+                mostrarAlerta("Erro", "Não foi possível encontrar ExibirPerfil.fxml");
+                return;
+            }
+
+            FXMLLoader loader = new FXMLLoader(url);
+            Parent hubView = loader.load();
+
+            ControllerExibirPerfil controllerHub = loader.getController();
+            if (controllerHub != null) {
+                controllerHub.setFuncionario(funcionarioLogado);
+            }
+
+            if (painelConteudoCentral != null) {
+                painelConteudoCentral.getChildren().setAll(hubView);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+            mostrarAlerta("Erro de Carregamento", "Falha ao carregar a tela de perfil: " + e.getMessage());
+        }
+    }
 
     @FXML
     private void abrirModeração(ActionEvent event) {
@@ -396,7 +415,7 @@ public class ControllerDashboard implements Initializable {
         try {
             URL url = getClass().getResource("/com/example/heblecollectiondesktop/view/telaConsumidores.fxml");
             if (url == null) {
-                url = getClass().getResource("/com/example/heblecollectiondesktop/view/telaConsumidores.fxml");
+                url = getClass().getResource("/com/example/heblecollectiondesktop/view/telaconsumidores.fxml");
             }
 
             if (url == null) {

@@ -10,7 +10,7 @@ import java.util.List;
 
 public class ConsumidoresDAO {
 
-    public List<Consumidores> listar() {
+    public List<Consumidores> listarConsumidores() {
         String sql = "SELECT * FROM consumidores";
         List<Consumidores> lista = new ArrayList<>();
 
@@ -151,7 +151,7 @@ public class ConsumidoresDAO {
         }
     }
 
-    public void deletar(int idConsumidor) {
+    public boolean deletar(int idConsumidor) {
         String sql = "DELETE FROM consumidores WHERE IDconsumidor = ?";
 
         try (Connection conn = conexaoDB.getConexao();
@@ -160,9 +160,13 @@ public class ConsumidoresDAO {
             stmt.setInt(1, idConsumidor);
             stmt.executeUpdate();
             System.out.println("Consumidor excluído com sucesso!");
+            return true;
 
         } catch (SQLException e) {
             System.err.println("Erro ao excluir consumidor: " + e.getMessage());
+
         }
+
+        return false;
     }
 }

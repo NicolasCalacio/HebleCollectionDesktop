@@ -31,9 +31,14 @@ public class FuncionarioDAO {
                     String pass = rs.getString("senha");
                     String cargoBanco = rs.getString("cargo");
 
-                    Cargo cargoEnum = (cargoBanco != null)
-                            ? Cargo.valueOf(cargoBanco.toUpperCase())
-                            : Cargo.FUNCIONARIO;
+                    Cargo cargoEnum = Cargo.FUNCIONARIO;
+                    if (cargoBanco != null && !cargoBanco.isBlank()) {
+                        try {
+                            cargoEnum = Cargo.valueOf(cargoBanco.trim().toUpperCase());
+                        } catch (IllegalArgumentException e) {
+                            System.err.println("Aviso: Cargo desconhecido no banco ('" + cargoBanco + "'). Assumindo FUNCIONARIO.");
+                        }
+                    }
 
                     if (cargoEnum == Cargo.GERENTE) {
                         return new Gerente(id, mat, pass);
@@ -60,9 +65,14 @@ public class FuncionarioDAO {
                 String pass = rs.getString("senha");
                 String cargoBanco = rs.getString("cargo");
 
-                Cargo cargoEnum = (cargoBanco != null)
-                        ? Cargo.valueOf(cargoBanco.toUpperCase())
-                        : Cargo.FUNCIONARIO;
+                Cargo cargoEnum = Cargo.FUNCIONARIO;
+                if (cargoBanco != null && !cargoBanco.isBlank()) {
+                    try {
+                        cargoEnum = Cargo.valueOf(cargoBanco.trim().toUpperCase());
+                    } catch (IllegalArgumentException e) {
+                        System.err.println("Aviso: Cargo desconhecido no banco ('" + cargoBanco + "'). Assumindo FUNCIONARIO.");
+                    }
+                }
 
                 if (cargoEnum == Cargo.GERENTE) {
                     lista.add(new Gerente(id, mat, pass));
@@ -121,6 +131,20 @@ public class FuncionarioDAO {
         }
     }
 
+    public boolean atualizarSenhaPorMatricula(String matricula, String novaSenha) throws SQLException {
+        String sql = "UPDATE funcionarios SET senha = ? WHERE matricula = ?";
+
+        try (Connection conexao = conexaoDB.getConexao();
+             PreparedStatement stmt = conexao.prepareStatement(sql)) {
+
+            stmt.setString(1, novaSenha);
+            stmt.setString(2, matricula);
+
+            int linhasAfetadas = stmt.executeUpdate();
+            return linhasAfetadas > 0;
+        }
+    }
+
     public boolean deletar(int idFuncionarioDeletar, String matriculaModerador, String motivo, String observacao) throws SQLException {
         String sqlSelect = "SELECT matricula FROM funcionarios WHERE idfuncionarios = ?";
         String sqlDelete = "DELETE FROM funcionarios WHERE idfuncionarios = ?";
@@ -141,12 +165,10 @@ public class FuncionarioDAO {
                 }
             }
 
-
             try (PreparedStatement stmtDelete = conn.prepareStatement(sqlDelete)) {
                 stmtDelete.setInt(1, idFuncionarioDeletar);
                 stmtDelete.executeUpdate();
             }
-
 
             try (PreparedStatement stmtLog = conn.prepareStatement(sqlLog)) {
                 stmtLog.setString(1, matriculaModerador);

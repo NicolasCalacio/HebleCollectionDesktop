@@ -4,11 +4,12 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="cb3a4291-41f8-4b38-8e73-f8ae096bae80" name="Changes" comment="Controller de Gerenciamento de Consumidores com implementação do banco de dados">
+    <list default="true" id="cb3a4291-41f8-4b38-8e73-f8ae096bae80" name="Changes" comment="branch atualizada 100% 2026 outubro rosa">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/example/heblecollectiondesktop/controller/ControllerDashboard.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/heblecollectiondesktop/controller/ControllerDashboard.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/heblecollectiondesktop/controller/ControllerVendas.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/heblecollectiondesktop/controller/ControllerVendas.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/com/example/heblecollectiondesktop/view/ticketsPendentes.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/com/example/heblecollectiondesktop/view/ticketsPendentes.fxml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/heblecollectiondesktop/controller/ControllerEditarConsumidor.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/heblecollectiondesktop/controller/ControllerEditarConsumidor.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/heblecollectiondesktop/controller/ControllerGerenciarConsumidores.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/heblecollectiondesktop/controller/ControllerGerenciarConsumidores.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/com/example/heblecollectiondesktop/view/telaConsumidores.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/com/example/heblecollectiondesktop/view/telaConsumidores.fxml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -255,7 +256,15 @@
       <option name="project" value="LOCAL" />
       <updated>1792093158833</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="branch atualizada 100% 2026 outubro rosa">
+      <option name="closed" value="true" />
+      <created>1792431662384</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1792431662384</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -296,7 +305,8 @@
     <MESSAGE value="novo host de banco adicionado e correção do botão de voltar em ticket" />
     <MESSAGE value="Tela Gerenciar Consumidores e Controller Consumidores" />
     <MESSAGE value="Controller de Gerenciamento de Consumidores com implementação do banco de dados" />
-    <option name="LAST_COMMIT_MESSAGE" value="Controller de Gerenciamento de Consumidores com implementação do banco de dados" />
+    <MESSAGE value="branch atualizada 100% 2026 outubro rosa" />
+    <option name="LAST_COMMIT_MESSAGE" value="branch atualizada 100% 2026 outubro rosa" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />

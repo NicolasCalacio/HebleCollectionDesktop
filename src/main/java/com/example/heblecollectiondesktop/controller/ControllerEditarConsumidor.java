@@ -23,7 +23,7 @@ public class ControllerEditarConsumidor {
     public void initialize(){
         if (CbMudarStatus != null){
             CbMudarStatus.setItems(FXCollections.observableArrayList("Permitido","Banido" ));
-            SetLabel();
+
         }
     }
     public void SetLabel(){
@@ -33,6 +33,9 @@ public class ControllerEditarConsumidor {
 
     public void setConsumidorEditar(Consumidores consumidor){
         this.ConsumidorEditar = consumidor;
+        if (consumidor != null){
+            SetLabel();
+        }
     }
     public void EditarConsumidor(){
         String selecionado = CbMudarStatus.getValue().toString();

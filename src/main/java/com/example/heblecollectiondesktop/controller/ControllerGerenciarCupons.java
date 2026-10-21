@@ -58,7 +58,7 @@ public class ControllerGerenciarCupons {
     @FXML
     public void initialize() {
         configurarColunas();
-        configurarDuploClique(); // Chamada adicionada
+        configurarDuploClique();
         carregarTabela();
     }
 

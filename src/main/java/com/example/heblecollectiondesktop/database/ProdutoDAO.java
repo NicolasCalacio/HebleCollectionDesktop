@@ -75,7 +75,7 @@ public class ProdutoDAO {
     }
 
     public boolean atualizarProduto(Produto produto) {
-        String sql = "UPDATE produtos SET nome = ?, descricao = ?, preco = ?, quantidade_estoque = ? WHERE id = ?";
+        String sql = "UPDATE produtos SET nome = ?, descricao = ?, preco = ?, quantidade_estoque = ?,status = ? WHERE id = ?";
 
         try (Connection conexao = conexaoDB.getConexao();
              PreparedStatement stmt = conexao.prepareStatement(sql)) {
@@ -84,7 +84,10 @@ public class ProdutoDAO {
             stmt.setString(2, produto.getDescricao());
             stmt.setDouble(3, produto.getPreco());
             stmt.setInt(4, produto.getQuantidadeEstoque());
-            stmt.setInt(5, produto.getId());
+            stmt.setString(5,produto.getStatus());
+            stmt.setInt(6, produto.getId());
+
+
 
             return stmt.executeUpdate() > 0;
 

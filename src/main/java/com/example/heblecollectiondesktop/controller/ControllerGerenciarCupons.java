@@ -21,7 +21,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableRow;
+import javafx.scene.control.TableRow; // Import adicionado
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.Pane;
@@ -42,8 +42,6 @@ public class ControllerGerenciarCupons {
     @FXML private Button btnEditarCupom;
     @FXML private Button btnRemoverCupom;
 
-
-
     private Pane containerCentral;
     private Funcionario funcionarioLogado;
     private final CupomDAO cupomDAO = new CupomDAO();
@@ -60,7 +58,7 @@ public class ControllerGerenciarCupons {
     @FXML
     public void initialize() {
         configurarColunas();
-        configurarDuploClique();
+        configurarDuploClique(); // Chamada adicionada
         carregarTabela();
     }
 
@@ -175,7 +173,6 @@ public class ControllerGerenciarCupons {
             mostrarAlerta(Alert.AlertType.ERROR, "Erro de Navegação", "Não foi possível voltar ao Painel Principal.");
         }
     }
-
 
     @FXML
     void abrirTelaAdicionarCupom(ActionEvent event) {

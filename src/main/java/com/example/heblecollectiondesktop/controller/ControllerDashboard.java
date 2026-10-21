@@ -240,6 +240,8 @@ public class ControllerDashboard implements Initializable {
 
             FXMLLoader loader = new FXMLLoader(url);
             Parent vendasView = loader.load();
+            ControllerVendas controllerVendas= loader.getController();
+            controllerVendas.setAcaoVoltar(()-> handleVisaoGeral(null));
 
             if (painelConteudoCentral != null) {
                 painelConteudoCentral.getChildren().setAll(vendasView);
@@ -281,6 +283,7 @@ public class ControllerDashboard implements Initializable {
             if (controllerCupons != null) {
                 controllerCupons.setContainerCentral(painelConteudoCentral);
                 controllerCupons.setFuncionarioLogado(funcionarioLogado);
+                controllerCupons.setAcaoVoltar(()->handleVisaoGeral(null));
             }
 
             if (painelConteudoCentral != null) {
@@ -355,6 +358,7 @@ public class ControllerDashboard implements Initializable {
             ControllerExibirPerfil controllerHub = loader.getController();
             if (controllerHub != null) {
                 controllerHub.setFuncionario(funcionarioLogado);
+                controllerHub.setAcaovoltar(()-> handleVisaoGeral(null));
             }
 
             if (painelConteudoCentral != null) {

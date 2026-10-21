@@ -101,7 +101,7 @@ public class ControllerGerenciarProdutos implements Initializable {
             return;
         }
 
-
+        // Subtela modal com motivo
         Dialog<String> dialog = new Dialog<>();
         dialog.setTitle("Justificativa de Exclusão");
         dialog.setHeaderText("Informe o motivo para a exclusão do produto: " + selecionado.getNome());
@@ -154,7 +154,7 @@ public class ControllerGerenciarProdutos implements Initializable {
    @FXML
     void irParaAprovacoes(ActionEvent event) {
         try {
-
+            // Garantido com a barra '/' no início do caminho do pacote
             URL fxmlUrl = getClass().getResource("/com/example/heblecollectiondesktop/view/AprovarProdutos.fxml");
             if (fxmlUrl == null) {
                 mostrarAlerta(Alert.AlertType.ERROR, "Erro de Navegação", "Arquivo AprovarProdutos.fxml não foi encontrado.");

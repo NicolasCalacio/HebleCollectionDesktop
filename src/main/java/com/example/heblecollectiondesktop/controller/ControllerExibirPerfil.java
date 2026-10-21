@@ -77,7 +77,7 @@ public class ControllerExibirPerfil {
         }
     }
     @FXML
-    void Voltar(ActionEvent event) {
+    private void Voltar(ActionEvent event) {
         if(acaovoltar!= null){
             acaovoltar.run();
         }
@@ -89,4 +89,4 @@ public class ControllerExibirPerfil {
         alert.setContentText(mensagem);
         alert.showAndWait();
     }
-    }
+}

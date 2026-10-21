@@ -13,7 +13,6 @@ public class ControllerInfoPopUpConsumidor {
     private Label lblNome;
     @FXML
     private Label lblCpf;
-
     @FXML
     private Label lblEmail;
     @FXML
@@ -27,19 +26,16 @@ public class ControllerInfoPopUpConsumidor {
     @FXML
     private Label lblDataNascimento;
 
-
-
     public void SetConsumidor(Consumidores consumidores){
         if (consumidores == null){return;}
-        lblId.setText("ID: "+ consumidores.getIDconsumidor());
-        lblNome.setText("NOME COMPLETO: "+ consumidores.getNomconsumidor());
-        lblCpf.setText("CPF: "+ consumidores.getCpfconsumidor());
+        lblId.setText("ID: " + consumidores.getIDconsumidor());
+        lblNome.setText("NOME COMPLETO: " + consumidores.getNomconsumidor());
+        lblCpf.setText("CPF: " + consumidores.getCpfconsumidor());
         lblCep.setText("CEP: " + consumidores.getCepconsumidor());
         lblTelefone.setText("TELEFONE: " + consumidores.getCelularconsumidor());
         lblEndereco.setText("ENDEREÇO: " + consumidores.getEnderecoconsumidor());
-        lblStatus.setText("STATUS: "+ consumidores.getStatusconsumidor());
+        lblStatus.setText("STATUS: " + consumidores.getStatusconsumidor());
         lblEmail.setText("EMAIL: " + consumidores.getEmailconsumidor());
-        lblDataNascimento.setText("DATA DE NASCIMENTO: " + consumidores.getDataNascconsumidor());
-
+        lblDataNascimento.setText("DATA DE NASCIMENTO: " + consumidores.getDataNascFormatada());
     }
 }

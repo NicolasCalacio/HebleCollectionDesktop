@@ -5,6 +5,7 @@ import com.example.heblecollectiondesktop.database.ConsumidoresDAO;
 import com.example.heblecollectiondesktop.model.Consumidores;
 
 import com.example.heblecollectiondesktop.model.Funcionario;
+import com.example.heblecollectiondesktop.model.Ticket;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -13,10 +14,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.Pane;
 import javafx.stage.Modality;
@@ -67,6 +65,8 @@ public class ControllerGerenciarConsumidores {
         if (colCpf != null) colCpf.setCellValueFactory(new PropertyValueFactory<>("cpfconsumidor"));
         if (colStatus != null) colStatus.setCellValueFactory(new PropertyValueFactory<>("statusconsumidor"));
         carregarTabela();
+        configurarDuploClique();
+
     }
     public void carregarTabela() {
         try {
@@ -77,6 +77,38 @@ public class ControllerGerenciarConsumidores {
         } catch (Exception e) {
             e.printStackTrace();
             mostrarAlerta(Alert.AlertType.ERROR, "Erro de Banco de Dados", "Falha ao remover cupom: " + e.getMessage());
+        }
+    }
+    private void configurarDuploClique() {
+        if (tabelaConsumidores == null) return;
+
+        tabelaConsumidores.setRowFactory(tv -> {
+            TableRow<Consumidores> row = new TableRow<>();
+            row.setOnMouseClicked(event -> {
+                if (event.getClickCount() == 2 && !row.isEmpty()) {
+                    Consumidores consumidorSelecionado = row.getItem();
+                    abrirTelaInfo(consumidorSelecionado);
+                }
+            });
+            return row;
+        });
+    }
+    private void abrirTelaInfo(Consumidores consumidores) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/heblecollectiondesktop/view/infoPopUpConsumidores.fxml"));
+            Parent root = loader.load();
+
+            ControllerInfoPopUpConsumidor modalController = loader.getController();
+            modalController.SetConsumidor(consumidores);
+
+            Stage stage = new Stage();
+            stage.setTitle("Detalhes do Consumidor #" + consumidores.getIDconsumidor());
+            stage.setScene(new Scene(root));
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.showAndWait();
+
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
     @FXML

@@ -28,7 +28,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-
+import javafx.scene.Node;
 public class ControllerGerenciarProdutos implements Initializable {
 
     @FXML private Button btnEditarProduto;
@@ -52,13 +52,18 @@ public class ControllerGerenciarProdutos implements Initializable {
     private Pane containerCentral;
     private Funcionario funcionarioLogado;
     private Runnable acaoVoltar;
-
+    private Node viewAnterior;
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         configurarTabela();
         carregarProdutos();
     }
-
+    private void handleVisaoGeral() {
+        if (containerCentral != null && viewAnterior != null) {
+            containerCentral.getChildren().setAll(viewAnterior);
+            viewAnterior = null;
+        }
+    }
     public void setContainerCentral(Pane containerCentral) {
         this.containerCentral = containerCentral;
     }
@@ -88,6 +93,7 @@ public class ControllerGerenciarProdutos implements Initializable {
         try {
             List<Produto> produtos = produtoDAO.listarTodos();
             listaProdutos.setAll(produtos);
+
         } catch (Exception e) {
             mostrarAlerta(Alert.AlertType.ERROR, "Erro", "Falha ao carregar produtos: " + e.getMessage());
         }
@@ -101,7 +107,7 @@ public class ControllerGerenciarProdutos implements Initializable {
             return;
         }
 
-        // Subtela modal com motivo
+
         Dialog<String> dialog = new Dialog<>();
         dialog.setTitle("Justificativa de Exclusão");
         dialog.setHeaderText("Informe o motivo para a exclusão do produto: " + selecionado.getNome());
@@ -151,48 +157,55 @@ public class ControllerGerenciarProdutos implements Initializable {
         });
     }
 
-   @FXML
+    @FXML
     void irParaAprovacoes(ActionEvent event) {
         try {
-            // Garantido com a barra '/' no início do caminho do pacote
-            URL fxmlUrl = getClass().getResource("/com/example/heblecollectiondesktop/view/AprovarProdutos.fxml");
-            if (fxmlUrl == null) {
-                mostrarAlerta(Alert.AlertType.ERROR, "Erro de Navegação", "Arquivo AprovarProdutos.fxml não foi encontrado.");
+            if (containerCentral == null) {
+                mostrarAlerta(
+                        Alert.AlertType.ERROR,
+                        "Erro de Navegação",
+                        "O container central não foi configurado."
+                );
                 return;
             }
 
-            FXMLLoader loader = new FXMLLoader(fxmlUrl);
-            Parent view = loader.load();
+
+            if (!containerCentral.getChildren().isEmpty()) {
+                viewAnterior = containerCentral.getChildren().get(0);
+            }
+
+            URL url = getClass().getResource(
+                    "/com/example/heblecollectiondesktop/view/AprovarProdutos.fxml"
+            );
+
+            if (url == null) {
+                mostrarAlerta(
+                        Alert.AlertType.ERROR,
+                        "Erro FXML",
+                        "Arquivo AprovarProdutos.fxml não encontrado."
+                );
+                return;
+            }
+
+            FXMLLoader loader = new FXMLLoader(url);
+            Parent gerenciarview = loader.load();
 
             ControllerAprovarProdutos controller = loader.getController();
-            controller.setContainerCentral(containerCentral);
-            controller.setFuncionarioLogado(funcionarioLogado);
-            controller.setAcaoVoltar(() -> {
-                if (containerCentral != null) {
-                    containerCentral.getChildren().clear();
 
-                    try {
-                        URL reloadUrl = getClass().getResource("/com/example/heblecollectiondesktop/GerenciarProdutos.fxml");
-                        if (reloadUrl != null) {
-                            FXMLLoader reloadLoader = new FXMLLoader(reloadUrl);
-                            Parent reloadView = reloadLoader.load();
-                            ControllerGerenciarProdutos reloadCtrl = reloadLoader.getController();
-                            reloadCtrl.setContainerCentral(containerCentral);
-                            reloadCtrl.setFuncionarioLogado(funcionarioLogado);
-                            containerCentral.getChildren().add(reloadView);
-                        }
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                }
-            });
-
-            if (containerCentral != null) {
-                containerCentral.getChildren().clear();
-                containerCentral.getChildren().add(view);
+            if (controller != null) {
+                controller.setAcaoVoltar(this::handleVisaoGeral);
             }
+
+            containerCentral.getChildren().setAll(gerenciarview);
+
         } catch (IOException e) {
-            mostrarAlerta(Alert.AlertType.ERROR, "Erro de Navegação", "Não foi possível carregar a tela de aprovações: " + e.getMessage());
+            e.printStackTrace();
+            mostrarAlerta(
+                    Alert.AlertType.ERROR,
+                    "Erro de Navegação",
+                    "Não foi possível carregar a tela de aprovações: "
+                            + e.getMessage()
+            );
         }
     }
 
@@ -220,7 +233,16 @@ public class ControllerGerenciarProdutos implements Initializable {
         TextField txtDescricao = new TextField(selecionado.getDescricao());
         TextField txtPreco = new TextField(String.valueOf(selecionado.getPreco()));
         TextField txtEstoque = new TextField(String.valueOf(selecionado.getQuantidadeEstoque()));
+        ComboBox<String> cbstatus= new ComboBox<>();
+        cbstatus.getItems().setAll("PENDENTE","APROVADO");
+        String statusAtual = selecionado.getStatus();
 
+        if (statusAtual != null &&
+                cbstatus.getItems().contains(statusAtual.toUpperCase())) {
+            cbstatus.setValue(statusAtual.toUpperCase());
+        } else {
+            cbstatus.setValue("PENDENTE");
+        }
         grid.add(new Label("Nome:"), 0, 0);
         grid.add(txtNome, 1, 0);
         grid.add(new Label("Descrição:"), 0, 1);
@@ -229,7 +251,8 @@ public class ControllerGerenciarProdutos implements Initializable {
         grid.add(txtPreco, 1, 2);
         grid.add(new Label("Estoque:"), 0, 3);
         grid.add(txtEstoque, 1, 3);
-
+        grid.add(new Label("Status:"),0, 4);
+        grid.add(cbstatus, 1, 4);
         dialog.getDialogPane().setContent(grid);
 
         dialog.setResultConverter(dialogButton -> {
@@ -239,6 +262,10 @@ public class ControllerGerenciarProdutos implements Initializable {
                     selecionado.setDescricao(txtDescricao.getText());
                     selecionado.setPreco(Double.parseDouble(txtPreco.getText()));
                     selecionado.setQuantidadeEstoque(Integer.parseInt(txtEstoque.getText()));
+                    selecionado.setStatus(cbstatus.getValue());
+                    if(selecionado.getStatus().equals("PENDENTE")){
+                        listaProdutos.remove(selecionado);
+                    }
                     return selecionado;
                 } catch (NumberFormatException e) {
                     mostrarAlerta(Alert.AlertType.ERROR, "Erro de Entrada", "Insira valores numéricos válidos para Preço e Estoque.");

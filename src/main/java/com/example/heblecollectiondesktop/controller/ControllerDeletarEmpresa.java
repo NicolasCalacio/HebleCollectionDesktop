@@ -87,7 +87,7 @@ public class ControllerDeletarEmpresa {
                 String alvoAfetado = empresaParaDeletar.getNome() + " (ID: " + empresaParaDeletar.getId() + ")";
                 String detalhes = "Motivo: " + motivo + (observacao.isEmpty() ? "" : " | Obs: " + observacao);
 
-                // Registo no log de moderação
+
                 logsDAO.registrarLog(
                         autorMatricula,
                         "EXCLUSAO_EMPRESA",

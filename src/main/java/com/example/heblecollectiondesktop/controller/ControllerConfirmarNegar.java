@@ -67,7 +67,7 @@ public class ControllerConfirmarNegar {
         }
 
         try {
-            // Alterado de false para "recusado" para corresponder ao novo sistema de status textual
+
             boolean sucesso = ticketDAO.atualizarStatus(ticketRejeitar.getId(), "recusado");
 
             if (sucesso) {

@@ -65,7 +65,7 @@ public class ControllerGerenciarConsumidores {
         if (colNome != null) colNome.setCellValueFactory(new PropertyValueFactory<>("nomconsumidor"));
         if (colCpf != null) colCpf.setCellValueFactory(new PropertyValueFactory<>("cpfconsumidor"));
 
-        // Configuração e formatação personalizada para a coluna de status
+
         if (colStatus != null) {
             colStatus.setCellValueFactory(new PropertyValueFactory<>("statusconsumidor"));
             colStatus.setCellFactory(column -> new TableCell<Consumidores, String>() {
@@ -75,11 +75,11 @@ public class ControllerGerenciarConsumidores {
                     if (empty || item == null) {
                         setText(null);
                     } else {
-                        // Se estiver escrito "permitido" (independente de maiúsculas/minúsculas), exibe "Ativo"
+
                         if (item.equalsIgnoreCase("permitido")) {
                             setText("Ativo");
                         } else {
-                            setText(item); // Mantém o status original (ex: "Banido")
+                            setText(item);
                         }
                     }
                 }

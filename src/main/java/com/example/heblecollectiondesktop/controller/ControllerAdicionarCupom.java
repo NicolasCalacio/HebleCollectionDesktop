@@ -104,7 +104,7 @@ public class ControllerAdicionarCupom {
             novoCupom.setDescontoPercentual(desconto);
             novoCupom.setValorMinimo(valorMin);
             novoCupom.setValidade(validade);
-            novoCupom.setAtivo(true); // Garante que o cupom nasce ativo por padrão
+            novoCupom.setAtivo(true);
 
             boolean sucesso = cupomDAO.salvar(novoCupom);
 

@@ -43,10 +43,10 @@ public class ControllerEditarConsumidor {
 
     @FXML
     public void EditarConsumidor() {
-        // 1. Pegamos o valor diretamente como String (sem chamar .toString() antes da checagem)
+
         String selecionado = (CbMudarStatus != null) ? CbMudarStatus.getValue() : null;
 
-        // 2. Validação se algo foi selecionado
+
         if (selecionado == null || selecionado.isBlank()) {
             mostrarAlerta(Alert.AlertType.WARNING, "Status Obrigatório", "Por favor, selecione um Status para a edição.");
             return;

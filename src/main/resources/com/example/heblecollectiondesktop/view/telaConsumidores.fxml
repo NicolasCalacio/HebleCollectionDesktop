@@ -39,7 +39,11 @@
                 </Button>
 
 
+<<<<<<< HEAD
+                <Button fx:id="btnBanirConsumidor" mnemonicParsing="false" prefHeight="40.0" style="-fx-background-color: #d6b667; -fx-text-fill: white; -fx-background-radius: 8; -fx-cursor: hand;" text="🗑 Banir Consumidor">
+=======
                 <Button fx:id="btnBanirConsumidor" mnemonicParsing="false" onAction="#IrBanirConsumidor" prefHeight="40.0" style="-fx-background-color: #d6b667; -fx-text-fill: white; -fx-background-radius: 8; -fx-cursor: hand;" text="🗑 Banir Consumidor">
+>>>>>>> origin/feature/branches-atualizadas
                     <font>
                         <Font name="System Bold" size="13.0" />
                     </font>

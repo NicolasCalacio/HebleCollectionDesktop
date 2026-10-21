@@ -100,7 +100,7 @@ public class ControllerTicketFechados {
         try {
             List<Ticket> listaBanco = ticketDAO.listarTodos();
 
-            // Filtra tickets que estejam finalizados ("fechado" ou "recusado")
+
             List<Ticket> fechados = listaBanco.stream()
                     .filter(t -> t.getStatus() != null &&
                             (t.getStatus().equalsIgnoreCase("fechado") || t.getStatus().equalsIgnoreCase("recusado")))

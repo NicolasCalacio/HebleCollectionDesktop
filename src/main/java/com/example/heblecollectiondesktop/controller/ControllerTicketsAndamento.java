@@ -29,7 +29,7 @@ public class ControllerTicketsAndamento {
     @FXML private TableColumn<Ticket, Integer> colID;
     @FXML private TableColumn<Ticket, String> colAssunto;
     @FXML private TableColumn<Ticket, String> colDescricao;
-    @FXML private TableColumn<Ticket, String> colStatus; // Alterado de Boolean para String
+    @FXML private TableColumn<Ticket, String> colStatus;
     @FXML private TableColumn<Ticket, Integer> colFuncionarioId;
 
     private final TicketDAO ticketDAO = new TicketDAO();

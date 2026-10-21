@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<VBox prefWidth="480.0" spacing="12.0" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.heblecollectiondesktop.controller.ControllerInfoPopUpConsumidor">
+    <padding>
+        <Insets bottom="16.0" left="20.0" right="20.0" top="16.0" />
+    </padding>
+    <children>
+        <Label text="Informações do Consumidor" textFill="#1e1e1e">
+            <font>
+                <Font name="System Bold" size="14.0" />
+            </font>
+        </Label>
+        <Separator />
+        <AnchorPane prefHeight="230.0" prefWidth="440.0">
+            <children>
+
+                <Label fx:id="lblId" layoutX="14.0" layoutY="14.0" text="ID:">
+                    <font>
+                        <Font name="System Bold" size="12.0" />
+                    </font>
+                </Label>
+                <Label fx:id="lblCpf" layoutX="14.0" layoutY="45.0" text="CPF:">
+                    <font>
+                        <Font name="System Bold" size="12.0" />
+                    </font>
+                </Label>
+                <Label fx:id="lblEmail" layoutX="14.0" layoutY="76.0" text="EMAIL:">
+                    <font>
+                        <Font name="System Bold" size="12.0" />
+                    </font>
+                </Label>
+                <Label fx:id="lblTelefone" layoutX="14.0" layoutY="107.0" text="TELEFONE:">
+                    <font>
+                        <Font name="System Bold" size="12.0" />
+                    </font>
+                </Label>
+                <Label fx:id="lblCep" layoutX="14.0" layoutY="138.0" text="CEP:">
+                    <font>
+                        <Font name="System Bold" size="12.0" />
+                    </font>
+                </Label>
+
+                <Label fx:id="lblStatus" layoutX="250.0" layoutY="14.0" text="STATUS:">
+                    <font>
+                        <Font name="System Bold" size="12.0" />
+                    </font>
+                </Label>
+                <Label fx:id="lblDataNascimento" layoutX="250.0" layoutY="45.0" text="DATA DE NASCIMENTO:">
+                    <font>
+                        <Font name="System Bold" size="12.0" />
+                    </font>
+                </Label>
+
+                <Label fx:id="lblNome" layoutX="14.0" layoutY="172.0" text="NOME COMPLETO:">
+                    <font>
+                        <Font name="System Bold" size="12.0" />
+                    </font>
+                </Label>
+                <Label fx:id="lblEndereco" layoutX="14.0" layoutY="201.0" text="ENDEREÇO:">
+                    <font>
+                        <Font name="System Bold" size="12.0" />
+                    </font>
+                </Label>
+            </children>
+        </AnchorPane>
+    </children>
+</VBox>

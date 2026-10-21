@@ -14,7 +14,7 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.MouseEvent; // IMPORT CORRETO DO JAVAFX
+import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -68,7 +68,7 @@ public class ControllerLogin implements Initializable {
                     return;
                 }
             } catch (IOException e) {
-                // ignora e tenta o próximo
+
             }
         }
     }

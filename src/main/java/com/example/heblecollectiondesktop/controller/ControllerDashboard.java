@@ -25,6 +25,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonBar;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
@@ -80,7 +81,7 @@ public class ControllerDashboard implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        // Inicializações padrão
+
     }
 
     public void setFuncionarioLogado(Funcionario funcionario) {
@@ -125,7 +126,6 @@ public class ControllerDashboard implements Initializable {
                 btnConsumidores.setManaged(isGerente || isSuporte);
             }
 
-            // FUNCIONÁRIO e GERENTE veem Produtos e Vendas
             if (btnProdutos != null) {
                 btnProdutos.setVisible(isGerente || isFuncionario);
                 btnProdutos.setManaged(isGerente || isFuncionario);
@@ -240,6 +240,8 @@ public class ControllerDashboard implements Initializable {
 
             FXMLLoader loader = new FXMLLoader(url);
             Parent vendasView = loader.load();
+            ControllerVendas controllerVendas= loader.getController();
+            controllerVendas.setAcaoVoltar(()-> handleVisaoGeral(null));
 
             if (painelConteudoCentral != null) {
                 painelConteudoCentral.getChildren().setAll(vendasView);
@@ -281,6 +283,7 @@ public class ControllerDashboard implements Initializable {
             if (controllerCupons != null) {
                 controllerCupons.setContainerCentral(painelConteudoCentral);
                 controllerCupons.setFuncionarioLogado(funcionarioLogado);
+                controllerCupons.setAcaoVoltar(()->handleVisaoGeral(null));
             }
 
             if (painelConteudoCentral != null) {
@@ -355,6 +358,7 @@ public class ControllerDashboard implements Initializable {
             ControllerExibirPerfil controllerHub = loader.getController();
             if (controllerHub != null) {
                 controllerHub.setFuncionario(funcionarioLogado);
+                controllerHub.setAcaovoltar(()-> handleVisaoGeral(null));
             }
 
             if (painelConteudoCentral != null) {
@@ -477,30 +481,38 @@ public class ControllerDashboard implements Initializable {
     }
 
     @FXML
-    private void handleSair(ActionEvent event) {
+    private void SairDoSistema(ActionEvent event) {
         try {
-            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/heblecollectiondesktop/login-view.fxml"));
+            URL url = getClass().getResource("/com/example/heblecollectiondesktop/view/modalSair.fxml");
+            if (url == null) {
+                url = getClass().getResource("/com/example/heblecollectiondesktop/modalSair.fxml");
+            }
+
+            if (url == null) {
+                mostrarAlerta("Erro", "Arquivo modalSair.fxml não encontrado.");
+                return;
+            }
+
+            FXMLLoader loader = new FXMLLoader(url);
             Parent root = loader.load();
-            stage.setScene(new Scene(root));
-            stage.setTitle("Heble Collection - Login");
-            stage.show();
+
+            Stage modalStage = new Stage();
+            modalStage.initModality(javafx.stage.Modality.APPLICATION_MODAL);
+
+            Stage dashboardStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            modalStage.initOwner(dashboardStage);
+
+            modalStage.initStyle(javafx.stage.StageStyle.TRANSPARENT);
+
+            Scene scene = new Scene(root);
+            scene.setFill(javafx.scene.paint.Color.TRANSPARENT);
+
+            modalStage.setScene(scene);
+            modalStage.showAndWait();
+
         } catch (IOException e) {
             e.printStackTrace();
-        }
-    }
-
-    @FXML
-    private void fecharAplicacao(ActionEvent event) {
-        Alert alerta = new Alert(Alert.AlertType.CONFIRMATION);
-        alerta.setTitle("Encerrar Sistema");
-        alerta.setHeaderText(null);
-        alerta.setContentText("Deseja realmente fechar o sistema?");
-
-        Optional<ButtonType> resultado = alerta.showAndWait();
-        if (resultado.isPresent() && resultado.get() == ButtonType.OK) {
-            Platform.exit();
-            System.exit(0);
+            mostrarAlerta("Erro de Carregamento", "Falha ao abrir o modal de saída: " + e.getMessage());
         }
     }
 

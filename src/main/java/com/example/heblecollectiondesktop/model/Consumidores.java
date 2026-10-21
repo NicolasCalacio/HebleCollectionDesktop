@@ -109,4 +109,23 @@ public class Consumidores {
     public void setStatusconsumidor(String statusconsumidor) {
         this.statusconsumidor = statusconsumidor;
     }
+
+    public String getDataNascFormatada() {
+        if (dataNascconsumidor == null || dataNascconsumidor.isEmpty()) {
+            return "";
+        }
+        try {
+
+            if (dataNascconsumidor.length() >= 10) {
+                String ano = dataNascconsumidor.substring(0, 4);
+                String mes = dataNascconsumidor.substring(5, 7);
+                String dia = dataNascconsumidor.substring(8, 10);
+                return dia + "/" + mes + "/" + ano;
+            }
+            return dataNascconsumidor;
+        } catch (Exception e) {
+            return dataNascconsumidor;
+        }
+    }
+
 }

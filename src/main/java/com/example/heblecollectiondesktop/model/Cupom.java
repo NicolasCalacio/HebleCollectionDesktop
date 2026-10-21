@@ -6,7 +6,7 @@ public class Cupom {
     private int id;
     private String codigo;
     private double descontoPercentual;
-    private double valorMinimo; // "A partir de N reais"
+    private double valorMinimo;
     private boolean ativo;
     private Date validade;
 

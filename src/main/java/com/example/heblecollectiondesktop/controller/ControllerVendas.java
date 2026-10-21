@@ -5,9 +5,12 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
+import java.time.Month;
 import java.time.YearMonth;
 import java.time.format.DateTimeFormatter;
+import java.time.format.TextStyle;
 import java.util.List;
+import java.util.Locale;
 
 import com.example.heblecollectiondesktop.database.VendaDAO;
 import com.example.heblecollectiondesktop.model.ItemVenda;
@@ -24,10 +27,12 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
@@ -62,6 +67,15 @@ public class ControllerVendas {
 
     private VendaDAO vendaDAO;
 
+    public Runnable getAcaoVoltar() {
+        return acaoVoltar;
+    }
+
+
+    private Runnable acaoVoltar;
+    public void setAcaoVoltar(Runnable acaoVoltar) {
+        this.acaoVoltar = acaoVoltar;
+    }
     @FXML
     public void initialize() {
         vendaDAO = new VendaDAO();
@@ -87,21 +101,98 @@ public class ControllerVendas {
 
     @FXML
     private void acaoRelatorioMes(ActionEvent event) {
+        Stage filtroStage = new Stage();
+        filtroStage.initModality(Modality.APPLICATION_MODAL);
+        filtroStage.setTitle("Selecionar Período do Relatório");
+
+        VBox layout = new VBox(16);
+        layout.setPadding(new Insets(24));
+        layout.setStyle("-fx-background-color: #FFFFFF; -fx-background-radius: 12;");
+        layout.setPrefWidth(400);
+
+        Label lblTitulo = new Label("📅 Selecionar Período");
+        lblTitulo.setFont(Font.font("System", FontWeight.BOLD, 18));
+        lblTitulo.setStyle("-fx-text-fill: #0F172A;");
+
+        Label lblSubtitulo = new Label("Escolha o mês e ano ou veja o consolidado geral:");
+        lblSubtitulo.setStyle("-fx-text-fill: #64748B; -fx-font-size: 12px;");
+
+        ComboBox<String> cbMes = new ComboBox<>();
+        ObservableList<String> mesesList = FXCollections.observableArrayList();
+        for (Month m : Month.values()) {
+            String nomeMes = m.getDisplayName(TextStyle.FULL, new Locale("pt", "BR"));
+            mesesList.add(nomeMes.substring(0, 1).toUpperCase() + nomeMes.substring(1));
+        }
+        cbMes.setItems(mesesList);
+        cbMes.getSelectionModel().select(YearMonth.now().getMonthValue() - 1);
+        cbMes.setMaxWidth(Double.MAX_VALUE);
+        cbMes.setStyle("-fx-background-color: #F8FAFC; -fx-border-color: #CBD5E1; -fx-border-radius: 8; -fx-background-radius: 8;");
+
+        ComboBox<Integer> cbAno = new ComboBox<>();
+        int anoAtual = YearMonth.now().getYear();
+        ObservableList<Integer> anosList = FXCollections.observableArrayList();
+        for (int ano = anoAtual - 2; ano <= anoAtual + 3; ano++) {
+            anosList.add(ano);
+        }
+        cbAno.setItems(anosList);
+        cbAno.getSelectionModel().select(Integer.valueOf(anoAtual));
+        cbAno.setMaxWidth(Double.MAX_VALUE);
+        cbAno.setStyle("-fx-background-color: #F8FAFC; -fx-border-color: #CBD5E1; -fx-border-radius: 8; -fx-background-radius: 8;");
+
+        HBox comboContainer = new HBox(10, cbMes, cbAno);
+        HBox.setHgrow(cbMes, javafx.scene.layout.Priority.ALWAYS);
+        HBox.setHgrow(cbAno, javafx.scene.layout.Priority.ALWAYS);
+
+        Button btnGerarPeriodo = new Button("Gerar do Mês Selecionado");
+        btnGerarPeriodo.setPrefHeight(38);
+        btnGerarPeriodo.setMaxWidth(Double.MAX_VALUE);
+        btnGerarPeriodo.setStyle("-fx-background-color: #d6b667; -fx-text-fill: white; -fx-background-radius: 8; -fx-cursor: hand; -fx-font-weight: bold;");
+
+        btnGerarPeriodo.setOnAction(e -> {
+            int mesSelecionado = cbMes.getSelectionModel().getSelectedIndex() + 1;
+            int anoSelecionado = cbAno.getSelectionModel().getSelectedItem();
+            YearMonth ymSelecionado = YearMonth.of(anoSelecionado, mesSelecionado);
+            filtroStage.close();
+            gerarRelatorioPorPeriodo(ymSelecionado);
+        });
+
+        Button btnGerarTodas = new Button("🌐 Relatório Geral (Todas as Vendas)");
+        btnGerarTodas.setPrefHeight(38);
+        btnGerarTodas.setMaxWidth(Double.MAX_VALUE);
+        btnGerarTodas.setStyle("-fx-background-color: #0F172A; -fx-text-fill: white; -fx-background-radius: 8; -fx-cursor: hand; -fx-font-weight: bold;");
+
+        btnGerarTodas.setOnAction(e -> {
+            filtroStage.close();
+            gerarRelatorioGeral();
+        });
+
+        layout.getChildren().addAll(lblTitulo, lblSubtitulo, comboContainer, btnGerarPeriodo, btnGerarTodas);
+
+        Scene scene = new Scene(layout);
+        filtroStage.setScene(scene);
+        filtroStage.showAndWait();
+    }
+
+    private void gerarRelatorioPorPeriodo(YearMonth ym) {
         try {
             List<Venda> todasVendas = vendaDAO.listarTodas();
-            YearMonth mesAtual = YearMonth.now();
 
             BigDecimal valorTotalMes = BigDecimal.ZERO;
             int quantidadeVendasMes = 0;
+            int quantidadeCanceladas = 0;
 
             for (Venda v : todasVendas) {
                 if (v.getCriadoEm() != null) {
                     YearMonth mesVenda = YearMonth.from(v.getCriadoEm());
-                    if (mesVenda.equals(mesAtual)) {
-                        if (v.getValorTotal() != null) {
-                            valorTotalMes = valorTotalMes.add(v.getValorTotal());
+                    if (mesVenda.equals(ym)) {
+                        if ("CANCELADA".equalsIgnoreCase(v.getStatusVenda())) {
+                            quantidadeCanceladas++;
+                        } else {
+                            if (v.getValorTotal() != null) {
+                                valorTotalMes = valorTotalMes.add(v.getValorTotal());
+                            }
+                            quantidadeVendasMes++;
                         }
-                        quantidadeVendasMes++;
                     }
                 }
             }
@@ -111,14 +202,80 @@ public class ControllerVendas {
                 mediaValor = valorTotalMes.divide(BigDecimal.valueOf(quantidadeVendasMes), 2, RoundingMode.HALF_UP);
             }
 
-            DateTimeFormatter formatterMes = DateTimeFormatter.ofPattern("MMMM / yyyy");
-            String nomeMesAno = mesAtual.format(formatterMes).toUpperCase();
+            DateTimeFormatter formatterMes = DateTimeFormatter.ofPattern("MMMM / yyyy", new Locale("pt", "BR"));
+            String nomeMesAno = ym.format(formatterMes).toUpperCase();
 
-            abrirPopupRelatorio(nomeMesAno, quantidadeVendasMes, valorTotalMes, mediaValor);
+            abrirPopupRelatorio("PERÍODO: " + nomeMesAno, quantidadeVendasMes, quantidadeCanceladas, valorTotalMes, mediaValor);
 
         } catch (SQLException e) {
             exibirAlerta("Erro", "Não foi possível gerar o relatório: " + e.getMessage());
         }
+    }
+
+    private void gerarRelatorioGeral() {
+        try {
+            List<Venda> todasVendas = vendaDAO.listarTodas();
+
+            BigDecimal valorTotalGeral = BigDecimal.ZERO;
+            int quantidadeVendasGeral = 0;
+            int quantidadeCanceladas = 0;
+
+            for (Venda v : todasVendas) {
+                if ("CANCELADA".equalsIgnoreCase(v.getStatusVenda())) {
+                    quantidadeCanceladas++;
+                } else {
+                    if (v.getValorTotal() != null) {
+                        valorTotalGeral = valorTotalGeral.add(v.getValorTotal());
+                    }
+                    quantidadeVendasGeral++;
+                }
+            }
+
+            BigDecimal mediaValor = BigDecimal.ZERO;
+            if (quantidadeVendasGeral > 0) {
+                mediaValor = valorTotalGeral.divide(BigDecimal.valueOf(quantidadeVendasGeral), 2, RoundingMode.HALF_UP);
+            }
+
+            abrirPopupRelatorio("HISTÓRICO COMPLETO (TODOS OS TEMPOS)", quantidadeVendasGeral, quantidadeCanceladas, valorTotalGeral, mediaValor);
+
+        } catch (SQLException e) {
+            exibirAlerta("Erro", "Não foi possível gerar o relatório geral: " + e.getMessage());
+        }
+    }
+
+    private void abrirPopupRelatorio(String tituloPeriodo, int qtdVendas, int qtdCanceladas, BigDecimal faturamentoTotal, BigDecimal mediaVenda) {
+        Stage popupStage = new Stage();
+        popupStage.initModality(Modality.APPLICATION_MODAL);
+        popupStage.setTitle("Relatório Financeiro");
+
+        VBox layout = new VBox(16);
+        layout.setPadding(new Insets(24));
+        layout.setStyle("-fx-background-color: #F8FAFC;");
+        layout.setPrefWidth(440);
+
+        Label lblTitulo = new Label("📊 Relatório Financeiro");
+        lblTitulo.setFont(Font.font("System", FontWeight.BOLD, 20));
+        lblTitulo.setStyle("-fx-text-fill: #0F172A;");
+
+        Label lblSubtitulo = new Label(tituloPeriodo);
+        lblSubtitulo.setStyle("-fx-text-fill: #64748B; -fx-font-weight: bold; -fx-font-size: 12px;");
+
+        VBox cardTotal = criarCardMetrica("Faturamento Total", "R$ " + String.format("%.2f", faturamentoTotal), "#10B981");
+        VBox cardQuantidade = criarCardMetrica("Transações Concluídas", qtdVendas + " vendas realizadas", "#3B82F6");
+        VBox cardMedia = criarCardMetrica("Ticket Médio (Média por Venda)", "R$ " + String.format("%.2f", mediaVenda), "#D6B667");
+        VBox cardCanceladas = criarCardMetrica("Vendas Canceladas", qtdCanceladas + " cancelamentos", "#EF4444");
+
+        Button btnFechar = new Button("Fechar Relatório");
+        btnFechar.setPrefHeight(38);
+        btnFechar.setMaxWidth(Double.MAX_VALUE);
+        btnFechar.setStyle("-fx-background-color: #d6b667; -fx-text-fill: white; -fx-background-radius: 8; -fx-cursor: hand; -fx-font-weight: bold;");
+        btnFechar.setOnAction(e -> popupStage.close());
+
+        layout.getChildren().addAll(lblTitulo, lblSubtitulo, cardTotal, cardQuantidade, cardMedia, cardCanceladas, btnFechar);
+
+        Scene scene = new Scene(layout);
+        popupStage.setScene(scene);
+        popupStage.showAndWait();
     }
 
     @FXML
@@ -135,40 +292,6 @@ public class ControllerVendas {
         } catch (SQLException e) {
             exibirAlerta("Erro", "Falha ao carregar os itens da venda: " + e.getMessage());
         }
-    }
-
-    private void abrirPopupRelatorio(String mesAno, int qtdVendas, BigDecimal faturamentoTotal, BigDecimal mediaVenda) {
-        Stage popupStage = new Stage();
-        popupStage.initModality(Modality.APPLICATION_MODAL);
-        popupStage.setTitle("Relatório Mensal de Vendas");
-
-        VBox layout = new VBox(20);
-        layout.setPadding(new Insets(24));
-        layout.setStyle("-fx-background-color: #F8FAFC; -fx-background-radius: 12;");
-        layout.setPrefWidth(420);
-
-        Label lblTitulo = new Label("📊 Relatório Financeiro");
-        lblTitulo.setFont(Font.font("System", FontWeight.BOLD, 20));
-        lblTitulo.setStyle("-fx-text-fill: #0F172A;");
-
-        Label lblSubtitulo = new Label("Período: " + mesAno);
-        lblSubtitulo.setStyle("-fx-text-fill: #64748B;");
-
-        VBox cardTotal = criarCardMetrica("Faturamento Total do Mês", "R$ " + String.format("%.2f", faturamentoTotal), "#10B981");
-        VBox cardQuantidade = criarCardMetrica("Total de Transações", qtdVendas + " vendas realizadas", "#3B82F6");
-        VBox cardMedia = criarCardMetrica("Média por Venda (Ticket Médio)", "R$ " + String.format("%.2f", mediaVenda), "#D6B667");
-
-        Button btnFechar = new Button("Fechar Relatório");
-        btnFechar.setPrefHeight(38);
-        btnFechar.setMaxWidth(Double.MAX_VALUE);
-        btnFechar.setStyle("-fx-background-color: #d6b667; -fx-text-fill: white; -fx-background-radius: 8; -fx-cursor: hand; -fx-font-weight: bold;");
-        btnFechar.setOnAction(e -> popupStage.close());
-
-        layout.getChildren().addAll(lblTitulo, lblSubtitulo, cardTotal, cardQuantidade, cardMedia, btnFechar);
-
-        Scene scene = new Scene(layout);
-        popupStage.setScene(scene);
-        popupStage.showAndWait();
     }
 
     private void abrirPopupDetalhes(Venda venda, List<ItemVenda> itens) {
@@ -225,7 +348,6 @@ public class ControllerVendas {
         Button btnFechar = new Button("Fechar");
         btnFechar.setPrefHeight(38);
         btnFechar.setMaxWidth(Double.MAX_VALUE);
-        // Aplicando o padrão de cor amarelo/dourado (#d6b667)
         btnFechar.setStyle("-fx-background-color: #d6b667; -fx-text-fill: white; -fx-background-radius: 8; -fx-cursor: hand; -fx-font-weight: bold;");
         btnFechar.setOnAction(e -> popupStage.close());
 
@@ -252,15 +374,10 @@ public class ControllerVendas {
     }
 
     @FXML
-    private void voltarAoHub(ActionEvent event) {
-        try {
-            Parent root = FXMLLoader.load(getClass().getResource("/com/example/heblecollectiondesktop/view/dashboard.fxml"));
-            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            stage.setScene(new Scene(root));
-            stage.show();
-        } catch (IOException e) {
-            exibirAlerta("Erro", "Não foi possível retornar ao painel: " + e.getMessage());
-        }
+    void voltarAoHub(ActionEvent event) {
+            if (acaoVoltar != null) {
+                acaoVoltar.run();
+            }
     }
 
     private void exibirAlerta(String titulo, String mensagem) {

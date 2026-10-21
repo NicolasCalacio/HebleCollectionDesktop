@@ -38,7 +38,8 @@ public class ControllerInfoPopUpConsumidor {
         lblTelefone.setText("TELEFONE: " + consumidores.getCelularconsumidor());
         lblEndereco.setText("ENDEREÇO: " + consumidores.getEnderecoconsumidor());
         lblStatus.setText("STATUS: "+ consumidores.getStatusconsumidor());
-        lblEmail.setText("EMAIL: ") + consumidores.getEmailconsumidor();
+        lblEmail.setText("EMAIL: " + consumidores.getEmailconsumidor());
+        lblDataNascimento.setText("DATA DE NASCIMENTO: " + consumidores.getDataNascconsumidor());
 
     }
 }

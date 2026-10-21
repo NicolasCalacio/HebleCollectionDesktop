@@ -12,48 +12,48 @@
                 <Font name="Arial Black" size="14.0" />
             </font>
         </Text>
-        <Label fx:id="lblNome" layoutX="9.0" layoutY="13.0" prefHeight="58.0" prefWidth="125.0" text="NOME COMPLETO:">
+        <Label fx:id="lblNome" layoutX="22.0" layoutY="52.0" prefHeight="21.0" prefWidth="431.0" text="NOME COMPLETO:">
             <font>
                 <Font name="System Bold" size="13.0" />
             </font>
         </Label>
-        <Label fx:id="lblCpf" layoutX="18.0" layoutY="107.0" text="CPF:">
+        <Label fx:id="lblCpf" layoutX="18.0" layoutY="107.0" prefHeight="20.0" prefWidth="200.0" text="CPF:">
             <font>
                 <Font name="System Bold" size="14.0" />
             </font>
         </Label>
-        <Label fx:id="lblEmail" layoutX="19.0" layoutY="137.0" prefHeight="21.0" prefWidth="62.0" text="EMAIL:">
+        <Label fx:id="lblEmail" layoutX="19.0" layoutY="137.0" prefHeight="21.0" prefWidth="215.0" text="EMAIL:">
             <font>
                 <Font name="System Bold" size="13.0" />
             </font>
         </Label>
         <Label layoutX="18.0" layoutY="200.0" prefHeight="18.0" prefWidth="62.0" />
-        <Label fx:id="lblCep" layoutX="16.0" layoutY="200.0" text="CEP :">
+        <Label fx:id="lblCep" layoutX="22.0" layoutY="201.0" prefHeight="17.0" prefWidth="215.0" text="CEP :">
             <font>
                 <Font name="Arial Bold" size="15.0" />
             </font>
         </Label>
-        <Label fx:id="lblDataNascimento" layoutX="18.0" layoutY="238.0" text="DATA DE NASCIMENTO:">
+        <Label fx:id="lblDataNascimento" layoutX="18.0" layoutY="238.0" prefHeight="16.0" prefWidth="326.0" text="DATA DE NASCIMENTO:">
             <font>
                 <Font name="Arial Bold" size="14.0" />
             </font>
         </Label>
-        <Label fx:id="lblEndereco" layoutX="15.0" layoutY="274.0" text="ENDEREÇO:">
+        <Label fx:id="lblEndereco" layoutX="15.0" layoutY="274.0" prefHeight="16.0" prefWidth="263.0" text="ENDEREÇO:">
             <font>
                 <Font name="Arial Bold" size="14.0" />
             </font>
         </Label>
-        <Label fx:id="lblStatus" layoutX="19.0" layoutY="317.0" text="STATUS:">
+        <Label fx:id="lblStatus" layoutX="19.0" layoutY="317.0" prefHeight="20.0" prefWidth="282.0" text="STATUS:">
             <font>
                 <Font name="Arial Black" size="13.0" />
             </font>
         </Label>
-      <Label fx:id="lblId" layoutX="22.0" layoutY="73.0" prefHeight="18.0" prefWidth="49.0" text="ID:">
+      <Label fx:id="lblId" layoutX="22.0" layoutY="73.0" prefHeight="19.0" prefWidth="200.0" text="ID:">
          <font>
             <Font name="System Bold" size="13.0" />
          </font>
       </Label>
-      <Label fx:id="lblTelefone" layoutX="19.0" layoutY="158.0" prefHeight="45.0" prefWidth="147.0" text="TELEFONE:">
+      <Label fx:id="lblTelefone" layoutX="19.0" layoutY="158.0" prefHeight="33.0" prefWidth="215.0" text="TELEFONE:">
          <font>
             <Font name="System Bold" size="13.0" />
          </font>

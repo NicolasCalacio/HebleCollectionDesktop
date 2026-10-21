@@ -21,7 +21,7 @@ import javafx.scene.layout.Pane;
 
 import java.io.IOException;
 import java.net.URL;
-import java.sql.SQLException;
+
 import java.util.Optional;
 
 public class ControllerAprovarEmpresa {

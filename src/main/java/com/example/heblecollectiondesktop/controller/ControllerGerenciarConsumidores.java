@@ -1,18 +1,20 @@
 package com.example.heblecollectiondesktop.controller;
 
 import com.example.heblecollectiondesktop.database.ConsumidoresDAO;
+
 import com.example.heblecollectiondesktop.model.Consumidores;
+
 import com.example.heblecollectiondesktop.model.Funcionario;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
-import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -22,17 +24,18 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 
+
 public class ControllerGerenciarConsumidores {
     @FXML
-    private TableView<Consumidores> tabelaConsumidores;
+    private TableView <Consumidores> tabelaConsumidores;
     @FXML
-    private TableColumn<Consumidores, Integer> colid;
+    private TableColumn<Consumidores , Integer> colid;
     @FXML
-    private TableColumn<Consumidores, String> colNome;
+    private TableColumn<Consumidores , String> colNome;
     @FXML
-    private TableColumn<Consumidores, Integer> colCpf;
+    private TableColumn<Consumidores , Integer> colCpf;
     @FXML
-    private TableColumn<Consumidores, String> colStatus;
+    private TableColumn<Consumidores , String> colStatus;
     private Pane containerCentral;
     private final ConsumidoresDAO consumidoresDAO = new ConsumidoresDAO();
     private final ObservableList<Consumidores> listaConsumidores = FXCollections.observableArrayList();
@@ -47,14 +50,12 @@ public class ControllerGerenciarConsumidores {
 
     private Funcionario funcionarioLogado;
     private Runnable acaovoltar;
-
-    public void setAcaovoltar(Runnable acaovoltar) {
-        this.acaovoltar = acaovoltar;
+    public void setAcaovoltar(Runnable acaovoltar){
+        this.acaovoltar=acaovoltar;
     }
-
     @FXML
     private void voltarAoHub(ActionEvent event) {
-        if (acaovoltar != null) {
+        if(acaovoltar!=null){
             acaovoltar.run();
         }
     }
@@ -64,31 +65,9 @@ public class ControllerGerenciarConsumidores {
         if (colid != null) colid.setCellValueFactory(new PropertyValueFactory<>("IDconsumidor"));
         if (colNome != null) colNome.setCellValueFactory(new PropertyValueFactory<>("nomconsumidor"));
         if (colCpf != null) colCpf.setCellValueFactory(new PropertyValueFactory<>("cpfconsumidor"));
-
-
-        if (colStatus != null) {
-            colStatus.setCellValueFactory(new PropertyValueFactory<>("statusconsumidor"));
-            colStatus.setCellFactory(column -> new TableCell<Consumidores, String>() {
-                @Override
-                protected void updateItem(String item, boolean empty) {
-                    super.updateItem(item, empty);
-                    if (empty || item == null) {
-                        setText(null);
-                    } else {
-
-                        if (item.equalsIgnoreCase("permitido")) {
-                            setText("Ativo");
-                        } else {
-                            setText(item);
-                        }
-                    }
-                }
-            });
-        }
-
+        if (colStatus != null) colStatus.setCellValueFactory(new PropertyValueFactory<>("statusconsumidor"));
         carregarTabela();
     }
-
     public void carregarTabela() {
         try {
             listaConsumidores.setAll(consumidoresDAO.listarConsumidores());
@@ -97,18 +76,19 @@ public class ControllerGerenciarConsumidores {
             }
         } catch (Exception e) {
             e.printStackTrace();
-            mostrarAlerta(Alert.AlertType.ERROR, "Erro de Banco de Dados", "Falha ao carregar consumidores: " + e.getMessage());
+            mostrarAlerta(Alert.AlertType.ERROR, "Erro de Banco de Dados", "Falha ao remover cupom: " + e.getMessage());
         }
     }
-
     @FXML
-    public void IrBanirConsumidor(ActionEvent event) {
+    public void IrBanirConsumidor(ActionEvent event){
         Consumidores consumidorselecionado = tabelaConsumidores.getSelectionModel().getSelectedItem();
-        if (consumidorselecionado == null) {
-            mostrarAlerta(Alert.AlertType.WARNING, "Aviso", "Por favor, selecione um consumidor na tabela para Banir.");
+        if (consumidorselecionado == null ){
+            mostrarAlerta(Alert.AlertType.WARNING,"Aviso", "Por favor, selecione um consumidor na tabela para Banir.");
             return;
         }
         try {
+
+
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/heblecollectiondesktop/view/BanirConsumidor.fxml"));
             Parent subtela = loader.load();
 
@@ -125,24 +105,22 @@ public class ControllerGerenciarConsumidores {
             SubJanela.setTitle("Banir Consumidor");
             SubJanela.setResizable(false);
             SubJanela.showAndWait();
-
-            carregarTabela();
-
         } catch (IOException e) {
-            mostrarAlerta(Alert.AlertType.ERROR, "Erro de Carregamento", "Falha ao carregar a sub-tela: " + e.getMessage());
+            mostrarAlerta(Alert.AlertType.ERROR,"Erro de Carregamento", "Falha ao carregar a sub-tela: " + e.getMessage());
         }
     }
-
     @FXML
-    public void IrEditarConsumidor(ActionEvent event) {
+    public void IrEditarConsumidor(ActionEvent event){
         Consumidores consumidorselecionado = tabelaConsumidores.getSelectionModel().getSelectedItem();
-        if (consumidorselecionado == null) {
-            mostrarAlerta(Alert.AlertType.WARNING, "Aviso", "Por favor, selecione um consumidor na tabela para Editar.");
+        if (consumidorselecionado == null ){
+            mostrarAlerta(Alert.AlertType.WARNING,"Aviso", "Por favor, selecione um consumidor na tabela para Banir.");
             return;
         }
 
-        if (consumidorselecionado.getStatusconsumidor().equalsIgnoreCase("Banido")) {
+        if (consumidorselecionado.getStatusconsumidor().equalsIgnoreCase("Banido")){
             try {
+
+
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/heblecollectiondesktop/view/EditarConsumidor.fxml"));
                 Parent subtela1 = loader.load();
 
@@ -159,15 +137,14 @@ public class ControllerGerenciarConsumidores {
                 SubJanela1.setTitle("Editar Consumidor");
                 SubJanela1.setResizable(false);
                 SubJanela1.showAndWait();
-
-                carregarTabela();
-
             } catch (IOException e) {
-                mostrarAlerta(Alert.AlertType.ERROR, "Erro de Carregamento", "Falha ao carregar a sub-tela: " + e.getMessage());
+                mostrarAlerta(Alert.AlertType.ERROR,"Erro de Carregamento", "Falha ao carregar a sub-tela: " + e.getMessage());
             }
-        } else {
-            mostrarAlerta(Alert.AlertType.WARNING, "Somente Consumidores Banidos", "Selecione somente um consumidor que esteja Banido");
+        }else {
+            mostrarAlerta(Alert.AlertType.WARNING,"Somente Consumidores Banidos", "Selecione somente um consumidor que esteja Banido");
+            return;
         }
+
     }
 
     private void mostrarAlerta(Alert.AlertType tipo, String titulo, String mensagem) {

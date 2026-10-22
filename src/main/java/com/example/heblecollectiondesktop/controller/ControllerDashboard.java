@@ -524,3 +524,4 @@ public class ControllerDashboard implements Initializable {
         alert.showAndWait();
     }
 }
+

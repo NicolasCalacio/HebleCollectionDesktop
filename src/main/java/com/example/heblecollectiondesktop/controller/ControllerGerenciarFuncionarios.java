@@ -176,15 +176,20 @@ public class ControllerGerenciarFuncionarios implements Initializable {
     @FXML
     private void acaoDeletarFuncionario(ActionEvent event) {
         Funcionario selecionado = tabelaFuncionarios.getSelectionModel().getSelectedItem();
+        if (selecionado == null) {
+            mostrarAlerta("Nenhum Funcionário Selecionado", "Por favor, selecione um funcionário na tabela para realizar a exclusão.");
+            return;
+        }
         abrirModalDeletar(selecionado);
     }
 
     private void abrirModalDeletar(Funcionario funcionarioSelecionado) {
-        if (funcionarioSelecionado == null) {
-            mostrarAlerta("Nenhum Funcionário Selecionado", "Por favor, selecione um funcionário na tabela para realizar a exclusão.");
+        if (funcionarioSelecionado == funcionarioLogado) {
             return;
         }
-
+        if (funcionarioSelecionado == null) {
+            return;
+        }
         try {
             URL url = getClass().getResource("/com/example/heblecollectiondesktop/view/deletarFuncionarios.fxml");
 

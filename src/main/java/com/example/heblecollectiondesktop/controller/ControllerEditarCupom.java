@@ -1,7 +1,9 @@
 package com.example.heblecollectiondesktop.controller;
 
 import java.sql.SQLException;
+import java.time.Instant;
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.time.ZoneId;
 import java.util.Date;
 
@@ -57,7 +59,7 @@ public class ControllerEditarCupom {
             chkAtivo.setSelected(cupom.isAtivo());
 
             if (cupom.getValidade() != null) {
-                LocalDate dataLocal = cupom.getValidade().toInstant()
+                LocalDate dataLocal = Instant.ofEpochMilli(cupom.getValidade().getTime())
                         .atZone(ZoneId.systemDefault())
                         .toLocalDate();
                 dpValidade.setValue(dataLocal);
@@ -73,7 +75,6 @@ public class ControllerEditarCupom {
         String txtDesconto = txDescontoPercentual.getText().trim();
         String txtValorMin = txValorMinimo.getText().trim();
 
-
         if (codigo.isEmpty() || txtDesconto.isEmpty() || txtValorMin.isEmpty()) {
             exibirAlerta(Alert.AlertType.WARNING, "Campos Obrigatórios", "Por favor, preencha o código, o desconto e o valor mínimo.");
             return;
@@ -87,7 +88,8 @@ public class ControllerEditarCupom {
             LocalDate localDate = dpValidade.getValue();
             Date validade = null;
             if (localDate != null) {
-                validade = Date.from(localDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
+                Instant instant = localDate.atTime(LocalTime.MAX).atZone(ZoneId.systemDefault()).toInstant();
+                validade = Date.from(instant);
             }
 
             if (cupomEmEdicao == null) {
@@ -99,7 +101,6 @@ public class ControllerEditarCupom {
             cupomEmEdicao.setValorMinimo(valorMin);
             cupomEmEdicao.setAtivo(ativo);
             cupomEmEdicao.setValidade(validade);
-
 
             boolean sucesso = cupomDAO.atualizar(cupomEmEdicao);
 

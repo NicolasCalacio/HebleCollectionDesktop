@@ -4,17 +4,14 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="cb3a4291-41f8-4b38-8e73-f8ae096bae80" name="Changes" comment="Controller de Gerenciamento de Consumidores com implementação do banco de dados">
+    <list default="true" id="cb3a4291-41f8-4b38-8e73-f8ae096bae80" name="Changes" comment="novo host de banco adicionado e correção do botão de voltar em ticket">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/heblecollectiondesktop/controller/ControllerExibirPerfil.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/heblecollectiondesktop/controller/ControllerExibirPerfil.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/heblecollectiondesktop/controller/ControllerGerenciarConsumidores.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/heblecollectiondesktop/controller/ControllerGerenciarConsumidores.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/heblecollectiondesktop/controller/ControllerGerenciarCupons.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/heblecollectiondesktop/controller/ControllerGerenciarCupons.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/heblecollectiondesktop/controller/ControllerCadastroFuncionarios.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/heblecollectiondesktop/controller/ControllerCadastroFuncionarios.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/heblecollectiondesktop/controller/ControllerEditarCupom.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/heblecollectiondesktop/controller/ControllerEditarCupom.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/example/heblecollectiondesktop/controller/ControllerGerenciarProdutos.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/heblecollectiondesktop/controller/ControllerGerenciarProdutos.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/heblecollectiondesktop/controller/ControllerInfoPopUpConsumidor.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/heblecollectiondesktop/controller/ControllerInfoPopUpConsumidor.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/heblecollectiondesktop/model/Consumidores.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/heblecollectiondesktop/model/Consumidores.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/com/example/heblecollectiondesktop/view/ExibirPerfil.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/com/example/heblecollectiondesktop/view/ExibirPerfil.fxml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/heblecollectiondesktop/controller/ControllerTicketsPendentes.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/heblecollectiondesktop/controller/ControllerTicketsPendentes.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/heblecollectiondesktop/database/FuncionarioDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/heblecollectiondesktop/database/FuncionarioDAO.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/resources/com/example/heblecollectiondesktop/view/InfoPopUpConsumidores.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/com/example/heblecollectiondesktop/view/InfoPopUpConsumidores.fxml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/com/example/heblecollectiondesktop/view/telaConsumidores.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/com/example/heblecollectiondesktop/view/telaConsumidores.fxml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -24,103 +21,100 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
-        <option value="FxmlFile" />
         <option value="Class" />
+        <option value="FxmlFile" />
       </list>
     </option>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
-        <entry key="$PROJECT_DIR$" value="feature/branches-atualizadas" />
+        <entry key="$PROJECT_DIR$" value="main" />
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="GitHubPullRequestSearchHistory">{
-    &quot;lastFilter&quot;: {
+  &quot;lastFilter&quot;: {
     &quot;state&quot;: &quot;OPEN&quot;,
     &quot;assignee&quot;: &quot;npinheiroz&quot;
-    }
-    }</component>
+  }
+}</component>
   <component name="GithubPullRequestsUISettings">{
-    &quot;selectedUrlAndAccountId&quot;: {
+  &quot;selectedUrlAndAccountId&quot;: {
     &quot;url&quot;: &quot;https://github.com/npinheiroz/HebleCollectionDesktop.git&quot;,
-    &quot;accountId&quot;: &quot;f256febc-6e22-44e4-9d7f-d50dffe8ed3d&quot;
-    }
-    }</component>
+    &quot;accountId&quot;: &quot;e3e63c9f-61ff-4153-a953-a2339246575c&quot;
+  }
+}</component>
   <component name="HighlightingSettingsPerFile">
     <setting file="file://$PROJECT_DIR$/src/main/resources/com/example/heblecollectiondesktop/view/login.fxml" root0="FORCE_HIGHLIGHTING" />
   </component>
-  <component name="MarkdownSettingsMigration">
-    <option name="stateVersion" value="1" />
-  </component>
   <component name="NextEditCompletionFeaturesState">
     <decayedCancelled>
-      <entry key="MS100" value="0.0" />
-      <entry key="MS500" value="0.0" />
-      <entry key="S2" value="7.226135164038197E-129" />
-      <entry key="S5" value="5.540671885144096E-52" />
-      <entry key="S10" value="2.3538631887162988E-26" />
-      <entry key="S30" value="2.9005461001444864E-9" />
-      <entry key="S60" value="8.507469683829854E-5" />
-      <entry key="M2" value="0.03752188930062942" />
-      <entry key="M5" value="2.0015626488762304" />
-      <entry key="M10" value="7.976245843731809" />
-      <entry key="M15" value="13.605622961922787" />
-      <entry key="M30" value="30.47074600704772" />
-      <entry key="H1" value="64.7010453774329" />
-      <entry key="H2" value="124.76230008881716" />
-      <entry key="H4" value="203.28114653944317" />
-      <entry key="D1" value="342.31631450480734" />
-      <entry key="W1" value="378.4891098746084" />
+      <entry key="MS100" value="1.0000097560016068" />
+      <entry key="MS500" value="1.1943918503054094" />
+      <entry key="S2" value="3.927825872769447" />
+      <entry key="S5" value="8.45247764244731" />
+      <entry key="S10" value="13.507263576232734" />
+      <entry key="S30" value="21.182466981917152" />
+      <entry key="S60" value="24.23679019678032" />
+      <entry key="M2" value="26.018814190858702" />
+      <entry key="M5" value="27.219052757086025" />
+      <entry key="M10" value="28.597836361795032" />
+      <entry key="M15" value="31.386956030869705" />
+      <entry key="M30" value="45.801988228474094" />
+      <entry key="H1" value="79.08720458659573" />
+      <entry key="H2" value="137.69411313968507" />
+      <entry key="H4" value="213.11072880046405" />
+      <entry key="D1" value="343.5602565608309" />
+      <entry key="W1" value="376.99946782324025" />
     </decayedCancelled>
     <decayedSelected>
-      <entry key="MS100" value="1.0" />
-      <entry key="MS500" value="1.0" />
-      <entry key="S2" value="1.0" />
-      <entry key="S5" value="1.0" />
-      <entry key="S10" value="1.0" />
-      <entry key="S30" value="1.0000000000015647" />
-      <entry key="S60" value="1.0000013129634828" />
-      <entry key="M2" value="1.0015752632032602" />
-      <entry key="M5" value="1.2456675320520985" />
-      <entry key="M10" value="2.813166684033179" />
-      <entry key="M15" value="4.7609784590111985" />
-      <entry key="M30" value="9.371203018061005" />
-      <entry key="H1" value="15.361721730746297" />
-      <entry key="H2" value="24.549791588088965" />
-      <entry key="H4" value="35.855167377027" />
-      <entry key="D1" value="54.51841889663964" />
-      <entry key="W1" value="59.169978517011714" />
+      <entry key="MS100" value="0.0" />
+      <entry key="MS500" value="0.0" />
+      <entry key="S2" value="0.0" />
+      <entry key="S5" value="2.5874575262438822E-164" />
+      <entry key="S10" value="2.2731792748309115E-82" />
+      <entry key="S30" value="9.696854879509801E-28" />
+      <entry key="S60" value="4.51233511634329E-14" />
+      <entry key="M2" value="3.572038267980185E-7" />
+      <entry key="M5" value="0.008759721844805462" />
+      <entry key="M10" value="0.3470120228775896" />
+      <entry key="M15" value="1.2662619622866949" />
+      <entry key="M30" value="4.966160442825625" />
+      <entry key="H1" value="11.256221116547616" />
+      <entry key="H2" value="21.062473625263586" />
+      <entry key="H4" value="33.2325889892839" />
+      <entry key="D1" value="53.837103496956885" />
+      <entry key="W1" value="59.06388211081339" />
     </decayedSelected>
     <decayedShown>
-      <entry key="MS100" value="1.6926467853136265E-10" />
-      <entry key="MS500" value="0.011109979770213083" />
-      <entry key="S2" value="0.32465965068247093" />
-      <entry key="S5" value="0.6376337948984947" />
-      <entry key="S10" value="0.7985197523533746" />
-      <entry key="S30" value="0.9277448577094717" />
-      <entry key="S60" value="0.9632801719701767" />
-      <entry key="M2" value="1.0189368279826274" />
-      <entry key="M5" value="2.994436509727788" />
-      <entry key="M10" value="9.060921868192562" />
-      <entry key="M15" value="15.113262557507232" />
-      <entry key="M30" value="34.62254438157372" />
-      <entry key="H1" value="74.66939307881555" />
-      <entry key="H2" value="144.56220436126682" />
-      <entry key="H4" value="235.67729322971127" />
-      <entry key="D1" value="396.6454813221953" />
-      <entry key="W1" value="438.4730525910516" />
+      <entry key="MS100" value="0.0016405203448751696" />
+      <entry key="MS500" value="0.47036181218627804" />
+      <entry key="S2" value="3.649328782694359" />
+      <entry key="S5" value="8.327807589793515" />
+      <entry key="S10" value="13.441443730035774" />
+      <entry key="S30" value="21.159249834462855" />
+      <entry key="S60" value="24.224954041441535" />
+      <entry key="M2" value="26.01283181624307" />
+      <entry key="M5" value="27.22535317789768" />
+      <entry key="M10" value="28.942601313877496" />
+      <entry key="M15" value="32.649813302220664" />
+      <entry key="M30" value="50.76243062345519" />
+      <entry key="H1" value="90.33671057119557" />
+      <entry key="H2" value="158.74922091837502" />
+      <entry key="H4" value="246.33654487073957" />
+      <entry key="D1" value="397.3952317503659" />
+      <entry key="W1" value="436.06300740214414" />
     </decayedShown>
   </component>
   <component name="ProblemsViewState">
     <option name="selectedTabId" value="CurrentFile" />
   </component>
   <component name="ProjectColorInfo">{
-    &quot;associatedIndex&quot;: 8,
-    &quot;fromUser&quot;: false
-    }</component>
+  &quot;associatedIndex&quot;: 8,
+  &quot;fromUser&quot;: false
+}</component>
   <component name="ProjectId" id="3J9nWLWbQNxVv2buhozWq5gaVpw" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
@@ -138,10 +132,9 @@
     "RunOnceActivity.git.unshallow": "true",
     "RunOnceActivity.typescript.service.memoryLimit.init": "true",
     "SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "WebServerToolWindowFactoryState": "false",
     "codeWithMe.voiceChat.enabledByDefault": "false",
     "com.intellij.ml.llm.matterhorn.ej.ui.settings.DefaultModelSelectionForGA.v1": "true",
-    "git-widget-placeholder": "branches-juntas-para-apresentar",
+    "git-widget-placeholder": "feature/validações",
     "ignore.virus.scanning.warn.message": "true",
     "junie.onboarding.icon.badge.shown": "true",
     "kotlin-language-version-configured": "true",
@@ -156,7 +149,7 @@
     "project.structure.last.edited": "Modules",
     "project.structure.proportion": "0.0",
     "project.structure.side.proportion": "0.0",
-    "settings.editor.selected.configurable": "preferences.lookFeel",
+    "settings.editor.selected.configurable": "preferences.JavaFX",
     "to.speed.mode.migration.done": "true",
     "vue.rearranger.settings.migration": "true"
   }
@@ -165,9 +158,6 @@
     <key name="MoveFile.RECENT_KEYS">
       <recent name="C:\projetos\HebleCollectionDesktop-main\HebleCollectionDesktop-main\src\main\resources\com\example\heblecollectiondesktop\view" />
       <recent name="C:\Users\nicol\OneDrive\coisas da minha mãe\Documentos\projetos\HebleCollectionDesktop-main\HebleCollectionDesktop-main\lib" />
-    </key>
-    <key name="CopyClassDialog.RECENTS_KEY">
-      <recent name="com.example.heblecollectiondesktop.controller" />
     </key>
   </component>
   <component name="RunManager" selected="Application.Application">
@@ -212,10 +202,20 @@
       <list>
         <item itemvalue="Application.Application" />
         <item itemvalue="Application.conexaoDB" />
+        <item itemvalue="Application.conexaoDB" />
+        <item itemvalue="Application.Application" />
+        <item itemvalue="Application.Application" />
       </list>
     </recent_temporary>
   </component>
-  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-jdk-30f59d01ecdd-a203e0a19954-intellij.indexing.shared.core-IU-262.10968.63" />
+        <option value="bundled-js-predefined-d6986cc7102b-4abd2a77f808-JavaScript-IU-262.10968.63" />
+      </set>
+    </attachedChunks>
+  </component>
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
       <changelist id="cb3a4291-41f8-4b38-8e73-f8ae096bae80" name="Changes" comment="" />
@@ -226,8 +226,6 @@
       <workItem from="1790874537693" duration="10650000" />
       <workItem from="1791220699364" duration="312000" />
       <workItem from="1791221190611" duration="5059000" />
-      <workItem from="1791480629311" duration="7217000" />
-      <workItem from="1791998375146" duration="316000" />
     </task>
     <task id="LOCAL-00001" summary="Correção da tela de deleção de empresas">
       <option name="closed" value="true" />
@@ -237,31 +235,7 @@
       <option name="project" value="LOCAL" />
       <updated>1790885376116</updated>
     </task>
-    <task id="LOCAL-00002" summary="Tela Gerenciar Consumidores e Controller Consumidores">
-      <option name="closed" value="true" />
-      <created>1792087166566</created>
-      <option name="number" value="00002" />
-      <option name="presentableId" value="LOCAL-00002" />
-      <option name="project" value="LOCAL" />
-      <updated>1792087166566</updated>
-    </task>
-    <task id="LOCAL-00003" summary="Tela Gerenciar Consumidores e Controller Consumidores">
-      <option name="closed" value="true" />
-      <created>1792088988307</created>
-      <option name="number" value="00003" />
-      <option name="presentableId" value="LOCAL-00003" />
-      <option name="project" value="LOCAL" />
-      <updated>1792088988307</updated>
-    </task>
-    <task id="LOCAL-00004" summary="Controller de Gerenciamento de Consumidores com implementação do banco de dados">
-      <option name="closed" value="true" />
-      <created>1792093158833</created>
-      <option name="number" value="00004" />
-      <option name="presentableId" value="LOCAL-00004" />
-      <option name="project" value="LOCAL" />
-      <updated>1792093158833</updated>
-    </task>
-    <option name="localTasksCounter" value="5" />
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -295,14 +269,12 @@
     <MESSAGE value="tela de login pronta e funcional e previa do dashboard" />
     <MESSAGE value="tela de login funcional e previa do dashboard" />
     <MESSAGE value="tela de login funcional e previa do dashboard e inserção do model" />
-    <MESSAGE value="adiciona controller de cadastro de funcionários e ajusta mapeamento do JavaFX" />
-    <MESSAGE value="banco de dados passados pra nuvem agora da pra acessar de qualquer lugar" />
+    <MESSAGE value="adiciona controller de cadastro de funcionários e ajusta mapeamento do JavaFX&#10;&#10;- Adicionado ControllerCadastroFuncionarios com validação de campos e callback para tela pai&#10;- Adicionado FXML para o cadastro de funcionários&#10;- Atualizado module-info.java abrindo o pacote model para javafx.base&#10;- Adicionados getters e setters públicos na model Funcionario" />
+    <MESSAGE value="banco de dados passados pra nuvem agora da pra acessar de qualquer lugar " />
     <MESSAGE value="Gerencia de empresas completa e integradas" />
     <MESSAGE value="Correção da tela de deleção de empresas" />
     <MESSAGE value="novo host de banco adicionado e correção do botão de voltar em ticket" />
-    <MESSAGE value="Tela Gerenciar Consumidores e Controller Consumidores" />
-    <MESSAGE value="Controller de Gerenciamento de Consumidores com implementação do banco de dados" />
-    <option name="LAST_COMMIT_MESSAGE" value="Controller de Gerenciamento de Consumidores com implementação do banco de dados" />
+    <option name="LAST_COMMIT_MESSAGE" value="novo host de banco adicionado e correção do botão de voltar em ticket" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />

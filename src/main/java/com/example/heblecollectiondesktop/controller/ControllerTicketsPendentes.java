@@ -37,7 +37,7 @@ public class ControllerTicketsPendentes {
     @FXML
     private TableColumn<Ticket, String> colAssunto;
     @FXML
-    private TableColumn<Ticket, String> colDescricao;
+    private TableColumn<Ticket, String> ColDescricao;
     @FXML
     private TableColumn<Ticket, String> colStatus;
 
@@ -58,7 +58,7 @@ public class ControllerTicketsPendentes {
         if (colID != null) colID.setCellValueFactory(new PropertyValueFactory<>("id"));
         if (colTipo != null) colTipo.setCellValueFactory(new PropertyValueFactory<>("tipo"));
         if (colAssunto != null) colAssunto.setCellValueFactory(new PropertyValueFactory<>("assunto"));
-        if (colDescricao != null) colDescricao.setCellValueFactory(new PropertyValueFactory<>("descricao"));
+        if (ColDescricao != null) ColDescricao.setCellValueFactory(new PropertyValueFactory<>("descricao"));
         if (colStatus != null) colStatus.setCellValueFactory(new PropertyValueFactory<>("status"));
 
         configurarDuploClique();

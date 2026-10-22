@@ -263,10 +263,16 @@ public class ControllerGerenciarProdutos implements Initializable {
                     selecionado.setPreco(Double.parseDouble(txtPreco.getText()));
                     selecionado.setQuantidadeEstoque(Integer.parseInt(txtEstoque.getText()));
                     selecionado.setStatus(cbstatus.getValue());
+                    if(selecionado.getPreco()<0||selecionado.getQuantidadeEstoque()<0){
+                        mostrarAlerta(Alert.AlertType.ERROR, "Inserção invalida","A quantidade de proudutos ou preço estão negativas, corrija esse problema");
+                    }else {
+                    if(selecionado.getPreco()==0 || selecionado.getQuantidadeEstoque()==0){
+                        selecionado.setStatus("PENDENTE");
+                    }
                     if(selecionado.getStatus().equals("PENDENTE")){
                         listaProdutos.remove(selecionado);
                     }
-                    return selecionado;
+                    return selecionado;}
                 } catch (NumberFormatException e) {
                     mostrarAlerta(Alert.AlertType.ERROR, "Erro de Entrada", "Insira valores numéricos válidos para Preço e Estoque.");
                 }

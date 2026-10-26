@@ -6,15 +6,19 @@ public class ItemVenda {
     private int iditem;
     private int vendaId;
     private int produtoId;
+    private String nomeProduto;
+    private String descricaoProduto;
     private int quantidade;
     private BigDecimal precoUnitario;
 
     public ItemVenda() {}
 
-    public ItemVenda(int produtoId, int quantidade, BigDecimal precoUnitario) {
+    public ItemVenda(int produtoId, String nomeProduto,String descricaoProduto, int quantidade, BigDecimal precoUnitario) {
         this.produtoId = produtoId;
         this.quantidade = quantidade;
         this.precoUnitario = precoUnitario;
+        this.nomeProduto = nomeProduto;
+        this.descricaoProduto = descricaoProduto;
     }
 
 
@@ -32,4 +36,10 @@ public class ItemVenda {
 
     public BigDecimal getPrecoUnitario() { return precoUnitario; }
     public void setPrecoUnitario(BigDecimal precoUnitario) { this.precoUnitario = precoUnitario; }
+
+    public String getNomeProduto() { return nomeProduto; }
+    public void setNomeProduto(String nomeProduto) { this.nomeProduto = nomeProduto; }
+
+    public String getDescricaoProduto() {return descricaoProduto;}
+    public void setDescricaoProduto(String descricaoProduto) {this.descricaoProduto = descricaoProduto;}
 }

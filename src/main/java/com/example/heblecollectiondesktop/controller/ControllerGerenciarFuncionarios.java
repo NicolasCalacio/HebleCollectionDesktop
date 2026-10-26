@@ -147,6 +147,10 @@ public class ControllerGerenciarFuncionarios implements Initializable {
             mostrarAlerta("Aviso", "Por favor, selecione um funcionário na tabela para editar.");
             return;
         }
+        if (funcionarioSelecionado.getMatricula().equals(funcionarioLogado.getMatricula())){
+            mostrarAlerta("Um funcionario logado nao pode se editar por esse meio" , "Por favor selecione outro funcionario ou deslogue da conta");
+            return;
+        }
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/heblecollectiondesktop/view/EditarFuncionarios.fxml"));
             Parent subtela = loader.load();

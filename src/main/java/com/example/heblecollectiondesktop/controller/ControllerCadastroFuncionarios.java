@@ -69,7 +69,7 @@ public class ControllerCadastroFuncionarios implements Initializable {
         boolean existe = funcionarios.stream()
                 .anyMatch(f -> f.getMatricula().equalsIgnoreCase(matricula));
         if(existe){
-            mostrarAlerta(Alert.AlertType.ERROR,"Funcionario já cadastrado","Escolha outro nome para a matricula, ou coloque o sborenome junto");
+            mostrarAlerta(Alert.AlertType.ERROR,"Funcionario já cadastrado","Escolha outro nome para a matricula, ou coloque o sobrenome junto");
             return;
         }else {
             try {

@@ -106,6 +106,13 @@ public class ConsumidoresDAO {
 
         return consumidor;
     }
+    public String buscarNomeClientePorId(int consumidorId) {
+        Consumidores consumidor = buscarPorId(consumidorId);
+        if (consumidor != null && consumidor.getNomconsumidor() != null) {
+            return consumidor.getNomconsumidor();
+        }
+        return "Cliente Desconhecido";
+    }
 
     public void atualizar(Consumidores consumidor) {
         String sql = "UPDATE consumidores SET nomconsumidor = ?, cpfconsumidor = ?, senhaconsumidor = ?, emailconsumidor = ?, celularconsumidor = ?, cepconsumidor = ?, enderecoconsumidor = ?, dataNascconsumidor = ?, statusconsumidor = ? WHERE IDconsumidor = ?";

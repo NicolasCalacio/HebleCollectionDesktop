@@ -81,9 +81,12 @@ public class VendaDAO {
         }
     }
 
-    public List<ItemVenda> listarItensPorVenda(int vendaId) throws SQLException {
+    public List<ItemVenda> listarItensPorVenda(int vendaId) {
         List<ItemVenda> itens = new ArrayList<>();
-        String sql = "SELECT * FROM itens_venda WHERE venda_id = ?";
+        String sql = "SELECT i.*, p.nome AS nome_produto " +
+                "FROM itens_venda i " +
+                "JOIN produtos p ON i.produto_id = p.id " +
+                "WHERE i.venda_id = ?";
 
         try (Connection conn = conexaoDB.getConexao();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -95,11 +98,15 @@ public class VendaDAO {
                     item.setIditem(rs.getInt("iditem"));
                     item.setVendaId(rs.getInt("venda_id"));
                     item.setProdutoId(rs.getInt("produto_id"));
+                    item.setNomeProduto(rs.getString("nome_produto"));
                     item.setQuantidade(rs.getInt("quantidade"));
                     item.setPrecoUnitario(rs.getBigDecimal("preco_unitario"));
+
                     itens.add(item);
                 }
             }
+        } catch (SQLException e) {
+            System.err.println("Erro ao listar itens da venda: " + e.getMessage());
         }
         return itens;
     }
@@ -132,5 +139,34 @@ public class VendaDAO {
             }
         }
         return vendas;
+    }
+    public String buscarResumoItens(int vendaId) {
+        String sql = "SELECT p.nome, i.quantidade " +
+                "FROM itens_venda i " +
+                "JOIN produtos p ON i.produto_id = p.id " +
+                "WHERE i.venda_id = ?";
+
+        List<String> itensTexto = new ArrayList<>();
+
+        try (Connection conn = conexaoDB.getConexao();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setInt(1, vendaId);
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    int qtd = rs.getInt("quantidade");
+                    String nomeProd = rs.getString("nome");
+                    itensTexto.add(qtd + "x " + nomeProd);
+                }
+            }
+        } catch (SQLException e) {
+            System.err.println("Erro ao buscar resumo dos itens: " + e.getMessage());
+        }
+
+        if (itensTexto.isEmpty()) {
+            return "Nenhum item";
+        }
+
+        return String.join(", ", itensTexto);
     }
 }

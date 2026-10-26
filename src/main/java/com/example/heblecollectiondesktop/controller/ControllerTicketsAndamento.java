@@ -39,6 +39,7 @@ public class ControllerTicketsAndamento {
     private Pane containerCentral;
     private Funcionario funcionarioLogado;
 
+
     public void setContainerCentral(Pane containerCentral) {
         this.containerCentral = containerCentral;
     }
@@ -46,6 +47,7 @@ public class ControllerTicketsAndamento {
     public void setFuncionarioLogado(Funcionario funcionarioLogado) {
         this.funcionarioLogado = funcionarioLogado;
     }
+
 
     @FXML
     public void initialize() {
@@ -82,6 +84,13 @@ public class ControllerTicketsAndamento {
 
         if (ticketSelecionado == null) {
             mostrarAlerta("Atenção", "Selecione um ticket na tabela para concluir/aprovar.", Alert.AlertType.WARNING);
+            return;
+
+
+        }
+
+        if (ticketSelecionado.getTipo().equalsIgnoreCase("Senha")) {
+            mostrarAlerta("O ticket nao pode ser aprovado." , "O ticket nao pode ser aprovado ate sua funçao ser completa" , Alert.AlertType.WARNING);
             return;
         }
 

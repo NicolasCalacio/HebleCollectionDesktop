@@ -2,6 +2,7 @@ package com.example.heblecollectiondesktop.controller;
 
 import java.net.URL;
 import java.sql.SQLException;
+import java.util.List;
 import java.util.ResourceBundle;
 
 import com.example.heblecollectiondesktop.database.FuncionarioDAO;
@@ -49,7 +50,7 @@ public class ControllerCadastroFuncionarios implements Initializable {
     }
 
     @FXML
-    private void salvarFuncionario(ActionEvent event) {
+    private void salvarFuncionario(ActionEvent event)throws SQLException {
         String matricula = txtMatricula.getText() != null ? txtMatricula.getText().trim() : "";
         String senha = txtSenha.getText() != null ? txtSenha.getText().trim() : "";
         String confirmarSenha = txtConfirmarSenha.getText() != null ? txtConfirmarSenha.getText().trim() : "";
@@ -64,42 +65,49 @@ public class ControllerCadastroFuncionarios implements Initializable {
             mostrarAlerta(Alert.AlertType.ERROR, "Senha Incompatível", "A senha e a confirmação de senha não coincidem.");
             return;
         }
+        List<Funcionario> funcionarios= funcionarioDAO.pesquisar(matricula);
+        boolean existe = funcionarios.stream()
+                .anyMatch(f -> f.getMatricula().equalsIgnoreCase(matricula));
+        if(existe){
+            mostrarAlerta(Alert.AlertType.ERROR,"Funcionario já cadastrado","Escolha outro nome para a matricula, ou coloque o sobrenome junto");
+            return;
+        }else {
+            try {
+                Funcionario novoFuncionario;
+                if (cargo == Cargo.GERENTE) {
+                    novoFuncionario = new Gerente(0, matricula, senha);
+                } else {
+                    novoFuncionario = new Funcionario(0, matricula, senha, cargo);
+                }
 
-        try {
-            Funcionario novoFuncionario;
-            if (cargo == Cargo.GERENTE) {
-                novoFuncionario = new Gerente(0, matricula, senha);
-            } else {
-                novoFuncionario = new Funcionario(0, matricula, senha, cargo);
-            }
+                funcionarioDAO.salvar(novoFuncionario);
 
-            funcionarioDAO.salvar(novoFuncionario);
+                String idModerador = (funcionarioLogado != null && funcionarioLogado.getMatricula() != null)
+                        ? funcionarioLogado.getMatricula() : "SISTEMA";
+                String alvo = "Matrícula: " + matricula;
 
-            String idModerador = (funcionarioLogado != null && funcionarioLogado.getMatricula() != null)
-                    ? funcionarioLogado.getMatricula() : "SISTEMA";
-            String alvo = "Matrícula: " + matricula;
+                logsDAO.registrarLog(
+                        idModerador,
+                        "CADASTRO_FUNCIONARIO",
+                        alvo,
+                        "Novo funcionário cadastrado com o cargo: " + cargo
+                );
 
-            logsDAO.registrarLog(
-                    idModerador,
-                    "CADASTRO_FUNCIONARIO",
-                    alvo,
-                    "Novo funcionário cadastrado com o cargo: " + cargo
-            );
+                mostrarAlerta(Alert.AlertType.INFORMATION, "Sucesso", "Funcionário cadastrado com sucesso!");
 
-            mostrarAlerta(Alert.AlertType.INFORMATION, "Sucesso", "Funcionário cadastrado com sucesso!");
+                if (controllerPai != null) {
+                    controllerPai.carregarFuncionarios();
+                }
 
-            if (controllerPai != null) {
-                controllerPai.carregarFuncionarios();
-            }
+                fecharJanela(event);
 
-            fecharJanela(event);
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-            if (e.getMessage() != null && e.getMessage().contains("Duplicate entry")) {
-                mostrarAlerta(Alert.AlertType.ERROR, "Matrícula Existente", "Já existe um funcionário cadastrado com esta matrícula.");
-            } else {
-                mostrarAlerta(Alert.AlertType.ERROR, "Erro no Banco de Dados", "Falha ao cadastrar funcionário: " + e.getMessage());
+            } catch (SQLException e) {
+                e.printStackTrace();
+                if (e.getMessage() != null && e.getMessage().contains("Duplicate entry")) {
+                    mostrarAlerta(Alert.AlertType.ERROR, "Matrícula Existente", "Já existe um funcionário cadastrado com esta matrícula.");
+                } else {
+                    mostrarAlerta(Alert.AlertType.ERROR, "Erro no Banco de Dados", "Falha ao cadastrar funcionário: " + e.getMessage());
+                }
             }
         }
     }

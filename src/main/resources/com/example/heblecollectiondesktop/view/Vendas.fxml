@@ -44,7 +44,7 @@
                 <TableColumn fx:id="colIdVenda" prefWidth="60.0" text="ID" />
                 <TableColumn fx:id="colCliente" prefWidth="220.0" text="Cliente / Comprador" />
                 <TableColumn fx:id="colData" prefWidth="130.0" text="Data da Venda" />
-                <TableColumn fx:id="colItens" prefWidth="220.0" text="Itens / Resumo" />
+                <TableColumn fx:id="colItensVenda" prefWidth="220.0" text="Itens / Resumo" />
                 <TableColumn fx:id="colTotal" prefWidth="120.0" text="Total (R$)" />
                 <TableColumn fx:id="colStatusVenda" prefWidth="110.0" text="Status" />
             </columns>

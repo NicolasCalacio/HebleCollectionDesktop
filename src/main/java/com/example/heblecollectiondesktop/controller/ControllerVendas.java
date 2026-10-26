@@ -12,10 +12,14 @@ import java.time.format.TextStyle;
 import java.util.List;
 import java.util.Locale;
 
+import com.example.heblecollectiondesktop.database.ConsumidoresDAO;
 import com.example.heblecollectiondesktop.database.VendaDAO;
+import com.example.heblecollectiondesktop.model.Consumidores;
 import com.example.heblecollectiondesktop.model.ItemVenda;
+import com.example.heblecollectiondesktop.model.LogModeracao;
 import com.example.heblecollectiondesktop.model.Venda;
 
+import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -25,12 +29,7 @@ import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.Label;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -48,7 +47,7 @@ public class ControllerVendas {
     private TableColumn<Venda, Integer> colIdVenda;
 
     @FXML
-    private TableColumn<Venda, Integer> colCliente;
+    private TableColumn<Venda, String> colCliente;
 
     @FXML
     private TableColumn<Venda, LocalDateTime> colData;
@@ -58,6 +57,9 @@ public class ControllerVendas {
 
     @FXML
     private TableColumn<Venda, String> colStatusVenda;
+
+    @FXML
+    private TableColumn<Venda, String> colItensVenda;
 
     @FXML
     private Button btnRelatorioMes;
@@ -71,22 +73,36 @@ public class ControllerVendas {
         return acaoVoltar;
     }
 
-
     private Runnable acaoVoltar;
     public void setAcaoVoltar(Runnable acaoVoltar) {
         this.acaoVoltar = acaoVoltar;
     }
+
     @FXML
     public void initialize() {
         vendaDAO = new VendaDAO();
 
         colIdVenda.setCellValueFactory(new PropertyValueFactory<>("idvenda"));
-        colCliente.setCellValueFactory(new PropertyValueFactory<>("consumidorId"));
+
+        colCliente.setCellValueFactory(cellData -> {
+            int consumidorId = cellData.getValue().getConsumidorId();
+            ConsumidoresDAO consumidorDAO = new ConsumidoresDAO();
+            String nomeCliente = consumidorDAO.buscarNomeClientePorId(consumidorId);
+            return new javafx.beans.property.SimpleStringProperty(nomeCliente);
+        });
+
         colData.setCellValueFactory(new PropertyValueFactory<>("criadoEm"));
         colTotal.setCellValueFactory(new PropertyValueFactory<>("valorTotal"));
         colStatusVenda.setCellValueFactory(new PropertyValueFactory<>("statusVenda"));
 
+        colItensVenda.setCellValueFactory(cellData -> {
+            int vendaId = cellData.getValue().getIdvenda();
+            String resumo = vendaDAO.buscarResumoItens(vendaId);
+            return new SimpleStringProperty(resumo);
+        });
+
         carregarVendas();
+        configurarDuploClique();
     }
 
     private void carregarVendas() {
@@ -280,6 +296,10 @@ public class ControllerVendas {
 
     @FXML
     private void acaoDetalhesVenda(ActionEvent event) {
+        abrirDetalhesSelecionados();
+    }
+
+    private void abrirDetalhesSelecionados() {
         Venda vendaSelecionada = tvVendas.getSelectionModel().getSelectedItem();
         if (vendaSelecionada == null) {
             exibirAlerta("Seleção Necessária", "Por favor, selecione uma venda na tabela para visualizar os detalhes.");
@@ -289,7 +309,7 @@ public class ControllerVendas {
         try {
             List<ItemVenda> itens = vendaDAO.listarItensPorVenda(vendaSelecionada.getIdvenda());
             abrirPopupDetalhes(vendaSelecionada, itens);
-        } catch (SQLException e) {
+        } catch (Exception e) {
             exibirAlerta("Erro", "Falha ao carregar os itens da venda: " + e.getMessage());
         }
     }
@@ -302,7 +322,7 @@ public class ControllerVendas {
         VBox layout = new VBox(16);
         layout.setPadding(new Insets(24));
         layout.setStyle("-fx-background-color: #F8FAFC;");
-        layout.setPrefSize(520, 500);
+        layout.setPrefSize(560, 500);
 
         Label lblTitulo = new Label("🧾 Detalhes da Venda #" + venda.getIdvenda());
         lblTitulo.setFont(Font.font("System", FontWeight.BOLD, 20));
@@ -311,27 +331,30 @@ public class ControllerVendas {
         DateTimeFormatter fmt = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
         String dataStr = venda.getCriadoEm() != null ? venda.getCriadoEm().format(fmt) : "N/A";
 
-        Label lblInfo = new Label(String.format("Cliente ID: %d  |  Data: %s  |  Status: %s",
-                venda.getConsumidorId(), dataStr, venda.getStatusVenda()));
+        ConsumidoresDAO consumidorDAO = new ConsumidoresDAO();
+        String nomeCliente = consumidorDAO.buscarNomeClientePorId(venda.getConsumidorId());
+
+        Label lblInfo = new Label(String.format("Cliente: %s (ID: %d)  |  Data: %s  |  Status: %s",
+                nomeCliente, venda.getConsumidorId(), dataStr, venda.getStatusVenda()));
         lblInfo.setStyle("-fx-text-fill: #64748B; -fx-font-size: 13px;");
 
         TableView<ItemVenda> tvItens = new TableView<>();
         tvItens.setStyle("-fx-background-radius: 8; -fx-border-color: #E2E8F0; -fx-border-radius: 8;");
         tvItens.setPrefHeight(200);
 
-        TableColumn<ItemVenda, Integer> colProdId = new TableColumn<>("Prod. ID");
-        colProdId.setCellValueFactory(new PropertyValueFactory<>("produtoId"));
-        colProdId.setPrefWidth(90);
+        TableColumn<ItemVenda, String> colNomeProd = new TableColumn<>("Produto");
+        colNomeProd.setCellValueFactory(new PropertyValueFactory<>("nomeProduto"));
+        colNomeProd.setPrefWidth(220);
 
         TableColumn<ItemVenda, Integer> colQtd = new TableColumn<>("Qtd.");
         colQtd.setCellValueFactory(new PropertyValueFactory<>("quantidade"));
-        colQtd.setPrefWidth(80);
+        colQtd.setPrefWidth(70);
 
         TableColumn<ItemVenda, BigDecimal> colPreco = new TableColumn<>("Preço Unit.");
         colPreco.setCellValueFactory(new PropertyValueFactory<>("precoUnitario"));
-        colPreco.setPrefWidth(120);
+        colPreco.setPrefWidth(110);
 
-        tvItens.getColumns().addAll(colProdId, colQtd, colPreco);
+        tvItens.getColumns().addAll(colNomeProd, colQtd, colPreco);
         tvItens.setItems(FXCollections.observableArrayList(itens));
 
         VBox resumoValores = new VBox(6);
@@ -373,11 +396,23 @@ public class ControllerVendas {
         return card;
     }
 
+    private void configurarDuploClique() {
+        tvVendas.setRowFactory(tv -> {
+            TableRow<Venda> row = new TableRow<>();
+            row.setOnMouseClicked(event -> {
+                if (event.getClickCount() == 2 && !row.isEmpty()) {
+                    abrirDetalhesSelecionados();
+                }
+            });
+            return row;
+        });
+    }
+
     @FXML
     void voltarAoHub(ActionEvent event) {
-            if (acaoVoltar != null) {
-                acaoVoltar.run();
-            }
+        if (acaoVoltar != null) {
+            acaoVoltar.run();
+        }
     }
 
     private void exibirAlerta(String titulo, String mensagem) {

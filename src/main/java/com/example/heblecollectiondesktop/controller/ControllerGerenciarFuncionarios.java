@@ -147,6 +147,10 @@ public class ControllerGerenciarFuncionarios implements Initializable {
             mostrarAlerta("Aviso", "Por favor, selecione um funcionário na tabela para editar.");
             return;
         }
+        if (funcionarioSelecionado.getMatricula().equals(funcionarioLogado.getMatricula())){
+            mostrarAlerta("Um funcionario logado nao pode se editar por esse meio" , "Por favor selecione outro funcionario ou deslogue da conta");
+            return;
+        }
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/heblecollectiondesktop/view/EditarFuncionarios.fxml"));
             Parent subtela = loader.load();
@@ -176,13 +180,22 @@ public class ControllerGerenciarFuncionarios implements Initializable {
     @FXML
     private void acaoDeletarFuncionario(ActionEvent event) {
         Funcionario selecionado = tabelaFuncionarios.getSelectionModel().getSelectedItem();
+        if (selecionado == null) {
+            mostrarAlerta("Nenhum Funcionário Selecionado", "Por favor, selecione um funcionário na tabela para realizar a exclusão.");
+            return;
+        }
+        if (selecionado.getMatricula().equals(funcionarioLogado.getMatricula())){
+            mostrarAlerta("Um funcionario logado nao pode se deletar" , "Por favor selecione outro funcionario ou deslogue da conta");
+            return;
+        }
         abrirModalDeletar(selecionado);
     }
 
     private void abrirModalDeletar(Funcionario funcionarioSelecionado) {
         if (funcionarioSelecionado == null) {
-            mostrarAlerta("Nenhum Funcionário Selecionado", "Por favor, selecione um funcionário na tabela para realizar a exclusão.");
             return;
+
+
         }
 
         try {
@@ -212,7 +225,6 @@ public class ControllerGerenciarFuncionarios implements Initializable {
             mostrarAlerta("Erro ao Abrir Tela", "Não foi possível carregar a interface de exclusão: " + e.getMessage());
         }
     }
-
     private void mostrarAlerta(String titulo, String mensagem) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle(titulo);

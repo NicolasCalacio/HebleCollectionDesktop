@@ -180,16 +180,20 @@ public class ControllerGerenciarFuncionarios implements Initializable {
             mostrarAlerta("Nenhum Funcionário Selecionado", "Por favor, selecione um funcionário na tabela para realizar a exclusão.");
             return;
         }
+        if (selecionado.getMatricula().equals(funcionarioLogado.getMatricula())){
+            mostrarAlerta("Um funcionario logado nao pode se deletar" , "Por favor selecione outro funcionario ou deslogue da conta");
+            return;
+        }
         abrirModalDeletar(selecionado);
     }
 
     private void abrirModalDeletar(Funcionario funcionarioSelecionado) {
-        if (funcionarioSelecionado == funcionarioLogado) {
-            return;
-        }
         if (funcionarioSelecionado == null) {
             return;
+
+
         }
+
         try {
             URL url = getClass().getResource("/com/example/heblecollectiondesktop/view/deletarFuncionarios.fxml");
 
@@ -217,7 +221,6 @@ public class ControllerGerenciarFuncionarios implements Initializable {
             mostrarAlerta("Erro ao Abrir Tela", "Não foi possível carregar a interface de exclusão: " + e.getMessage());
         }
     }
-
     private void mostrarAlerta(String titulo, String mensagem) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle(titulo);

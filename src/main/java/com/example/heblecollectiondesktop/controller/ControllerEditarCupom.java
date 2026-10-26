@@ -84,7 +84,10 @@ public class ControllerEditarCupom {
             double desconto = Double.parseDouble(txtDesconto.replace(",", "."));
             double valorMin = Double.parseDouble(txtValorMin.replace(",", "."));
             boolean ativo = chkAtivo.isSelected();
-
+            if(desconto<=0||valorMin<0){
+               exibirAlerta(Alert.AlertType.ERROR,"Inserção incorreta", "Insira valores validos");
+                return;
+            }
             LocalDate localDate = dpValidade.getValue();
             Date validade = null;
             if (localDate != null) {

@@ -194,4 +194,41 @@ public class FuncionarioDAO {
             }
         }
     }
+    public List<Funcionario> pesquisar(String termo) throws SQLException {
+        List<Funcionario> lista = new ArrayList<>();
+        String sql = "SELECT * FROM funcionarios WHERE matricula LIKE ? OR cargo LIKE ? ORDER BY idfuncionarios DESC";
+
+        try (Connection conexao = conexaoDB.getConexao();
+             PreparedStatement stmt = conexao.prepareStatement(sql)) {
+
+            String argumento = "%" + termo + "%";
+            stmt.setString(1, argumento);
+            stmt.setString(2, argumento);
+
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    int id = rs.getInt("idfuncionarios");
+                    String mat = rs.getString("matricula");
+                    String pass = rs.getString("senha");
+                    String cargoBanco = rs.getString("cargo");
+
+                    Cargo cargoEnum = Cargo.FUNCIONARIO;
+                    if (cargoBanco != null && !cargoBanco.isBlank()) {
+                        try {
+                            cargoEnum = Cargo.valueOf(cargoBanco.trim().toUpperCase());
+                        } catch (IllegalArgumentException e) {
+                            System.err.println("Aviso: Cargo desconhecido no banco ('" + cargoBanco + "'). Assumindo FUNCIONARIO.");
+                        }
+                    }
+
+                    if (cargoEnum == Cargo.GERENTE) {
+                        lista.add(new Gerente(id, mat, pass));
+                    } else {
+                        lista.add(new Funcionario(id, mat, pass, cargoEnum));
+                    }
+                }
+            }
+        }
+        return lista;
+    }
 }

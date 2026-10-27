@@ -1,5 +1,7 @@
 package com.example.heblecollectiondesktop.database;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -11,9 +13,11 @@ import com.example.heblecollectiondesktop.model.Cupom;
 
 public class CupomDAO {
 
+    private static final String COLUNAS = "id, codigo, desconto_percentual, valor_minimo, ativo, validade";
+
     public List<Cupom> listarTodos() throws SQLException {
         List<Cupom> lista = new ArrayList<>();
-        String sql = "SELECT id, codigo, desconto_percentual, valor_minimo, ativo, validade FROM cupons ORDER BY id DESC";
+        String sql = "SELECT " + COLUNAS + " FROM cupons ORDER BY id DESC";
 
         try (Connection conexao = conexaoDB.getConexao();
              PreparedStatement stmt = conexao.prepareStatement(sql);
@@ -27,7 +31,7 @@ public class CupomDAO {
     }
 
     public Cupom buscarPorCodigo(String codigo) throws SQLException {
-        String sql = "SELECT id, codigo, desconto_percentual, valor_minimo, ativo, validade FROM cupons WHERE codigo = ?";
+        String sql = "SELECT " + COLUNAS + " FROM cupons WHERE codigo = ?";
 
         try (Connection conexao = conexaoDB.getConexao();
              PreparedStatement stmt = conexao.prepareStatement(sql)) {
@@ -44,7 +48,7 @@ public class CupomDAO {
     }
 
     public Cupom buscarPorId(int id) throws SQLException {
-        String sql = "SELECT id, codigo, desconto_percentual, valor_minimo, ativo, validade FROM cupons WHERE id = ?";
+        String sql = "SELECT " + COLUNAS + " FROM cupons WHERE id = ?";
 
         try (Connection conexao = conexaoDB.getConexao();
              PreparedStatement stmt = conexao.prepareStatement(sql)) {
@@ -66,12 +70,7 @@ public class CupomDAO {
         try (Connection conexao = conexaoDB.getConexao();
              PreparedStatement stmt = conexao.prepareStatement(sql)) {
 
-            stmt.setString(1, cupom.getCodigo());
-            stmt.setDouble(2, cupom.getDescontoPercentual());
-            stmt.setDouble(3, cupom.getValorMinimo());
-            stmt.setBoolean(4, cupom.isAtivo());
-            stmt.setDate(5, cupom.getValidade() != null ? new java.sql.Date(cupom.getValidade().getTime()) : null);
-
+            preencherCampos(stmt, cupom);
             return stmt.executeUpdate() > 0;
         }
     }
@@ -82,11 +81,7 @@ public class CupomDAO {
         try (Connection conexao = conexaoDB.getConexao();
              PreparedStatement stmt = conexao.prepareStatement(sql)) {
 
-            stmt.setString(1, cupom.getCodigo());
-            stmt.setDouble(2, cupom.getDescontoPercentual());
-            stmt.setDouble(3, cupom.getValorMinimo());
-            stmt.setBoolean(4, cupom.isAtivo());
-            stmt.setDate(5, cupom.getValidade() != null ? new java.sql.Date(cupom.getValidade().getTime()) : null);
+            preencherCampos(stmt, cupom);
             stmt.setInt(6, cupom.getId());
 
             return stmt.executeUpdate() > 0;
@@ -100,7 +95,6 @@ public class CupomDAO {
              PreparedStatement stmt = conexao.prepareStatement(sql)) {
 
             stmt.setInt(1, id);
-
             return stmt.executeUpdate() > 0;
         }
     }
@@ -112,6 +106,22 @@ public class CupomDAO {
 
     public boolean excluir(int id) throws SQLException {
         return deletar(id);
+    }
+
+    private void preencherCampos(PreparedStatement stmt, Cupom cupom) throws SQLException {
+        if (cupom.getValidade() == null) {
+            throw new SQLException("A validade do cupom é obrigatória.");
+        }
+
+        stmt.setString(1, cupom.getCodigo());
+        stmt.setBigDecimal(2, duasCasas(cupom.getDescontoPercentual()));
+        stmt.setBigDecimal(3, duasCasas(cupom.getValorMinimo()));
+        stmt.setBoolean(4, cupom.isAtivo());
+        stmt.setDate(5, new java.sql.Date(cupom.getValidade().getTime()));
+    }
+
+    private static BigDecimal duasCasas(double valor) {
+        return BigDecimal.valueOf(valor).setScale(2, RoundingMode.HALF_UP);
     }
 
     private Cupom mapearResultSetParaCupom(ResultSet rs) throws SQLException {

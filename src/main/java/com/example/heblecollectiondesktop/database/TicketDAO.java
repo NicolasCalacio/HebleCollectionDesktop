@@ -4,15 +4,20 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Types;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import com.example.heblecollectiondesktop.model.Ticket;
 
 public class TicketDAO {
 
+    private static final Logger LOGGER = Logger.getLogger(TicketDAO.class.getName());
+
     public List<Ticket> listarTodos() {
-        String sql = "SELECT * FROM tickets ORDER BY criado_em DESC";
+        String sql = "SELECT id, assunto, tipo, descricao, status, funcionario_id FROM tickets ORDER BY criado_em DESC";
         List<Ticket> lista = new ArrayList<>();
 
         try (Connection conexao = conexaoDB.getConexao();
@@ -20,18 +25,15 @@ public class TicketDAO {
              ResultSet rs = stmt.executeQuery()) {
 
             while (rs.next()) {
-                String status = rs.getString("status");
-                String tipo = rs.getString("tipo");
-
-                Ticket t = new Ticket(
+                // funcionario_id NULL vira 0 no getInt, que é o que o restante do código já espera.
+                lista.add(new Ticket(
                         rs.getInt("id"),
                         rs.getString("assunto"),
-                        tipo,
+                        rs.getString("tipo"),
                         rs.getString("descricao"),
-                        status,
+                        rs.getString("status"),
                         rs.getInt("funcionario_id")
-                );
-                lista.add(t);
+                ));
             }
 
         } catch (SQLException e) {
@@ -67,18 +69,13 @@ public class TicketDAO {
             return stmt.executeUpdate() > 0;
 
         } catch (SQLException e) {
-            System.err.println("Erro ao deletar ticket: " + e.getMessage());
-            e.printStackTrace();
+            LOGGER.log(Level.SEVERE, "Erro ao deletar ticket " + idTicket, e);
             return false;
         }
     }
 
     public boolean Adicionar(Ticket ticket) {
-        String sql = """
-            INSERT INTO tickets 
-            (assunto, tipo, descricao, status, funcionario_id) 
-            VALUES (?, ?, ?, ?, ?)
-            """;
+        String sql = "INSERT INTO tickets (assunto, tipo, descricao, status, funcionario_id) VALUES (?, ?, ?, ?, ?)";
 
         try (Connection conexao = conexaoDB.getConexao();
              PreparedStatement stmt = conexao.prepareStatement(sql)) {
@@ -91,7 +88,7 @@ public class TicketDAO {
             if (ticket.getFuncionarioId() > 0) {
                 stmt.setInt(5, ticket.getFuncionarioId());
             } else {
-                stmt.setNull(5, java.sql.Types.INTEGER);
+                stmt.setNull(5, Types.INTEGER);
             }
 
             return stmt.executeUpdate() > 0;

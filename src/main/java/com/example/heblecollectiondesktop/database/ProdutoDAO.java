@@ -6,74 +6,29 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import com.example.heblecollectiondesktop.model.Produto;
 
 public class ProdutoDAO {
 
+    private static final Logger LOGGER = Logger.getLogger(ProdutoDAO.class.getName());
+
+    private static final String SELECT_BASE =
+            "SELECT p.id, p.nome, p.descricao, p.preco, p.quantidade_estoque, p.status, p.ativo, " +
+                    "COALESCE(e.nome, 'Não vinculada') AS nome_empresa " +
+                    "FROM produtos p " +
+                    "LEFT JOIN empresa e ON p.empresa_id = e.id ";
+
     public List<Produto> listarTodos() {
-        String sql = "SELECT p.*, COALESCE(e.nome, 'Não vinculada') AS nome_empresa " +
-                "FROM produtos p " +
-                "LEFT JOIN empresa e ON p.empresa_id = e.id " +
-                "ORDER BY p.id DESC";
-        List<Produto> lista = new ArrayList<>();
-
-        try (Connection conexao = conexaoDB.getConexao();
-             PreparedStatement stmt = conexao.prepareStatement(sql);
-             ResultSet rs = stmt.executeQuery()) {
-
-            while (rs.next()) {
-                Produto p = new Produto(
-                        rs.getInt("id"),
-                        rs.getString("nome"),
-                        rs.getString("descricao"),
-                        rs.getDouble("preco"),
-                        rs.getInt("quantidade_estoque"),
-                        rs.getString("status"),
-                        rs.getString("nome_empresa"),
-                        rs.getBoolean("ativo")
-                );
-                lista.add(p);
-            }
-
-        } catch (SQLException e) {
-            throw new RuntimeException("Erro ao listar produtos: " + e.getMessage(), e);
-        }
-
-        return lista;
+        return consultar(SELECT_BASE + "ORDER BY p.id DESC", "Erro ao listar produtos");
     }
 
     public List<Produto> listarPendentes() {
-        String sql = "SELECT p.*, COALESCE(e.nome, 'Não vinculada') AS nome_empresa " +
-                "FROM produtos p " +
-                "LEFT JOIN empresa e ON p.empresa_id = e.id " +
-                "WHERE p.status = 'PENDENTE' OR p.status IS NULL " +
-                "ORDER BY p.id DESC";
-        List<Produto> lista = new ArrayList<>();
-
-        try (Connection conexao = conexaoDB.getConexao();
-             PreparedStatement stmt = conexao.prepareStatement(sql);
-             ResultSet rs = stmt.executeQuery()) {
-
-            while (rs.next()) {
-                Produto p = new Produto(
-                        rs.getInt("id"),
-                        rs.getString("nome"),
-                        rs.getString("descricao"),
-                        rs.getDouble("preco"),
-                        rs.getInt("quantidade_estoque"),
-                        rs.getString("status"),
-                        rs.getString("nome_empresa"),
-                        rs.getBoolean("ativo")
-                );
-                lista.add(p);
-            }
-
-        } catch (SQLException e) {
-            throw new RuntimeException("Erro ao listar produtos pendentes: " + e.getMessage(), e);
-        }
-
-        return lista;
+        // 'status' é NOT NULL no banco, então não precisa mais testar IS NULL.
+        return consultar(SELECT_BASE + "WHERE p.status = 'PENDENTE' ORDER BY p.id DESC",
+                "Erro ao listar produtos pendentes");
     }
 
     public boolean atualizarProduto(Produto produto) {
@@ -128,12 +83,16 @@ public class ProdutoDAO {
     }
 
     public List<Produto> buscarPorTermo(String termo) {
-        List<Produto> lista = new ArrayList<>();
-        String sql = "SELECT p.*, COALESCE(e.nome, 'Não vinculada') AS nome_empresa " +
-                "FROM produtos p " +
-                "LEFT JOIN empresa e ON p.empresa_id = e.id " +
-                "WHERE p.ativo = 1 AND (p.nome LIKE ? OR p.descricao LIKE ? OR e.nome LIKE ?) " +
+        return buscarPorTermo(termo, false);
+    }
+
+    public List<Produto> buscarPorTermo(String termo, boolean somenteAprovados) {
+        String sql = SELECT_BASE +
+                "WHERE p.ativo = 1 " + (somenteAprovados ? "AND p.status = 'APROVADO' " : "") +
+                "AND (p.nome LIKE ? OR p.descricao LIKE ? OR e.nome LIKE ?) " +
                 "ORDER BY p.id DESC";
+
+        List<Produto> lista = new ArrayList<>();
 
         try (Connection conn = conexaoDB.getConexao();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -145,22 +104,44 @@ public class ProdutoDAO {
 
             try (ResultSet rs = stmt.executeQuery()) {
                 while (rs.next()) {
-                    Produto produto = new Produto(
-                            rs.getInt("id"),
-                            rs.getString("nome"),
-                            rs.getString("descricao"),
-                            rs.getDouble("preco"),
-                            rs.getInt("quantidade_estoque"),
-                            rs.getString("status"),
-                            rs.getString("nome_empresa"),
-                            rs.getBoolean("ativo") // <--- Adicionado aqui
-                    );
-                    lista.add(produto);
+                    lista.add(mapear(rs));
                 }
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            // Mantido o comportamento anterior (lista vazia); agora o erro vai para o log.
+            LOGGER.log(Level.SEVERE, "Erro ao buscar produtos por termo", e);
         }
         return lista;
+    }
+
+    private List<Produto> consultar(String sql, String mensagemErro) {
+        List<Produto> lista = new ArrayList<>();
+
+        try (Connection conexao = conexaoDB.getConexao();
+             PreparedStatement stmt = conexao.prepareStatement(sql);
+             ResultSet rs = stmt.executeQuery()) {
+
+            while (rs.next()) {
+                lista.add(mapear(rs));
+            }
+
+        } catch (SQLException e) {
+            throw new RuntimeException(mensagemErro + ": " + e.getMessage(), e);
+        }
+
+        return lista;
+    }
+
+    private Produto mapear(ResultSet rs) throws SQLException {
+        return new Produto(
+                rs.getInt("id"),
+                rs.getString("nome"),
+                rs.getString("descricao"),
+                rs.getDouble("preco"),
+                rs.getInt("quantidade_estoque"),
+                rs.getString("status"),
+                rs.getString("nome_empresa"),
+                rs.getBoolean("ativo")
+        );
     }
 }

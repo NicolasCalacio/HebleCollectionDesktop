@@ -5,7 +5,7 @@ module com.example.heblecollectiondesktop {
     requires javafx.base;
     requires java.sql;
     requires mysql.connector.j;
-
+    requires com.zaxxer.hikari;
 
 
     opens com.example.heblecollectiondesktop to javafx.fxml;

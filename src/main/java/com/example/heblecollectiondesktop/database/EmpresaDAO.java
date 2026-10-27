@@ -8,116 +8,40 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class EmpresaDAO {
 
+    private static final Logger LOGGER = Logger.getLogger(EmpresaDAO.class.getName());
+
+    private static final String COLUNAS = "id, nome, cnpj, estilo, aprovado";
+
+
+    private static final int ERRO_MYSQL_REGISTRO_REFERENCIADO = 1451;
+
     public List<Empresa> listarPendentes() {
-        String sql = "SELECT * FROM empresa WHERE aprovado = 0 ORDER BY id DESC";
-        List<Empresa> empresas = new ArrayList<>();
-
-        try (Connection conn = conexaoDB.getConexao();
-             PreparedStatement stmt = conn.prepareStatement(sql);
-             ResultSet rs = stmt.executeQuery()) {
-
-            while (rs.next()) {
-                Empresa e = new Empresa(
-                        rs.getInt("id"),
-                        rs.getString("nome"),
-                        rs.getString("cnpj"),
-                        rs.getString("estilo"),
-                        rs.getBoolean("aprovado")
-                );
-                empresas.add(e);
-            }
-        } catch (SQLException e) {
-            throw new RuntimeException("Erro ao listar empresas pendentes: " + e.getMessage(), e);
-        }
-
-        return empresas;
+        return listar("SELECT " + COLUNAS + " FROM empresa WHERE aprovado = 0 ORDER BY id DESC",
+                "Erro ao listar empresas pendentes");
     }
 
     public List<Empresa> listarAprovadas() {
-        String sql = "SELECT * FROM empresa WHERE aprovado = 1 ORDER BY nome ASC";
-        List<Empresa> empresas = new ArrayList<>();
-
-        try (Connection conn = conexaoDB.getConexao();
-             PreparedStatement stmt = conn.prepareStatement(sql);
-             ResultSet rs = stmt.executeQuery()) {
-
-            while (rs.next()) {
-                Empresa e = new Empresa(
-                        rs.getInt("id"),
-                        rs.getString("nome"),
-                        rs.getString("cnpj"),
-                        rs.getString("estilo"),
-                        rs.getBoolean("aprovado")
-                );
-                empresas.add(e);
-            }
-        } catch (SQLException e) {
-            throw new RuntimeException("Erro ao listar empresas aprovadas: " + e.getMessage(), e);
-        }
-
-        return empresas;
+        return listar("SELECT " + COLUNAS + " FROM empresa WHERE aprovado = 1 ORDER BY nome ASC",
+                "Erro ao listar empresas aprovadas");
     }
 
     public List<Empresa> listarTodas() {
-        String sql = "SELECT * FROM empresa ORDER BY nome ASC";
-        List<Empresa> empresas = new ArrayList<>();
-
-        try (Connection conn = conexaoDB.getConexao();
-             PreparedStatement stmt = conn.prepareStatement(sql);
-             ResultSet rs = stmt.executeQuery()) {
-
-            while (rs.next()) {
-                Empresa e = new Empresa(
-                        rs.getInt("id"),
-                        rs.getString("nome"),
-                        rs.getString("cnpj"),
-                        rs.getString("estilo"),
-                        rs.getBoolean("aprovado")
-                );
-                empresas.add(e);
-            }
-        } catch (SQLException e) {
-            throw new RuntimeException("Erro ao listar todas as empresas: " + e.getMessage(), e);
-        }
-
-        return empresas;
+        return listar("SELECT " + COLUNAS + " FROM empresa ORDER BY nome ASC",
+                "Erro ao listar todas as empresas");
     }
 
     public boolean atualizar(Empresa empresa) {
-        String sql = "UPDATE empresa SET nome = ?, cnpj = ?, estilo = ? WHERE id = ?";
-
-        try (Connection conn = conexaoDB.getConexao();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
-
-            stmt.setString(1, empresa.getNome());
-            stmt.setString(2, empresa.getCnpj());
-            stmt.setString(3, empresa.getEstilo());
-            stmt.setInt(4, empresa.getId());
-
-            return stmt.executeUpdate() > 0;
-        } catch (SQLException e) {
-            throw new RuntimeException("Erro ao atualizar dados da empresa: " + e.getMessage(), e);
-        }
+        return atualizarDados(empresa.getId(), empresa.getNome(), empresa.getCnpj(), empresa.getEstilo(),
+                "Erro ao atualizar dados da empresa");
     }
 
     public boolean atualizarCampos(int id, String nome, String cnpj, String estilo) {
-        String sql = "UPDATE empresa SET nome = ?, cnpj = ?, estilo = ? WHERE id = ?";
-
-        try (Connection conn = conexaoDB.getConexao();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
-
-            stmt.setString(1, nome);
-            stmt.setString(2, cnpj);
-            stmt.setString(3, estilo);
-            stmt.setInt(4, id);
-
-            return stmt.executeUpdate() > 0;
-        } catch (SQLException e) {
-            throw new RuntimeException("Erro ao atualizar campos da empresa: " + e.getMessage(), e);
-        }
+        return atualizarDados(id, nome, cnpj, estilo, "Erro ao atualizar campos da empresa");
     }
 
     public boolean atualizarStatusAprovacao(int id, boolean aprovado) {
@@ -136,7 +60,7 @@ public class EmpresaDAO {
     }
 
     public Empresa buscarPorId(int id) {
-        String sql = "SELECT * FROM empresa WHERE id = ?";
+        String sql = "SELECT " + COLUNAS + " FROM empresa WHERE id = ?";
 
         try (Connection conn = conexaoDB.getConexao();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -144,13 +68,7 @@ public class EmpresaDAO {
             stmt.setInt(1, id);
             try (ResultSet rs = stmt.executeQuery()) {
                 if (rs.next()) {
-                    return new Empresa(
-                            rs.getInt("id"),
-                            rs.getString("nome"),
-                            rs.getString("cnpj"),
-                            rs.getString("estilo"),
-                            rs.getBoolean("aprovado")
-                    );
+                    return mapear(rs);
                 }
             }
         } catch (SQLException e) {
@@ -162,17 +80,81 @@ public class EmpresaDAO {
 
     public boolean deletar(int idEmpresa) {
         String sql = "DELETE FROM empresa WHERE id = ?";
+
         try (Connection conn = conexaoDB.getConexao();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
             stmt.setInt(1, idEmpresa);
-            int linhasAfetadas = stmt.executeUpdate();
-            return linhasAfetadas > 0;
+            return stmt.executeUpdate() > 0;
 
         } catch (SQLException e) {
-            System.err.println("Erro ao deletar empresa: " + e.getMessage());
-            e.printStackTrace();
+            if (e.getErrorCode() == ERRO_MYSQL_REGISTRO_REFERENCIADO) {
+                LOGGER.warning("Empresa " + idEmpresa + " não pode ser excluída: possui produtos vinculados.");
+            } else {
+                LOGGER.log(Level.SEVERE, "Erro ao deletar empresa " + idEmpresa, e);
+            }
             return false;
         }
+    }
+
+    /** NOVO (opcional): permite à tela avisar "empresa tem produtos" antes de tentar excluir. */
+    public boolean possuiProdutos(int idEmpresa) {
+        String sql = "SELECT 1 FROM produtos WHERE empresa_id = ? LIMIT 1";
+
+        try (Connection conn = conexaoDB.getConexao();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setInt(1, idEmpresa);
+            try (ResultSet rs = stmt.executeQuery()) {
+                return rs.next();
+            }
+        } catch (SQLException e) {
+            LOGGER.log(Level.SEVERE, "Erro ao verificar produtos da empresa " + idEmpresa, e);
+            return false;
+        }
+    }
+
+    private boolean atualizarDados(int id, String nome, String cnpj, String estilo, String mensagemErro) {
+        String sql = "UPDATE empresa SET nome = ?, cnpj = ?, estilo = ? WHERE id = ?";
+
+        try (Connection conn = conexaoDB.getConexao();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setString(1, nome);
+            stmt.setString(2, cnpj);
+            stmt.setString(3, estilo);
+            stmt.setInt(4, id);
+
+            return stmt.executeUpdate() > 0;
+        } catch (SQLException e) {
+            throw new RuntimeException(mensagemErro + ": " + e.getMessage(), e);
+        }
+    }
+
+    private List<Empresa> listar(String sql, String mensagemErro) {
+        List<Empresa> empresas = new ArrayList<>();
+
+        try (Connection conn = conexaoDB.getConexao();
+             PreparedStatement stmt = conn.prepareStatement(sql);
+             ResultSet rs = stmt.executeQuery()) {
+
+            while (rs.next()) {
+                empresas.add(mapear(rs));
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(mensagemErro + ": " + e.getMessage(), e);
+        }
+
+        return empresas;
+    }
+
+    private Empresa mapear(ResultSet rs) throws SQLException {
+        return new Empresa(
+                rs.getInt("id"),
+                rs.getString("nome"),
+                rs.getString("cnpj"),
+                rs.getString("estilo"),
+                rs.getBoolean("aprovado")
+        );
     }
 }

@@ -59,11 +59,21 @@ public class conexaoDB {
         if (DATA_SOURCE == null) {
             throw new SQLException(ERRO_CONFIGURACAO);
         }
-        return DATA_SOURCE.getConnection();
+        try {
+            return DATA_SOURCE.getConnection();
+        } catch (SQLException e) {
+            SQLException motivo = e.getNextException();
+            if (motivo != null) {
+                throw new SQLException(e.getMessage() + " | Motivo real: " + motivo.getMessage(),
+                        e.getSQLState(), e.getErrorCode(), motivo);
+            }
+            throw e;
+        }
     }
 
     private static Properties carregarConfiguracao() throws IOException {
         Properties prop = new Properties();
+
 
         try (InputStream input = new FileInputStream("config.properties")) {
             prop.load(input);

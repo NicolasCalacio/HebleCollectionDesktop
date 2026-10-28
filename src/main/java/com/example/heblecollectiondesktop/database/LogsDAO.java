@@ -73,7 +73,6 @@ public class LogsDAO {
     }
 
     private List<LogModeracao> buscarComFiltro(String coluna, String valor, String descricao) {
-        // 'coluna' vem sempre de constantes acima, nunca de entrada do usuário.
         String sql = SELECT_LOGS + "WHERE " + coluna + " LIKE ? ORDER BY data_acao DESC";
         List<LogModeracao> logs = new ArrayList<>();
 

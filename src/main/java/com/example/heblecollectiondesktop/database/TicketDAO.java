@@ -25,7 +25,6 @@ public class TicketDAO {
              ResultSet rs = stmt.executeQuery()) {
 
             while (rs.next()) {
-                // funcionario_id NULL vira 0 no getInt, que é o que o restante do código já espera.
                 lista.add(new Ticket(
                         rs.getInt("id"),
                         rs.getString("assunto"),

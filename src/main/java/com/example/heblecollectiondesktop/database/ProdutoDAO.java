@@ -26,7 +26,6 @@ public class ProdutoDAO {
     }
 
     public List<Produto> listarPendentes() {
-        // 'status' é NOT NULL no banco, então não precisa mais testar IS NULL.
         return consultar(SELECT_BASE + "WHERE p.status = 'PENDENTE' ORDER BY p.id DESC",
                 "Erro ao listar produtos pendentes");
     }

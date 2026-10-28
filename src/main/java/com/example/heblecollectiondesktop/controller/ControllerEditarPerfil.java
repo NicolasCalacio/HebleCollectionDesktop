@@ -6,14 +6,15 @@ import com.example.heblecollectiondesktop.model.Funcionario;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
-import javafx.scene.control.TextField;
+import javafx.scene.control.Label;
+import javafx.scene.control.PasswordField;
 import javafx.stage.Stage;
 
 public class ControllerEditarPerfil {
     @FXML
-    private TextField txNome;
+    private Label lbNome;
     @FXML
-    private TextField txSenha;
+    private PasswordField txSenha;
 
     private Funcionario funcionarioEditando;
 
@@ -23,20 +24,20 @@ public class ControllerEditarPerfil {
     public void setPerfil(Funcionario funcionario){
         this.funcionarioEditando = funcionario;
         if(funcionario != null) {
+            // Apenas exibe a matrícula/usuário no Label (não editável)
+            lbNome.setText(funcionario.getMatricula() != null ? funcionario.getMatricula() : "");
 
-            txNome.setText(funcionario.getMatricula() != null ? funcionario.getMatricula() : "");
+            // Opcional: pré-carrega a senha atual ou deixa limpo para redigitar
             txSenha.setText(funcionario.getSenha() != null ? funcionario.getSenha() : "");
         }
     }
 
     @FXML
     public void EditarPerfil(ActionEvent event) {
-        String matriculaDigitada = txNome.getText();
         String senhaDigitada = txSenha.getText();
 
-        if (matriculaDigitada == null || matriculaDigitada.trim().isEmpty() ||
-                senhaDigitada == null || senhaDigitada.trim().isEmpty() ){
-            mostrarAlerta1("Campos Obrigatórios", "Por favor, preencha a matrícula e a senha.", "Alerta");
+        if (senhaDigitada == null || senhaDigitada.trim().isEmpty()){
+            mostrarAlerta1("Campo Obrigatório", "Por favor, preencha a nova senha.", "Alerta");
             return;
         }
 
@@ -45,7 +46,7 @@ public class ControllerEditarPerfil {
             return;
         }
 
-        funcionarioEditando.setMatricula(matriculaDigitada);
+        // Mantém a matrícula original e altera apenas a senha
         funcionarioEditando.setSenha(senhaDigitada);
 
         boolean sucesso = funcionarioDAO.atualizar(funcionarioEditando);
@@ -59,12 +60,12 @@ public class ControllerEditarPerfil {
                     matriculaLog,
                     "EDICAO_FUNCIONARIO",
                     alvo,
-                    "Dados do funcionário atualizados com sucesso."
+                    "Senha do funcionário atualizada com sucesso."
             );
 
-            mostrarAlerta1("Sucesso", "Seus dados foram atualizados", "Informação");
+            mostrarAlerta1("Sucesso", "Sua senha foi atualizada com sucesso!", "Informação");
 
-            Stage janelaAtual = (Stage) txNome.getScene().getWindow();
+            Stage janelaAtual = (Stage) lbNome.getScene().getWindow();
             janelaAtual.close();
         } else {
             mostrarAlerta1("Erro de Persistência", "Não foi possível atualizar os dados no banco de dados.", "Erro");
@@ -91,7 +92,7 @@ public class ControllerEditarPerfil {
 
     @FXML
     public void Limpar() {
-        txNome.clear();
+        // Como o usuário não altera mais a matrícula, o botão limpar limpa apenas o campo de senha
         txSenha.clear();
     }
 

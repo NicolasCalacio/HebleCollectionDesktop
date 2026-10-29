@@ -39,7 +39,6 @@ public class ControllerTicketsAndamento {
     private Pane containerCentral;
     private Funcionario funcionarioLogado;
 
-
     public void setContainerCentral(Pane containerCentral) {
         this.containerCentral = containerCentral;
     }
@@ -47,7 +46,6 @@ public class ControllerTicketsAndamento {
     public void setFuncionarioLogado(Funcionario funcionarioLogado) {
         this.funcionarioLogado = funcionarioLogado;
     }
-
 
     @FXML
     public void initialize() {
@@ -63,9 +61,8 @@ public class ControllerTicketsAndamento {
     public void carregarTickets() {
         try {
             List<Ticket> todos = ticketDAO.listarTodos();
-
             List<Ticket> emAndamento = todos.stream()
-                    .filter(t -> t.getStatus() != null && t.getStatus().equalsIgnoreCase("andamento"))
+                    .filter(t -> t.getStatus() != null && t.getStatus().name().equalsIgnoreCase("andamento"))
                     .collect(Collectors.toList());
 
             listaTickets.setAll(emAndamento);
@@ -85,17 +82,15 @@ public class ControllerTicketsAndamento {
         if (ticketSelecionado == null) {
             mostrarAlerta("Atenção", "Selecione um ticket na tabela para concluir/aprovar.", Alert.AlertType.WARNING);
             return;
-
-
         }
 
-        if (ticketSelecionado.getTipo().equalsIgnoreCase("Senha")) {
-            mostrarAlerta("O ticket nao pode ser aprovado." , "O ticket nao pode ser aprovado ate sua funçao ser completa" , Alert.AlertType.WARNING);
+        if (ticketSelecionado.getTipo() != null && ticketSelecionado.getTipo().name().equals("SENHA")) {
+            mostrarAlerta("O ticket não pode ser aprovado.", "O ticket de redefinição de senha deve ser concluído através da tela de detalhes ao alterar a senha.", Alert.AlertType.WARNING);
             return;
         }
 
         try {
-            boolean sucesso = ticketDAO.atualizarStatus(ticketSelecionado.getId(), "fechado");
+            boolean sucesso = ticketDAO.atualizarStatus(ticketSelecionado.getId(), "finalizado");
 
             if (sucesso) {
                 registrarLog("CONCLUSAO_TICKET", ticketSelecionado, "Ticket finalizado com sucesso.");
@@ -140,7 +135,7 @@ public class ControllerTicketsAndamento {
 
         } catch (IOException e) {
             e.printStackTrace();
-            mostrarAlerta("Erro de Carregamento", "Falha ao carregar a sub-tela: ", Alert.AlertType.ERROR);
+            mostrarAlerta("Erro de Carregamento", "Falha ao carregar a sub-tela.", Alert.AlertType.ERROR);
         }
     }
 
@@ -199,7 +194,6 @@ public class ControllerTicketsAndamento {
             stage.setScene(new Scene(root));
             stage.initModality(Modality.APPLICATION_MODAL);
             stage.showAndWait();
-
 
             carregarTickets();
 

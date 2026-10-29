@@ -25,12 +25,13 @@ public class ControllerTelaInfoTickets {
     private Ticket ticketAtual;
     private final FuncionarioDAO funcionarioDAO = new FuncionarioDAO();
     private final TicketDAO ticketDAO = new TicketDAO();
+
     public void setTicket(Ticket ticket) {
         this.ticketAtual = ticket;
         if (ticket == null) return;
 
-        boolean isSenha = "Senha".equalsIgnoreCase(ticket.getTipo());
-        boolean emAndamento = ticket.getStatus() != null && ticket.getStatus().equalsIgnoreCase("andamento");
+        boolean isSenha = ticket.getTipo() != null && ticket.getTipo().name().equals("SENHA");
+        boolean emAndamento = ticket.getStatus() != null && ticket.getStatus().name().equalsIgnoreCase("andamento");
         boolean podeEditar = isSenha && emAndamento;
 
         if (btnEditarSenha != null) {
@@ -41,7 +42,7 @@ public class ControllerTelaInfoTickets {
         lblId.setText("ID: " + ticket.getId());
         lblAssunto.setText("Assunto: " + ticket.getAssunto());
 
-        String statusAtual = ticket.getStatus() != null ? ticket.getStatus() : "indefinido";
+        String statusAtual = ticket.getStatus() != null ? ticket.getStatus().name() : "indefinido";
         lblStatus.setText("Estado: " + statusAtual);
 
         txtDescricao.setText(ticket.getDescricao());
@@ -68,7 +69,7 @@ public class ControllerTelaInfoTickets {
                 boolean senhaAtualizada = funcionarioDAO.atualizarSenhaPorMatricula(matriculaAlvo, novaSenha.trim());
 
                 if (senhaAtualizada) {
-                    ticketDAO.atualizarStatus(ticketAtual.getId(), "Fechado");
+                    ticketDAO.atualizarStatus(ticketAtual.getId(), "finalizado");
 
                     exibirAlerta("Sucesso", "Senha alterada e ticket resolvido com sucesso!", Alert.AlertType.INFORMATION);
 

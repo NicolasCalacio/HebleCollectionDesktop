@@ -11,6 +11,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import com.example.heblecollectiondesktop.model.Ticket;
+import com.example.heblecollectiondesktop.model.Tipo;
+import com.example.heblecollectiondesktop.model.status; // Ajuste para maiúscula se a sua classe for Status
 
 public class TicketDAO {
 
@@ -25,12 +27,32 @@ public class TicketDAO {
              ResultSet rs = stmt.executeQuery()) {
 
             while (rs.next()) {
+                Tipo tipoEnum = null;
+                try {
+                    String tipoStr = rs.getString("tipo");
+                    if (tipoStr != null) {
+                        tipoEnum = Tipo.valueOf(tipoStr.toUpperCase());
+                    }
+                } catch (Exception e) {
+                    tipoEnum = Tipo.GERAL;
+                }
+
+                status statusEnum = null;
+                try {
+                    String statusStr = rs.getString("status");
+                    if (statusStr != null) {
+                        statusEnum = status.valueOf(statusStr.toLowerCase());
+                    }
+                } catch (Exception e) {
+                    statusEnum = status.pendente;
+                }
+
                 lista.add(new Ticket(
                         rs.getInt("id"),
                         rs.getString("assunto"),
-                        rs.getString("tipo"),
+                        tipoEnum,
                         rs.getString("descricao"),
-                        rs.getString("status"),
+                        statusEnum,
                         rs.getInt("funcionario_id")
                 ));
             }
@@ -80,9 +102,9 @@ public class TicketDAO {
              PreparedStatement stmt = conexao.prepareStatement(sql)) {
 
             stmt.setString(1, ticket.getAssunto());
-            stmt.setString(2, ticket.getTipo() != null ? ticket.getTipo() : "GERAL");
+            stmt.setString(2, ticket.getTipo() != null ? ticket.getTipo().name() : "GERAL");
             stmt.setString(3, ticket.getDescricao());
-            stmt.setString(4, ticket.getStatus() != null ? ticket.getStatus() : "pendente");
+            stmt.setString(4, ticket.getStatus() != null ? ticket.getStatus().name() : "aberto");
 
             if (ticket.getFuncionarioId() > 0) {
                 stmt.setInt(5, ticket.getFuncionarioId());

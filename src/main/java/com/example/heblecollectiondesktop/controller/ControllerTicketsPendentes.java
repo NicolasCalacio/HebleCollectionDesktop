@@ -76,7 +76,6 @@ public class ControllerTicketsPendentes {
                 mostrarAlerta("Erro FXML", "Arquivo ticketsHub.fxml não encontrado nos recursos.", Alert.AlertType.ERROR);
                 return;
             }
-            System.out.println(url.getPath());
             FXMLLoader loader = new FXMLLoader(url);
             Parent hubView = loader.load();
 
@@ -136,7 +135,6 @@ public class ControllerTicketsPendentes {
             stage.initModality(Modality.APPLICATION_MODAL);
             stage.showAndWait();
 
-
             carregarTickets();
 
         } catch (IOException e) {
@@ -149,8 +147,9 @@ public class ControllerTicketsPendentes {
         try {
             List<Ticket> listaBanco = ticketsPendentesDao.listarTodos();
 
+            // CORREÇÃO: Uso de .name() para comparar o Enum status com a String "pendente"
             List<Ticket> pendentes = listaBanco.stream()
-                    .filter(t -> t != null && t.getStatus() != null && t.getStatus().equalsIgnoreCase("pendente"))
+                    .filter(t -> t != null && t.getStatus() != null && t.getStatus().name().equalsIgnoreCase("pendente"))
                     .collect(Collectors.toList());
 
             ObservableList<Ticket> lista = FXCollections.observableArrayList(pendentes);

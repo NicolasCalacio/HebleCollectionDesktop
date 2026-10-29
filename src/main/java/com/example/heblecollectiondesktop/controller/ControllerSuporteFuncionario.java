@@ -2,6 +2,8 @@ package com.example.heblecollectiondesktop.controller;
 
 import com.example.heblecollectiondesktop.database.TicketDAO;
 import com.example.heblecollectiondesktop.model.Ticket;
+import com.example.heblecollectiondesktop.model.Tipo;
+import com.example.heblecollectiondesktop.model.status; // Ajuste para Status maiúsculo se a sua classe for com S maiúsculo
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -35,10 +37,10 @@ public class ControllerSuporteFuncionario {
             return;
         }
 
-        String tipoTicket = "Senha";
-        String statusInicial = "pendente";
+        // Correção: Usando os Enums corretos definidos no seu model
+        Tipo tipoTicket = Tipo.SENHA;
+        status statusInicial = status.pendente; // Ajuste para PENDENTE se no seu Enum for maiúsculo
         int idFuncionarioLogado = 0;
-
 
         Ticket novoTicket = new Ticket(
                 0,

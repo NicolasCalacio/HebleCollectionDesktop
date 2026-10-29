@@ -21,7 +21,7 @@ public class ControllerTelaInfoTicketsAndamento {
         lblId.setText("ID: " + ticket.getId());
         lblAssunto.setText("Assunto: " + ticket.getAssunto());
 
-        String statusAtual = ticket.getStatus() != null ? ticket.getStatus() : "indefinido";
+        String statusAtual = ticket.getStatus() != null ? ticket.getStatus().name() : "Sem Status";
         lblStatus.setText("Estado: " + statusAtual);
 
         txtDescricao.setText(ticket.getDescricao());

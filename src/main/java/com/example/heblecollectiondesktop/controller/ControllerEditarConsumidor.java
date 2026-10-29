@@ -60,8 +60,8 @@ public class ControllerEditarConsumidor {
         try {
             String observacao = (txtObservacao.getText() != null) ? txtObservacao.getText().trim() : "";
 
-            if (selecionado.equalsIgnoreCase("Permitido")) {
-                boolean sucesso = consumidorDAO.atualizarStatusConsumidor(ConsumidorEditar.getIDconsumidor(), "Permitido");
+            if (selecionado.equalsIgnoreCase("Ativo")) {
+                boolean sucesso = consumidorDAO.atualizarStatusConsumidor(ConsumidorEditar.getIDconsumidor(), "Ativo");
                 if (sucesso) {
                     String detalhes = "Motivo: " + selecionado + (observacao.isEmpty() ? "" : " | Obs: " + observacao);
                     String alvoAfetado = ConsumidorEditar.getNomconsumidor();

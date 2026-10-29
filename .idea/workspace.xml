@@ -4,15 +4,12 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="cb3a4291-41f8-4b38-8e73-f8ae096bae80" name="Changes" comment="validacoes juntinhas fofinhas cuti cuti">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/heblecollectiondesktop/controller/ControllerVendas.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/heblecollectiondesktop/controller/ControllerVendas.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/heblecollectiondesktop/database/ConsumidoresDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/heblecollectiondesktop/database/ConsumidoresDAO.java" afterDir="false" />
+    <list default="true" id="cb3a4291-41f8-4b38-8e73-f8ae096bae80" name="Changes" comment="correção dos tipos de tickets e dos valores das vendas">
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/heblecollectiondesktop/controller/ControllerEditarPerfil.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/heblecollectiondesktop/controller/ControllerEditarPerfil.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/heblecollectiondesktop/controller/ControllerSuporteFuncionario.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/heblecollectiondesktop/controller/ControllerSuporteFuncionario.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/heblecollectiondesktop/controller/ControllerTicketFechados.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/heblecollectiondesktop/controller/ControllerTicketFechados.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/heblecollectiondesktop/controller/ControllerTicketsPendentes.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/heblecollectiondesktop/controller/ControllerTicketsPendentes.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/example/heblecollectiondesktop/database/ProdutoDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/heblecollectiondesktop/database/ProdutoDAO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/heblecollectiondesktop/database/VendaDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/heblecollectiondesktop/database/VendaDAO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/heblecollectiondesktop/model/ItemVenda.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/heblecollectiondesktop/model/ItemVenda.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/heblecollectiondesktop/model/Produto.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/heblecollectiondesktop/model/Produto.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/com/example/heblecollectiondesktop/view/Vendas.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/com/example/heblecollectiondesktop/view/Vendas.fxml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -22,15 +19,16 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
-        <option value="Class" />
         <option value="FxmlFile" />
+        <option value="Class" />
+        <option value="Enum" />
       </list>
     </option>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
-        <entry key="$PROJECT_DIR$" value="main" />
+        <entry key="$PROJECT_DIR$" value="feature/fixes-em-exibir-e-editar-perfil(retirada-de-edição-de-matricula)" />
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -44,7 +42,7 @@
   <component name="GithubPullRequestsUISettings">{
   &quot;selectedUrlAndAccountId&quot;: {
     &quot;url&quot;: &quot;https://github.com/npinheiroz/HebleCollectionDesktop.git&quot;,
-    &quot;accountId&quot;: &quot;e3e63c9f-61ff-4153-a953-a2339246575c&quot;
+    &quot;accountId&quot;: &quot;1415892a-d9be-4d03-9c66-333395d89dd4&quot;
   }
 }</component>
   <component name="HighlightingSettingsPerFile">
@@ -125,6 +123,7 @@
   "keyToString": {
     "ASKED_SHARE_PROJECT_CONFIGURATION_FILES": "true",
     "Application.Application.executor": "Run",
+    "Application.TesteConexao.executor": "Run",
     "Application.conexaoDB.executor": "Run",
     "Maven.HebleCollectionDesktop [clean].executor": "Run",
     "Maven.HebleCollectionDesktop [compile].executor": "Run",
@@ -135,7 +134,7 @@
     "SHARE_PROJECT_CONFIGURATION_FILES": "true",
     "codeWithMe.voiceChat.enabledByDefault": "false",
     "com.intellij.ml.llm.matterhorn.ej.ui.settings.DefaultModelSelectionForGA.v1": "true",
-    "git-widget-placeholder": "feature/validacoesJuntas",
+    "git-widget-placeholder": "feature/correcao-tipo-tickets-e-valores-vendas",
     "ignore.virus.scanning.warn.message": "true",
     "junie.onboarding.icon.badge.shown": "true",
     "kotlin-language-version-configured": "true",
@@ -205,15 +204,14 @@
         <item itemvalue="Application.conexaoDB" />
         <item itemvalue="Application.conexaoDB" />
         <item itemvalue="Application.Application" />
-        <item itemvalue="Application.Application" />
       </list>
     </recent_temporary>
   </component>
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-jdk-30f59d01ecdd-a203e0a19954-intellij.indexing.shared.core-IU-262.10968.63" />
-        <option value="bundled-js-predefined-d6986cc7102b-4abd2a77f808-JavaScript-IU-262.10968.63" />
+        <option value="bundled-jdk-30f59d01ecdd-26cb7f24e5b0-intellij.indexing.shared.core-IU-253.29346.138" />
+        <option value="bundled-js-predefined-d6986cc7102b-9b0f141eb926-JavaScript-IU-253.29346.138" />
       </set>
     </attachedChunks>
   </component>
@@ -227,6 +225,8 @@
       <workItem from="1790874537693" duration="10650000" />
       <workItem from="1791220699364" duration="312000" />
       <workItem from="1791221190611" duration="5059000" />
+      <workItem from="1793214560790" duration="3881000" />
+      <workItem from="1793293738615" duration="7172000" />
     </task>
     <task id="LOCAL-00001" summary="Correção da tela de deleção de empresas">
       <option name="closed" value="true" />
@@ -244,7 +244,31 @@
       <option name="project" value="LOCAL" />
       <updated>1793036406216</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="validacoes juntinhas fofinhas cuti cuti">
+      <option name="closed" value="true" />
+      <created>1793209633520</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1793209633520</updated>
+    </task>
+    <task id="LOCAL-00004" summary="mudanças na parte de exibir e editar perfil, correções e mudanças, retirada da edição de matricula pq não fazia sentido">
+      <option name="closed" value="true" />
+      <created>1793215426839</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1793215426839</updated>
+    </task>
+    <task id="LOCAL-00005" summary="correção dos tipos de tickets e dos valores das vendas">
+      <option name="closed" value="true" />
+      <created>1793303327535</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1793303327535</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -284,7 +308,9 @@
     <MESSAGE value="Correção da tela de deleção de empresas" />
     <MESSAGE value="novo host de banco adicionado e correção do botão de voltar em ticket" />
     <MESSAGE value="validacoes juntinhas fofinhas cuti cuti" />
-    <option name="LAST_COMMIT_MESSAGE" value="validacoes juntinhas fofinhas cuti cuti" />
+    <MESSAGE value="mudanças na parte de exibir e editar perfil, correções e mudanças, retirada da edição de matricula pq não fazia sentido" />
+    <MESSAGE value="correção dos tipos de tickets e dos valores das vendas" />
+    <option name="LAST_COMMIT_MESSAGE" value="correção dos tipos de tickets e dos valores das vendas" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />

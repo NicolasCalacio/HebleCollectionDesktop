@@ -8,36 +8,46 @@ import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import com.example.heblecollectiondesktop.model.Funcionario;
 import com.example.heblecollectiondesktop.model.LogModeracao;
 
 public class LogsDAO {
 
+    private static final Logger LOGGER = Logger.getLogger(LogsDAO.class.getName());
+
+    private static final String SELECT_LOGS =
+            "SELECT id, funcionario_id, acao, alvo_afetado, detalhes, data_acao FROM logs_moderacao ";
+
     public boolean salvar(LogModeracao log) {
-        String sql = "INSERT INTO logs_moderacao (funcionario_id, acao, alvo_afetado, detalhes, data_acao) VALUES (?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO logs_moderacao (funcionario_id, autor_id, acao, alvo_afetado, detalhes, data_acao) " +
+                "VALUES (?, (SELECT idfuncionarios FROM funcionarios WHERE matricula = ? LIMIT 1), ?, ?, ?, ?)";
+
+        String autor = log.getFuncionarioId() != null && !log.getFuncionarioId().isBlank() ? log.getFuncionarioId() : "SISTEMA";
 
         try (Connection conn = conexaoDB.getConexao();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
-            stmt.setString(1, log.getFuncionarioId() != null && !log.getFuncionarioId().isBlank() ? log.getFuncionarioId() : "SISTEMA");
-            stmt.setString(2, log.getAcao() != null && !log.getAcao().isBlank() ? log.getAcao() : "N/A");
-            stmt.setString(3, log.getAlvoAfetado() != null && !log.getAlvoAfetado().isBlank() ? log.getAlvoAfetado() : "N/A");
-            stmt.setString(4, log.getDetalhes() != null ? log.getDetalhes() : "");
-            stmt.setTimestamp(5, Timestamp.valueOf(log.getDataAcao() != null ? log.getDataAcao() : LocalDateTime.now()));
+            stmt.setString(1, autor);
+            stmt.setString(2, autor);
+            stmt.setString(3, log.getAcao() != null && !log.getAcao().isBlank() ? log.getAcao() : "N/A");
+            stmt.setString(4, log.getAlvoAfetado() != null && !log.getAlvoAfetado().isBlank() ? log.getAlvoAfetado() : "N/A");
+            stmt.setString(5, log.getDetalhes() != null ? log.getDetalhes() : "");
+            stmt.setTimestamp(6, Timestamp.valueOf(log.getDataAcao() != null ? log.getDataAcao() : LocalDateTime.now()));
 
             return stmt.executeUpdate() > 0;
 
         } catch (SQLException e) {
-            System.err.println("❌ [LogsDAO] Erro ao salvar log no banco de dados: " + e.getMessage());
-            e.printStackTrace();
+            LOGGER.log(Level.SEVERE, "Erro ao salvar log no banco de dados", e);
             return false;
         }
     }
 
     public List<LogModeracao> listarTodos() {
+        String sql = SELECT_LOGS + "ORDER BY data_acao DESC";
         List<LogModeracao> logs = new ArrayList<>();
-        String sql = "SELECT id, funcionario_id, acao, alvo_afetado, detalhes, data_acao FROM logs_moderacao ORDER BY data_acao DESC";
 
         try (Connection conn = conexaoDB.getConexao();
              PreparedStatement stmt = conn.prepareStatement(sql);
@@ -48,44 +58,28 @@ public class LogsDAO {
             }
 
         } catch (SQLException e) {
-            System.err.println("❌ [LogsDAO] Erro ao listar logs: " + e.getMessage());
-            e.printStackTrace();
+            LOGGER.log(Level.SEVERE, "Erro ao listar logs", e);
         }
 
         return logs;
     }
 
     public List<LogModeracao> buscarPorModerador(String matricula) {
-        List<LogModeracao> logs = new ArrayList<>();
-        String sql = "SELECT id, funcionario_id, acao, alvo_afetado, detalhes, data_acao FROM logs_moderacao WHERE funcionario_id LIKE ? ORDER BY data_acao DESC";
-
-        try (Connection conn = conexaoDB.getConexao();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
-
-            stmt.setString(1, "%" + (matricula != null ? matricula : "") + "%");
-
-            try (ResultSet rs = stmt.executeQuery()) {
-                while (rs.next()) {
-                    logs.add(mapearResultSetParaLog(rs));
-                }
-            }
-
-        } catch (SQLException e) {
-            System.err.println("❌ [LogsDAO] Erro ao buscar logs por moderador: " + e.getMessage());
-            e.printStackTrace();
-        }
-
-        return logs;
+        return buscarComFiltro("funcionario_id", matricula, "moderador");
     }
 
     public List<LogModeracao> buscarPorAlvo(String alvo) {
+        return buscarComFiltro("alvo_afetado", alvo, "alvo");
+    }
+
+    private List<LogModeracao> buscarComFiltro(String coluna, String valor, String descricao) {
+        String sql = SELECT_LOGS + "WHERE " + coluna + " LIKE ? ORDER BY data_acao DESC";
         List<LogModeracao> logs = new ArrayList<>();
-        String sql = "SELECT id, funcionario_id, acao, alvo_afetado, detalhes, data_acao FROM logs_moderacao WHERE alvo_afetado LIKE ? ORDER BY data_acao DESC";
 
         try (Connection conn = conexaoDB.getConexao();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
-            stmt.setString(1, "%" + (alvo != null ? alvo : "") + "%");
+            stmt.setString(1, "%" + (valor != null ? valor : "") + "%");
 
             try (ResultSet rs = stmt.executeQuery()) {
                 while (rs.next()) {
@@ -94,8 +88,7 @@ public class LogsDAO {
             }
 
         } catch (SQLException e) {
-            System.err.println("❌ [LogsDAO] Erro ao buscar logs por alvo: " + e.getMessage());
-            e.printStackTrace();
+            LOGGER.log(Level.SEVERE, "Erro ao buscar logs por " + descricao, e);
         }
 
         return logs;

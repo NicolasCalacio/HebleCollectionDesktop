@@ -2,91 +2,116 @@ package com.example.heblecollectiondesktop.database;
 
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import com.example.heblecollectiondesktop.model.ItemVenda;
 import com.example.heblecollectiondesktop.model.Venda;
 
 public class VendaDAO {
 
+    private static final Logger LOGGER = Logger.getLogger(VendaDAO.class.getName());
+
+    private static final String SQL_INSERT_VENDA =
+            "INSERT INTO vendas (consumidor_id, cupom_id, valor_subtotal, valor_frete, valor_desconto, valor_total, status_venda) " +
+                    "VALUES (?, ?, ?, ?, ?, ?, ?)";
+
+    private static final String SQL_INSERT_ITEM =
+            "INSERT INTO itens_venda (venda_id, produto_id, quantidade, preco_unitario) VALUES (?, ?, ?, ?)";
+
+    private static final String SQL_COLUNAS_VENDA =
+            "idvenda, consumidor_id, cupom_id, valor_subtotal, valor_frete, valor_desconto, valor_total, status_venda, criado_em";
+
     public boolean salvar(Venda venda) throws SQLException {
-        String sqlVenda = "INSERT INTO vendas (consumidor_id, cupom_id, valor_subtotal, valor_frete, valor_desconto, valor_total, status_venda) VALUES (?, ?, ?, ?, ?, ?, ?)";
-        String sqlItem = "INSERT INTO itens_venda (venda_id, produto_id, quantidade, preco_unitario) VALUES (?, ?, ?, ?)";
+        if (venda.getItens() == null || venda.getItens().isEmpty()) {
+            throw new SQLException("A venda precisa ter pelo menos um item.");
+        }
 
-        Connection conn = null;
+        try (Connection conn = conexaoDB.getConexao()) {
+            try {
+                conn.setAutoCommit(false);
+
+                int vendaId = inserirVenda(conn, venda);
+                inserirItens(conn, vendaId, venda);
+
+                conn.commit();
+                return true;
+
+            } catch (SQLException | RuntimeException e) {
+                desfazer(conn);
+                throw e;
+            } finally {
+                restaurarAutoCommit(conn);
+            }
+        }
+    }
+
+    private int inserirVenda(Connection conn, Venda venda) throws SQLException {
+        try (PreparedStatement stmt = conn.prepareStatement(SQL_INSERT_VENDA, Statement.RETURN_GENERATED_KEYS)) {
+            stmt.setInt(1, venda.getConsumidorId());
+
+            if (venda.getCupomId() != null) {
+                stmt.setInt(2, venda.getCupomId());
+            } else {
+                stmt.setNull(2, Types.INTEGER);
+            }
+
+            stmt.setBigDecimal(3, venda.getValorSubtotal());
+            stmt.setBigDecimal(4, venda.getValorFrete());
+            stmt.setBigDecimal(5, venda.getValorDesconto());
+            stmt.setBigDecimal(6, venda.getValorTotal());
+            stmt.setString(7, venda.getStatusVenda() != null ? venda.getStatusVenda() : "PENDENTE");
+
+            stmt.executeUpdate();
+
+            try (ResultSet rs = stmt.getGeneratedKeys()) {
+                if (rs.next()) {
+                    return rs.getInt(1);
+                }
+                throw new SQLException("Falha ao obter o ID da venda gerada.");
+            }
+        }
+    }
+
+    private void inserirItens(Connection conn, int vendaId, Venda venda) throws SQLException {
+        try (PreparedStatement stmt = conn.prepareStatement(SQL_INSERT_ITEM)) {
+            for (ItemVenda item : venda.getItens()) {
+                stmt.setInt(1, vendaId);
+                stmt.setInt(2, item.getProdutoId());
+                stmt.setInt(3, item.getQuantidade());
+                stmt.setBigDecimal(4, item.getPrecoUnitario());
+                stmt.addBatch();
+            }
+            stmt.executeBatch();
+        }
+    }
+
+    private void desfazer(Connection conn) {
         try {
-            conn = conexaoDB.getConexao();
-            conn.setAutoCommit(false);
+            conn.rollback();
+        } catch (SQLException ex) {
+            LOGGER.log(Level.SEVERE, "Erro ao desfazer a transação da venda", ex);
+        }
+    }
 
-
-            int vendaIdGenerado;
-            try (PreparedStatement stmtVenda = conn.prepareStatement(sqlVenda, Statement.RETURN_GENERATED_KEYS)) {
-                stmtVenda.setInt(1, venda.getConsumidorId());
-
-                if (venda.getCupomId() != null) {
-                    stmtVenda.setInt(2, venda.getCupomId());
-                } else {
-                    stmtVenda.setNull(2, Types.INTEGER);
-                }
-
-                stmtVenda.setBigDecimal(3, venda.getValorSubtotal());
-                stmtVenda.setBigDecimal(4, venda.getValorFrete());
-                stmtVenda.setBigDecimal(5, venda.getValorDesconto());
-                stmtVenda.setBigDecimal(6, venda.getValorTotal());
-                stmtVenda.setString(7, venda.getStatusVenda() != null ? venda.getStatusVenda() : "PENDENTE");
-
-                stmtVenda.executeUpdate();
-
-                try (ResultSet rs = stmtVenda.getGeneratedKeys()) {
-                    if (rs.next()) {
-                        vendaIdGenerado = rs.getInt(1);
-                    } else {
-                        throw new SQLException("Falha ao obter o ID da venda gerada.");
-                    }
-                }
-            }
-
-            try (PreparedStatement stmtItem = conn.prepareStatement(sqlItem)) {
-                for (ItemVenda item : venda.getItens()) {
-                    stmtItem.setInt(1, vendaIdGenerado);
-                    stmtItem.setInt(2, item.getProdutoId());
-                    stmtItem.setInt(3, item.getQuantidade());
-                    stmtItem.setBigDecimal(4, item.getPrecoUnitario());
-                    stmtItem.addBatch();
-                }
-                stmtItem.executeBatch();
-            }
-
-            conn.commit();
-            return true;
-
-        } catch (SQLException e) {
-            if (conn != null) {
-                try {
-                    conn.rollback();
-                } catch (SQLException ex) {
-                    ex.printStackTrace();
-                }
-            }
-            throw e;
-        } finally {
-            if (conn != null) {
-                try {
-                    conn.setAutoCommit(true);
-                    conn.close();
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-            }
+    private void restaurarAutoCommit(Connection conn) {
+        try {
+            conn.setAutoCommit(true);
+        } catch (SQLException ex) {
+            LOGGER.log(Level.WARNING, "Erro ao restaurar o auto-commit", ex);
         }
     }
 
     public List<ItemVenda> listarItensPorVenda(int vendaId) {
         List<ItemVenda> itens = new ArrayList<>();
-        String sql = "SELECT i.*, p.nome AS nome_produto " +
+        String sql = "SELECT i.iditem, i.venda_id, i.produto_id, i.quantidade, i.preco_unitario, p.nome AS nome_produto " +
                 "FROM itens_venda i " +
                 "JOIN produtos p ON i.produto_id = p.id " +
-                "WHERE i.venda_id = ?";
+                "WHERE i.venda_id = ? " +
+                "ORDER BY i.iditem";
 
         try (Connection conn = conexaoDB.getConexao();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -101,50 +126,74 @@ public class VendaDAO {
                     item.setNomeProduto(rs.getString("nome_produto"));
                     item.setQuantidade(rs.getInt("quantidade"));
                     item.setPrecoUnitario(rs.getBigDecimal("preco_unitario"));
-
                     itens.add(item);
                 }
             }
         } catch (SQLException e) {
-            System.err.println("Erro ao listar itens da venda: " + e.getMessage());
+
+            LOGGER.log(Level.SEVERE, "Erro ao listar itens da venda " + vendaId, e);
         }
         return itens;
     }
 
     public List<Venda> listarTodas() throws SQLException {
+        String sql = "SELECT " + SQL_COLUNAS_VENDA + " FROM vendas ORDER BY criado_em DESC";
         List<Venda> vendas = new ArrayList<>();
-        String sql = "SELECT * FROM vendas ORDER BY criado_em DESC";
 
         try (Connection conn = conexaoDB.getConexao();
              PreparedStatement stmt = conn.prepareStatement(sql);
              ResultSet rs = stmt.executeQuery()) {
 
             while (rs.next()) {
-                Venda v = new Venda();
-                v.setIdvenda(rs.getInt("idvenda"));
-                v.setConsumidorId(rs.getInt("consumidor_id"));
-                v.setCupomId((Integer) rs.getObject("cupom_id"));
-                v.setValorSubtotal(rs.getBigDecimal("valor_subtotal"));
-                v.setValorFrete(rs.getBigDecimal("valor_frete"));
-                v.setValorDesconto(rs.getBigDecimal("valor_desconto"));
-                v.setValorTotal(rs.getBigDecimal("valor_total"));
-                v.setStatusVenda(rs.getString("status_venda"));
-
-                Timestamp timestamp = rs.getTimestamp("criado_em");
-                if (timestamp != null) {
-                    v.setCriadoEm(timestamp.toLocalDateTime());
-                }
-
-                vendas.add(v);
+                vendas.add(mapearVenda(rs));
             }
         }
         return vendas;
     }
+
+    /** NOVO (opcional): versão paginada, útil quando houver muitas vendas. */
+    public List<Venda> listarTodas(int limite, int deslocamento) throws SQLException {
+        String sql = "SELECT " + SQL_COLUNAS_VENDA + " FROM vendas ORDER BY criado_em DESC LIMIT ? OFFSET ?";
+        List<Venda> vendas = new ArrayList<>();
+
+        try (Connection conn = conexaoDB.getConexao();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setInt(1, limite);
+            stmt.setInt(2, deslocamento);
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    vendas.add(mapearVenda(rs));
+                }
+            }
+        }
+        return vendas;
+    }
+
+    private Venda mapearVenda(ResultSet rs) throws SQLException {
+        Venda v = new Venda();
+        v.setIdvenda(rs.getInt("idvenda"));
+        v.setConsumidorId(rs.getInt("consumidor_id"));
+        v.setCupomId(rs.getObject("cupom_id", Integer.class));
+        v.setValorSubtotal(rs.getBigDecimal("valor_subtotal"));
+        v.setValorFrete(rs.getBigDecimal("valor_frete"));
+        v.setValorDesconto(rs.getBigDecimal("valor_desconto"));
+        v.setValorTotal(rs.getBigDecimal("valor_total"));
+        v.setStatusVenda(rs.getString("status_venda"));
+
+        Timestamp timestamp = rs.getTimestamp("criado_em");
+        if (timestamp != null) {
+            v.setCriadoEm(timestamp.toLocalDateTime());
+        }
+        return v;
+    }
+
     public String buscarResumoItens(int vendaId) {
         String sql = "SELECT p.nome, i.quantidade " +
                 "FROM itens_venda i " +
                 "JOIN produtos p ON i.produto_id = p.id " +
-                "WHERE i.venda_id = ?";
+                "WHERE i.venda_id = ? " +
+                "ORDER BY i.iditem";
 
         List<String> itensTexto = new ArrayList<>();
 
@@ -154,19 +203,38 @@ public class VendaDAO {
             stmt.setInt(1, vendaId);
             try (ResultSet rs = stmt.executeQuery()) {
                 while (rs.next()) {
-                    int qtd = rs.getInt("quantidade");
-                    String nomeProd = rs.getString("nome");
-                    itensTexto.add(qtd + "x " + nomeProd);
+                    itensTexto.add(rs.getInt("quantidade") + "x " + rs.getString("nome"));
                 }
             }
         } catch (SQLException e) {
-            System.err.println("Erro ao buscar resumo dos itens: " + e.getMessage());
+            LOGGER.log(Level.SEVERE, "Erro ao buscar resumo dos itens da venda " + vendaId, e);
         }
 
         if (itensTexto.isEmpty()) {
             return "Nenhum item";
         }
-
         return String.join(", ", itensTexto);
+    }
+
+    public Map<Integer, String> buscarResumosItens() {
+        String sql = "SELECT i.venda_id, " +
+                "GROUP_CONCAT(CONCAT(i.quantidade, 'x ', p.nome) ORDER BY i.iditem SEPARATOR ', ') AS resumo " +
+                "FROM itens_venda i " +
+                "JOIN produtos p ON i.produto_id = p.id " +
+                "GROUP BY i.venda_id";
+
+        Map<Integer, String> resumos = new HashMap<>();
+
+        try (Connection conn = conexaoDB.getConexao();
+             PreparedStatement stmt = conn.prepareStatement(sql);
+             ResultSet rs = stmt.executeQuery()) {
+
+            while (rs.next()) {
+                resumos.put(rs.getInt("venda_id"), rs.getString("resumo"));
+            }
+        } catch (SQLException e) {
+            LOGGER.log(Level.SEVERE, "Erro ao buscar resumo dos itens de todas as vendas", e);
+        }
+        return resumos;
     }
 }

@@ -5,13 +5,26 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Types;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class ConsumidoresDAO {
 
+    private static final Logger LOGGER = Logger.getLogger(ConsumidoresDAO.class.getName());
+
+    private static final String COLUNAS =
+            "IDconsumidor, nomconsumidor, cpfconsumidor, senhaconsumidor, emailconsumidor, " +
+                    "celularconsumidor, cepconsumidor, enderecoconsumidor, dataNascconsumidor, statusconsumidor";
+
+    private static final int ERRO_MYSQL_REGISTRO_REFERENCIADO = 1451;
+
     public List<Consumidores> listarConsumidores() {
-        String sql = "SELECT * FROM consumidores";
+        String sql = "SELECT " + COLUNAS + " FROM consumidores";
         List<Consumidores> lista = new ArrayList<>();
 
         try (Connection conn = conexaoDB.getConexao();
@@ -19,30 +32,18 @@ public class ConsumidoresDAO {
              ResultSet rs = stmt.executeQuery()) {
 
             while (rs.next()) {
-                Consumidores consumidor = new Consumidores(
-                        rs.getInt("IDconsumidor"),
-                        rs.getString("nomconsumidor"),
-                        rs.getString("cpfconsumidor"),
-                        rs.getString("senhaconsumidor"),
-                        rs.getString("emailconsumidor"),
-                        rs.getString("celularconsumidor"),
-                        rs.getString("cepconsumidor"),
-                        rs.getString("enderecoconsumidor"),
-                        rs.getString("dataNascconsumidor"),
-                        rs.getString("statusconsumidor")
-                );
-                lista.add(consumidor);
+                lista.add(mapear(rs));
             }
 
         } catch (SQLException e) {
-            System.err.println("Erro ao listar consumidores: " + e.getMessage());
+            LOGGER.log(Level.SEVERE, "Erro ao listar consumidores", e);
         }
 
         return lista;
     }
 
     public List<Consumidores> pesquisarPorNome(String nome) {
-        String sql = "SELECT * FROM consumidores WHERE nomconsumidor LIKE ?";
+        String sql = "SELECT " + COLUNAS + " FROM consumidores WHERE nomconsumidor LIKE ?";
         List<Consumidores> lista = new ArrayList<>();
 
         try (Connection conn = conexaoDB.getConexao();
@@ -52,32 +53,19 @@ public class ConsumidoresDAO {
 
             try (ResultSet rs = stmt.executeQuery()) {
                 while (rs.next()) {
-                    Consumidores consumidor = new Consumidores(
-                            rs.getInt("IDconsumidor"),
-                            rs.getString("nomconsumidor"),
-                            rs.getString("cpfconsumidor"),
-                            rs.getString("senhaconsumidor"),
-                            rs.getString("emailconsumidor"),
-                            rs.getString("celularconsumidor"),
-                            rs.getString("cepconsumidor"),
-                            rs.getString("enderecoconsumidor"),
-                            rs.getString("dataNascconsumidor"),
-                            rs.getString("statusconsumidor")
-                    );
-                    lista.add(consumidor);
+                    lista.add(mapear(rs));
                 }
             }
 
         } catch (SQLException e) {
-            System.err.println("Erro ao pesquisar consumidores: " + e.getMessage());
+            LOGGER.log(Level.SEVERE, "Erro ao pesquisar consumidores", e);
         }
 
         return lista;
     }
 
     public Consumidores buscarPorId(int idConsumidor) {
-        String sql = "SELECT * FROM consumidores WHERE IDconsumidor = ?";
-        Consumidores consumidor = null;
+        String sql = "SELECT " + COLUNAS + " FROM consumidores WHERE IDconsumidor = ?";
 
         try (Connection conn = conexaoDB.getConexao();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -85,37 +73,63 @@ public class ConsumidoresDAO {
             stmt.setInt(1, idConsumidor);
             try (ResultSet rs = stmt.executeQuery()) {
                 if (rs.next()) {
-                    consumidor = new Consumidores(
-                            rs.getInt("IDconsumidor"),
-                            rs.getString("nomconsumidor"),
-                            rs.getString("cpfconsumidor"),
-                            rs.getString("senhaconsumidor"),
-                            rs.getString("emailconsumidor"),
-                            rs.getString("celularconsumidor"),
-                            rs.getString("cepconsumidor"),
-                            rs.getString("enderecoconsumidor"),
-                            rs.getString("dataNascconsumidor"),
-                            rs.getString("statusconsumidor")
-                    );
+                    return mapear(rs);
                 }
             }
 
         } catch (SQLException e) {
-            System.err.println("Erro ao buscar consumidor por ID: " + e.getMessage());
+            LOGGER.log(Level.SEVERE, "Erro ao buscar consumidor por ID " + idConsumidor, e);
         }
 
-        return consumidor;
+        return null;
     }
+
     public String buscarNomeClientePorId(int consumidorId) {
-        Consumidores consumidor = buscarPorId(consumidorId);
-        if (consumidor != null && consumidor.getNomconsumidor() != null) {
-            return consumidor.getNomconsumidor();
+        String sql = "SELECT nomconsumidor FROM consumidores WHERE IDconsumidor = ?";
+
+        try (Connection conn = conexaoDB.getConexao();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setInt(1, consumidorId);
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    String nome = rs.getString("nomconsumidor");
+                    if (nome != null) {
+                        return nome;
+                    }
+                }
+            }
+
+        } catch (SQLException e) {
+            LOGGER.log(Level.SEVERE, "Erro ao buscar nome do consumidor " + consumidorId, e);
         }
+
         return "Cliente Desconhecido";
     }
 
+    public Map<Integer, String> buscarNomesClientes() {
+        String sql = "SELECT IDconsumidor, nomconsumidor FROM consumidores";
+        Map<Integer, String> nomes = new HashMap<>();
+
+        try (Connection conn = conexaoDB.getConexao();
+             PreparedStatement stmt = conn.prepareStatement(sql);
+             ResultSet rs = stmt.executeQuery()) {
+
+            while (rs.next()) {
+                nomes.put(rs.getInt("IDconsumidor"), rs.getString("nomconsumidor"));
+            }
+
+        } catch (SQLException e) {
+            LOGGER.log(Level.SEVERE, "Erro ao buscar nomes dos consumidores", e);
+        }
+
+        return nomes;
+    }
+
     public void atualizar(Consumidores consumidor) {
-        String sql = "UPDATE consumidores SET nomconsumidor = ?, cpfconsumidor = ?, senhaconsumidor = ?, emailconsumidor = ?, celularconsumidor = ?, cepconsumidor = ?, enderecoconsumidor = ?, dataNascconsumidor = ?, statusconsumidor = ? WHERE IDconsumidor = ?";
+        String sql = "UPDATE consumidores SET nomconsumidor = ?, cpfconsumidor = ?, senhaconsumidor = ?, emailconsumidor = ?, " +
+                "celularconsumidor = ?, cepconsumidor = ?, enderecoconsumidor = ?, dataNascconsumidor = ?, statusconsumidor = ? " +
+                "WHERE IDconsumidor = ?";
 
         try (Connection conn = conexaoDB.getConexao();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -127,15 +141,22 @@ public class ConsumidoresDAO {
             stmt.setString(5, consumidor.getCelularconsumidor());
             stmt.setString(6, consumidor.getCepconsumidor());
             stmt.setString(7, consumidor.getEnderecoconsumidor());
-            stmt.setString(8, consumidor.getDataNascconsumidor());
+
+            String dataNasc = consumidor.getDataNascconsumidor();
+            if (dataNasc == null || dataNasc.isBlank()) {
+                stmt.setNull(8, Types.DATE);
+            } else {
+                stmt.setString(8, dataNasc.trim());
+            }
+
             stmt.setString(9, consumidor.getStatusconsumidor());
             stmt.setInt(10, consumidor.getIDconsumidor());
 
             stmt.executeUpdate();
-            System.out.println("Consumidor atualizado com sucesso!");
+            LOGGER.info("Consumidor atualizado com sucesso!");
 
         } catch (SQLException e) {
-            System.err.println("Erro ao atualizar consumidor: " + e.getMessage());
+            LOGGER.log(Level.SEVERE, "Erro ao atualizar consumidor " + consumidor.getIDconsumidor(), e);
         }
     }
 
@@ -148,12 +169,14 @@ public class ConsumidoresDAO {
             stmt.setString(1, novoStatus);
             stmt.setInt(2, idConsumidor);
 
-            int linhasAfetadas = stmt.executeUpdate();
-            System.out.println("Status do consumidor atualizado com sucesso!");
-            return linhasAfetadas > 0;
+            boolean alterou = stmt.executeUpdate() > 0;
+            if (alterou) {
+                LOGGER.info("Status do consumidor atualizado com sucesso!");
+            }
+            return alterou;
 
         } catch (SQLException e) {
-            System.err.println("Erro ao atualizar o status do consumidor: " + e.getMessage());
+            LOGGER.log(Level.SEVERE, "Erro ao atualizar o status do consumidor " + idConsumidor, e);
             return false;
         }
     }
@@ -165,15 +188,51 @@ public class ConsumidoresDAO {
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
             stmt.setInt(1, idConsumidor);
-            stmt.executeUpdate();
-            System.out.println("Consumidor excluído com sucesso!");
-            return true;
+            boolean apagou = stmt.executeUpdate() > 0;
+            if (apagou) {
+                LOGGER.info("Consumidor excluído com sucesso!");
+            }
+            return apagou;
 
         } catch (SQLException e) {
-            System.err.println("Erro ao excluir consumidor: " + e.getMessage());
-
+            if (e.getErrorCode() == ERRO_MYSQL_REGISTRO_REFERENCIADO) {
+                LOGGER.warning("Consumidor " + idConsumidor + " não pode ser excluído: possui vendas vinculadas.");
+            } else {
+                LOGGER.log(Level.SEVERE, "Erro ao excluir consumidor " + idConsumidor, e);
+            }
+            return false;
         }
+    }
 
-        return false;
+
+    public boolean possuiVendas(int idConsumidor) {
+        String sql = "SELECT 1 FROM vendas WHERE consumidor_id = ? LIMIT 1";
+
+        try (Connection conn = conexaoDB.getConexao();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setInt(1, idConsumidor);
+            try (ResultSet rs = stmt.executeQuery()) {
+                return rs.next();
+            }
+        } catch (SQLException e) {
+            LOGGER.log(Level.SEVERE, "Erro ao verificar vendas do consumidor " + idConsumidor, e);
+            return false;
+        }
+    }
+
+    private Consumidores mapear(ResultSet rs) throws SQLException {
+        return new Consumidores(
+                rs.getInt("IDconsumidor"),
+                rs.getString("nomconsumidor"),
+                rs.getString("cpfconsumidor"),
+                rs.getString("senhaconsumidor"),
+                rs.getString("emailconsumidor"),
+                rs.getString("celularconsumidor"),
+                rs.getString("cepconsumidor"),
+                rs.getString("enderecoconsumidor"),
+                rs.getString("dataNascconsumidor"),
+                rs.getString("statusconsumidor")
+        );
     }
 }

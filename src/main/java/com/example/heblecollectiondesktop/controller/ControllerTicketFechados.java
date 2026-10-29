@@ -99,14 +99,13 @@ public class ControllerTicketFechados {
     public void carregarTickets() {
         try {
             List<Ticket> listaBanco = ticketDAO.listarTodos();
-
-
-            List<Ticket> fechados = listaBanco.stream()
-                    .filter(t -> t.getStatus() != null &&
-                            (t.getStatus().equalsIgnoreCase("fechado") || t.getStatus().equalsIgnoreCase("recusado")))
+            List<Ticket> finalizados = listaBanco.stream()
+                    .filter(t -> t != null && t.getStatus() != null &&
+                            (t.getStatus().name().equalsIgnoreCase("finalizado") ||
+                                    t.getStatus().name().equalsIgnoreCase("recusado")))
                     .collect(Collectors.toList());
 
-            ObservableList<Ticket> listaObservable = FXCollections.observableArrayList(fechados);
+            ObservableList<Ticket> listaObservable = FXCollections.observableArrayList(finalizados);
             if (tbTicketsFechados != null) {
                 tbTicketsFechados.setItems(listaObservable);
             }

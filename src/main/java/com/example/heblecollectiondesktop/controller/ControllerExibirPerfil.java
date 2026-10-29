@@ -26,22 +26,26 @@ public class ControllerExibirPerfil {
     private Label lblCargo;
     private Funcionario funcionario;
     private Runnable acaovoltar;
+
     public void setAcaovoltar(Runnable acaovoltar){
-        this.acaovoltar=acaovoltar;
+        this.acaovoltar = acaovoltar;
     }
+
     public void setFuncionario(Funcionario funcionario){
-        this.funcionario=funcionario;
+        this.funcionario = funcionario;
         setLabel();
     }
+
     private void setLabel(){
-        lblPerfil.setText("Perfil de "+ funcionario.getMatricula());
-        lblId.setText("Id: "+ funcionario.getId());
-        lblCargo.setText("Cargo:"+funcionario.getCargo().toString());
+
+        lblPerfil.setText(funcionario.getMatricula() != null ? funcionario.getMatricula() : "");
+
+        lblId.setText(String.valueOf(funcionario.getId()));
+
+        lblCargo.setText(funcionario.getCargo() != null ? funcionario.getCargo().toString() : "");
     }
 
     public void irparaEditarPerfil(ActionEvent event){
-
-
         try {
             URL url = getClass().getResource("/com/example/heblecollectiondesktop/view/EditarPerfil.fxml");
             if (url == null) {
@@ -49,7 +53,7 @@ public class ControllerExibirPerfil {
             }
 
             if (url == null) {
-                mostrarAlerta("Erro FXML", "Arquivo EditarEmpresas.fxml não encontrado.", Alert.AlertType.ERROR);
+                mostrarAlerta("Erro FXML", "Arquivo EditarPerfil.fxml não encontrado.", Alert.AlertType.ERROR);
                 return;
             }
 
@@ -70,18 +74,19 @@ public class ControllerExibirPerfil {
             subjanela1.setResizable(false);
             subjanela1.showAndWait();
 
-
         } catch (IOException e) {
             e.printStackTrace();
             mostrarAlerta("Erro de Carregamento", "Falha ao carregar a sub-tela: " + e.getMessage(), Alert.AlertType.ERROR);
         }
     }
+
     @FXML
     private void Voltar(ActionEvent event) {
-        if(acaovoltar!= null){
+        if(acaovoltar != null){
             acaovoltar.run();
         }
     }
+
     private void mostrarAlerta(String titulo, String mensagem, Alert.AlertType tipo) {
         Alert alert = new Alert(tipo);
         alert.setTitle(titulo);

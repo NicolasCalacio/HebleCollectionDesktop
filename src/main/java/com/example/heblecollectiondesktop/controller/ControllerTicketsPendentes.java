@@ -146,8 +146,6 @@ public class ControllerTicketsPendentes {
     public void carregarTickets() {
         try {
             List<Ticket> listaBanco = ticketsPendentesDao.listarTodos();
-
-            // CORREÇÃO: Uso de .name() para comparar o Enum status com a String "pendente"
             List<Ticket> pendentes = listaBanco.stream()
                     .filter(t -> t != null && t.getStatus() != null && t.getStatus().name().equalsIgnoreCase("pendente"))
                     .collect(Collectors.toList());

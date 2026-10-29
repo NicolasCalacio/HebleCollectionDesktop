@@ -107,7 +107,6 @@ public class ProdutoDAO {
                 }
             }
         } catch (SQLException e) {
-            // Mantido o comportamento anterior (lista vazia); agora o erro vai para o log.
             LOGGER.log(Level.SEVERE, "Erro ao buscar produtos por termo", e);
         }
         return lista;

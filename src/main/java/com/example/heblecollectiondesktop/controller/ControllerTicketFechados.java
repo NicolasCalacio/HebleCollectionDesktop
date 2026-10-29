@@ -99,7 +99,6 @@ public class ControllerTicketFechados {
     public void carregarTickets() {
         try {
             List<Ticket> listaBanco = ticketDAO.listarTodos();
-
             List<Ticket> finalizados = listaBanco.stream()
                     .filter(t -> t != null && t.getStatus() != null &&
                             (t.getStatus().name().equalsIgnoreCase("finalizado") ||

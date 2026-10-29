@@ -37,9 +37,8 @@ public class ControllerSuporteFuncionario {
             return;
         }
 
-        // Correção: Usando os Enums corretos definidos no seu model
         Tipo tipoTicket = Tipo.SENHA;
-        status statusInicial = status.pendente; // Ajuste para PENDENTE se no seu Enum for maiúsculo
+        status statusInicial = status.pendente;
         int idFuncionarioLogado = 0;
 
         Ticket novoTicket = new Ticket(

@@ -24,10 +24,8 @@ public class ControllerEditarPerfil {
     public void setPerfil(Funcionario funcionario){
         this.funcionarioEditando = funcionario;
         if(funcionario != null) {
-            // Apenas exibe a matrícula/usuário no Label (não editável)
             lbNome.setText(funcionario.getMatricula() != null ? funcionario.getMatricula() : "");
 
-            // Opcional: pré-carrega a senha atual ou deixa limpo para redigitar
             txSenha.setText(funcionario.getSenha() != null ? funcionario.getSenha() : "");
         }
     }
@@ -46,7 +44,6 @@ public class ControllerEditarPerfil {
             return;
         }
 
-        // Mantém a matrícula original e altera apenas a senha
         funcionarioEditando.setSenha(senhaDigitada);
 
         boolean sucesso = funcionarioDAO.atualizar(funcionarioEditando);
@@ -92,7 +89,6 @@ public class ControllerEditarPerfil {
 
     @FXML
     public void Limpar() {
-        // Como o usuário não altera mais a matrícula, o botão limpar limpa apenas o campo de senha
         txSenha.clear();
     }
 
